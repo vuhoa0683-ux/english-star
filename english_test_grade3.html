@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Practice Test - Grade 3</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #fff9f0;
+    color: #2d2d2d;
+  }
+
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px 50px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    border: 3px solid #ff6b35;
+    border-radius: 16px;
+    padding: 18px 20px 14px;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #fff5f0 0%, #fff9f5 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '⭐';
+    position: absolute; top: 8px; left: 14px; font-size: 22px;
+  }
+  .header::after {
+    content: '⭐';
+    position: absolute; top: 8px; right: 14px; font-size: 22px;
+  }
+  .header h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 22px;
+    color: #ff6b35;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .header h2 {
+    font-size: 14px;
+    color: #666;
+    font-weight: 600;
+    margin-top: 3px;
+  }
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #444;
+    gap: 10px;
+  }
+  .info-row span {
+    border-bottom: 1.5px solid #ccc;
+    flex: 1;
+    padding-bottom: 2px;
+  }
+  .info-row span b { color: #ff6b35; }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 28px;
+  }
+  .section-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 15px;
+    font-weight: 800;
+    color: white;
+    background: #ff6b35;
+    padding: 7px 18px;
+    border-radius: 30px;
+    display: inline-block;
+    margin-bottom: 14px;
+  }
+  .instruction {
+    font-size: 13px;
+    color: #555;
+    font-style: italic;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  /* PART A - Multiple Choice */
+  .mc-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 13px;
+  }
+  .mc-num {
+    font-weight: 800;
+    font-size: 14px;
+    color: #ff6b35;
+    min-width: 22px;
+    padding-top: 1px;
+  }
+  .mc-question {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    flex: 1;
+  }
+  .mc-options {
+    display: flex;
+    gap: 18px;
+    margin-top: 5px;
+    flex-wrap: wrap;
+  }
+  .mc-options label {
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .mc-options input[type="radio"] {
+    accent-color: #ff6b35;
+    width: 14px; height: 14px;
+  }
+
+  /* PART B - Fill in blank */
+  .fill-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    flex-wrap: wrap;
+    line-height: 2;
+  }
+  .fill-num {
+    font-weight: 800;
+    color: #ff6b35;
+    min-width: 22px;
+  }
+  .blank {
+    border: none;
+    border-bottom: 2px solid #ff6b35;
+    width: 110px;
+    font-size: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    color: #333;
+    background: transparent;
+    outline: none;
+    text-align: center;
+    padding: 0 4px;
+  }
+  .blank:focus { border-bottom-color: #ff4500; background: #fff5f0; }
+
+  .word-bank {
+    background: #fff5f0;
+    border: 2px dashed #ffb38a;
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #555;
+  }
+  .word-bank span { color: #ff6b35; font-weight: 800; }
+
+  /* PART C - Arrange */
+  .arrange-item {
+    margin-bottom: 14px;
+  }
+  .arrange-words {
+    background: #f0f7ff;
+    border: 2px solid #a8d4f5;
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #2266aa;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  .arrange-line {
+    border: none;
+    border-bottom: 2px solid #bbb;
+    width: 100%;
+    font-size: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    padding: 3px 6px;
+    background: transparent;
+    outline: none;
+    color: #333;
+  }
+  .arrange-line:focus { border-bottom-color: #ff6b35; background: #fff8f5; }
+  .arrange-num {
+    font-weight: 800; color: #ff6b35; font-size: 13.5px; margin-bottom: 4px;
+  }
+
+  /* PART D - Reading */
+  .reading-passage {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e8f4fd 100%);
+    border-left: 5px solid #4da6e8;
+    border-radius: 0 12px 12px 0;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.9;
+    font-weight: 600;
+    color: #333;
+  }
+  .reading-passage .name { color: #ff6b35; font-weight: 800; }
+
+  /* SCORE BOX */
+  .score-box {
+    border: 3px solid #ff6b35;
+    border-radius: 16px;
+    padding: 16px 20px;
+    text-align: center;
+    margin-top: 28px;
+    background: #fff5f0;
+  }
+  .score-box .score-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 16px;
+    font-weight: 800;
+    color: #ff6b35;
+    margin-bottom: 10px;
+  }
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #555;
+  }
+  .score-cell {
+    border: 1.5px solid #ffb38a;
+    border-radius: 8px;
+    padding: 8px 6px;
+    background: white;
+  }
+  .score-cell .cell-label { font-size: 11px; color: #999; display: block; margin-bottom: 3px; }
+  .score-cell .cell-score { font-size: 20px; font-weight: 900; color: #ff6b35; }
+
+  .divider {
+    border: none;
+    border-top: 2px dashed #ffddcc;
+    margin: 20px 0;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { padding: 20px 30px; }
+    input { -webkit-appearance: none; }
+  }
+
+  /* Cute sticker decorations */
+  .emoji-deco { font-size: 16px; margin-right: 5px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>🌟 ENGLISH PRACTICE TEST 🌟</h1>
+    <h2>Hobbies &amp; School Subjects | Grade 3</h2>
+    <div class="info-row">
+      <span><b>Name:</b> ___________________________</span>
+      <span><b>Class:</b> ___________</span>
+      <span><b>Score:</b> _____ / 40</span>
+    </div>
+  </div>
+
+  <!-- PART A -->
+  <div class="section">
+    <div class="section-title">🎯 PART A – Choose the correct answer (10 pts)</div>
+    <p class="instruction">📌 Chọn đáp án đúng (A, B, C hoặc D)</p>
+
+    <!-- 1 -->
+    <div class="mc-item">
+      <span class="mc-num">1.</span>
+      <div class="mc-question">
+        What ______ you like doing?
+        <div class="mc-options">
+          <label><input type="radio" name="q1"> A. do</label>
+          <label><input type="radio" name="q1"> B. does</label>
+          <label><input type="radio" name="q1"> C. is</label>
+          <label><input type="radio" name="q1"> D. are</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="mc-item">
+      <span class="mc-num">2.</span>
+      <div class="mc-question">
+        She ______ drawing pictures.
+        <div class="mc-options">
+          <label><input type="radio" name="q2"> A. like</label>
+          <label><input type="radio" name="q2"> B. likes</label>
+          <label><input type="radio" name="q2"> C. liking</label>
+          <label><input type="radio" name="q2"> D. liked</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="mc-item">
+      <span class="mc-num">3.</span>
+      <div class="mc-question">
+        What is his hobby? – His hobby is ______ TV.
+        <div class="mc-options">
+          <label><input type="radio" name="q3"> A. watch</label>
+          <label><input type="radio" name="q3"> B. watches</label>
+          <label><input type="radio" name="q3"> C. watching</label>
+          <label><input type="radio" name="q3"> D. watched</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="mc-item">
+      <span class="mc-num">4.</span>
+      <div class="mc-question">
+        I have Maths ______ Monday.
+        <div class="mc-options">
+          <label><input type="radio" name="q4"> A. in</label>
+          <label><input type="radio" name="q4"> B. at</label>
+          <label><input type="radio" name="q4"> C. on</label>
+          <label><input type="radio" name="q4"> D. to</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="mc-item">
+      <span class="mc-num">5.</span>
+      <div class="mc-question">
+        She ______ have Science on Tuesday.
+        <div class="mc-options">
+          <label><input type="radio" name="q5"> A. don't</label>
+          <label><input type="radio" name="q5"> B. doesn't</label>
+          <label><input type="radio" name="q5"> C. isn't</label>
+          <label><input type="radio" name="q5"> D. not</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="mc-item">
+      <span class="mc-num">6.</span>
+      <div class="mc-question">
+        ______ does he like doing? – He likes singing.
+        <div class="mc-options">
+          <label><input type="radio" name="q6"> A. Who</label>
+          <label><input type="radio" name="q6"> B. Where</label>
+          <label><input type="radio" name="q6"> C. What</label>
+          <label><input type="radio" name="q6"> D. When</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="mc-item">
+      <span class="mc-num">7.</span>
+      <div class="mc-question">
+        Môn Thể dục trong tiếng Anh là:
+        <div class="mc-options">
+          <label><input type="radio" name="q7"> A. Music</label>
+          <label><input type="radio" name="q7"> B. Art</label>
+          <label><input type="radio" name="q7"> C. Physical Education</label>
+          <label><input type="radio" name="q7"> D. Science</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="mc-item">
+      <span class="mc-num">8.</span>
+      <div class="mc-question">
+        ______ she have English today? – Yes, she does.
+        <div class="mc-options">
+          <label><input type="radio" name="q8"> A. Do</label>
+          <label><input type="radio" name="q8"> B. Does</label>
+          <label><input type="radio" name="q8"> C. Is</label>
+          <label><input type="radio" name="q8"> D. Has</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="mc-item">
+      <span class="mc-num">9.</span>
+      <div class="mc-question">
+        My hobby is ______ football.
+        <div class="mc-options">
+          <label><input type="radio" name="q9"> A. play</label>
+          <label><input type="radio" name="q9"> B. plays</label>
+          <label><input type="radio" name="q9"> C. playing</label>
+          <label><input type="radio" name="q9"> D. played</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="mc-item">
+      <span class="mc-num">10.</span>
+      <div class="mc-question">
+        "IT" là viết tắt của môn học nào?
+        <div class="mc-options">
+          <label><input type="radio" name="q10"> A. History</label>
+          <label><input type="radio" name="q10"> B. Information Technology</label>
+          <label><input type="radio" name="q10"> C. Art</label>
+          <label><input type="radio" name="q10"> D. Geography</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PART B -->
+  <div class="section">
+    <div class="section-title">✏️ PART B – Fill in the blank (10 pts)</div>
+    <p class="instruction">📌 Điền từ thích hợp vào chỗ trống</p>
+
+    <div class="word-bank">
+      📦 <b>Word bank:</b>
+      <span>does &nbsp;|&nbsp; have &nbsp;|&nbsp; likes &nbsp;|&nbsp; singing &nbsp;|&nbsp; hobby &nbsp;|&nbsp; don't &nbsp;|&nbsp; playing &nbsp;|&nbsp; has &nbsp;|&nbsp; do &nbsp;|&nbsp; watching</span>
+    </div>
+
+    <div class="fill-item"><span class="fill-num">1.</span> What <input class="blank" type="text"> she like? – She <input class="blank" type="text"> apples.</div>
+    <div class="fill-item"><span class="fill-num">2.</span> My <input class="blank" type="text"> is <input class="blank" type="text"> TV.</div>
+    <div class="fill-item"><span class="fill-num">3.</span> They <input class="blank" type="text"> not have Art on Friday.</div>
+    <div class="fill-item"><span class="fill-num">4.</span> She <input class="blank" type="text"> Music on Wednesday.</div>
+    <div class="fill-item"><span class="fill-num">5.</span> I <input class="blank" type="text"> Maths and English today.</div>
+    <div class="fill-item"><span class="fill-num">6.</span> His hobby is <input class="blank" type="text"> football.</div>
+    <div class="fill-item"><span class="fill-num">7.</span> What <input class="blank" type="text"> your hobby? – My hobby is <input class="blank" type="text">.</div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PART C -->
+  <div class="section">
+    <div class="section-title">🔀 PART C – Arrange the words (10 pts)</div>
+    <p class="instruction">📌 Sắp xếp các từ thành câu đúng</p>
+
+    <div class="arrange-item">
+      <div class="arrange-num">1.</div>
+      <div class="arrange-words">hobby / is / his / What ?</div>
+      <input class="arrange-line" type="text" placeholder="→ Viết câu đúng vào đây...">
+    </div>
+
+    <div class="arrange-item">
+      <div class="arrange-num">2.</div>
+      <div class="arrange-words">like / She / singing / does / doing ?</div>
+      <input class="arrange-line" type="text" placeholder="→ Viết câu đúng vào đây...">
+    </div>
+
+    <div class="arrange-item">
+      <div class="arrange-num">3.</div>
+      <div class="arrange-words">have / I / Maths / on / don't / Tuesday .</div>
+      <input class="arrange-line" type="text" placeholder="→ Viết câu đúng vào đây...">
+    </div>
+
+    <div class="arrange-item">
+      <div class="arrange-num">4.</div>
+      <div class="arrange-words">hobby / playing / Their / is / football .</div>
+      <input class="arrange-line" type="text" placeholder="→ Viết câu đúng vào đây...">
+    </div>
+
+    <div class="arrange-item">
+      <div class="arrange-num">5.</div>
+      <div class="arrange-words">she / Does / English / have / today ?</div>
+      <input class="arrange-line" type="text" placeholder="→ Viết câu đúng vào đây...">
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PART D -->
+  <div class="section">
+    <div class="section-title">📖 PART D – Reading comprehension (10 pts)</div>
+    <p class="instruction">📌 Đọc đoạn văn và trả lời câu hỏi (khoanh tròn đáp án đúng)</p>
+
+    <div class="reading-passage">
+      Hi! My name is <span class="name">Lily</span>. I am a student. I like <b>drawing pictures</b> and <b>reading books</b>. My hobby is drawing pictures.<br><br>
+      My friend's name is <span class="name">Tom</span>. He likes <b>singing</b> and <b>playing football</b>. His hobby is playing football.<br><br>
+      At school, I have <b>English and Maths</b> on Monday. I have <b>Art</b> on Wednesday. I don't have Science today.<br>
+      Tom has <b>Music</b> on Tuesday. He doesn't have PE on Thursday.
+    </div>
+
+    <div class="mc-item">
+      <span class="mc-num">1.</span>
+      <div class="mc-question">
+        What is Lily's hobby?
+        <div class="mc-options">
+          <label><input type="radio" name="r1"> A. Singing</label>
+          <label><input type="radio" name="r1"> B. Drawing pictures</label>
+          <label><input type="radio" name="r1"> C. Playing football</label>
+          <label><input type="radio" name="r1"> D. Watching TV</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mc-item">
+      <span class="mc-num">2.</span>
+      <div class="mc-question">
+        Does Tom like singing?
+        <div class="mc-options">
+          <label><input type="radio" name="r2"> A. Yes, he does.</label>
+          <label><input type="radio" name="r2"> B. No, he does not.</label>
+          <label><input type="radio" name="r2"> C. Yes, she does.</label>
+          <label><input type="radio" name="r2"> D. No, she does not.</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mc-item">
+      <span class="mc-num">3.</span>
+      <div class="mc-question">
+        What does Lily have on Monday?
+        <div class="mc-options">
+          <label><input type="radio" name="r3"> A. Art and Music</label>
+          <label><input type="radio" name="r3"> B. PE and Science</label>
+          <label><input type="radio" name="r3"> C. English and Maths</label>
+          <label><input type="radio" name="r3"> D. Maths and Art</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mc-item">
+      <span class="mc-num">4.</span>
+      <div class="mc-question">
+        Does Tom have PE on Thursday?
+        <div class="mc-options">
+          <label><input type="radio" name="r4"> A. Yes, he does.</label>
+          <label><input type="radio" name="r4"> B. No, he doesn't.</label>
+          <label><input type="radio" name="r4"> C. Yes, she does.</label>
+          <label><input type="radio" name="r4"> D. No, she doesn't.</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mc-item">
+      <span class="mc-num">5.</span>
+      <div class="mc-question">
+        When does Tom have Music?
+        <div class="mc-options">
+          <label><input type="radio" name="r5"> A. On Monday</label>
+          <label><input type="radio" name="r5"> B. On Wednesday</label>
+          <label><input type="radio" name="r5"> C. On Tuesday</label>
+          <label><input type="radio" name="r5"> D. On Thursday</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORE BOX -->
+  <div class="score-box">
+    <div class="score-title">🏆 TỔNG KẾT ĐIỂM</div>
+    <div class="score-grid">
+      <div class="score-cell"><span class="cell-label">Part A (10đ)</span><span class="cell-score">___</span></div>
+      <div class="score-cell"><span class="cell-label">Part B (10đ)</span><span class="cell-score">___</span></div>
+      <div class="score-cell"><span class="cell-label">Part C (10đ)</span><span class="cell-score">___</span></div>
+      <div class="score-cell"><span class="cell-label">Part D (10đ)</span><span class="cell-score">___</span></div>
+    </div>
+    <div style="margin-top: 12px; font-size: 13px; font-weight: 700; color: #777;">
+      TOTAL: _____ / 40 &nbsp;&nbsp;|&nbsp;&nbsp; Xếp loại: _________________
+    </div>
+  </div>
+
+  <!-- ANSWER KEY (hidden, for parent) -->
+  <details style="margin-top: 24px; font-size: 12px; color: #888;">
+    <summary style="cursor: pointer; font-weight: 700; color: #ff6b35; font-size: 13px;">🔑 Đáp án (dành cho phụ huynh – nhấn để xem)</summary>
+    <div style="background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 14px; margin-top: 8px; line-height: 2; font-weight: 600;">
+      <b>PART A:</b> 1-A &nbsp;|&nbsp; 2-B &nbsp;|&nbsp; 3-C &nbsp;|&nbsp; 4-C &nbsp;|&nbsp; 5-B &nbsp;|&nbsp; 6-C &nbsp;|&nbsp; 7-C &nbsp;|&nbsp; 8-B &nbsp;|&nbsp; 9-C &nbsp;|&nbsp; 10-B<br>
+      <b>PART B:</b> 1. does / likes &nbsp;|&nbsp; 2. hobby / watching &nbsp;|&nbsp; 3. do &nbsp;|&nbsp; 4. has &nbsp;|&nbsp; 5. have &nbsp;|&nbsp; 6. playing &nbsp;|&nbsp; 7. is / singing<br>
+      <b>PART C:</b>
+      1. What is his hobby? &nbsp;|&nbsp;
+      2. Does she like doing singing? &nbsp;|&nbsp;
+      3. I don't have Maths on Tuesday. &nbsp;|&nbsp;
+      4. Their hobby is playing football. &nbsp;|&nbsp;
+      5. Does she have English today?<br>
+      <b>PART D:</b> 1-B &nbsp;|&nbsp; 2-A &nbsp;|&nbsp; 3-C &nbsp;|&nbsp; 4-B &nbsp;|&nbsp; 5-C
+    </div>
+  </details>
+
+</div>
+</body>
+</html>

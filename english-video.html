@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>📺 Video Học Tiếng Anh</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#0EA5E9;--sky-l:#E0F2FE;--sky-d:#0284C7;--mint:#10B981;--mint-l:#ECFDF5;--mint-d:#059669;--sun:#F59E0B;--sun-l:#FEF3C7;--violet:#8B5CF6;--coral:#F43F5E;--ink:#0F172A;--muted:#94A3B8;--bg:#F0F9FF;--card:#FFF;--border:#E2E8F0;--r:16px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+.hdr{background:linear-gradient(135deg,#CC0000,#880000);padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.back{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.4);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none;flex-shrink:0}
+.logo{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;color:#fff;flex:1}
+#setup{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:14px;background:linear-gradient(150deg,#FEF2F2,#EDE9FE)}
+.s-hero{font-size:64px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.s-title{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;text-align:center;color:var(--ink)}
+.s-in{width:100%;max-width:300px;padding:12px 16px;border:2px solid var(--border);border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;outline:none;text-align:center;background:var(--card)}
+.s-btn{width:100%;max-width:300px;padding:13px;background:linear-gradient(135deg,#EF4444,#DC2626);color:#fff;border:none;border-radius:var(--rs);font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;cursor:pointer}
+#app{display:none;max-width:480px;margin:0 auto;padding:14px 14px 60px}
+.day-tabs{display:flex;gap:5px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.day-tabs::-webkit-scrollbar{display:none}
+.dtab{padding:7px 13px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:12px;font-weight:800;cursor:pointer;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.dtab.on{background:#EF4444;color:#fff;border-color:transparent}
+.dtab.today{border-color:#EF4444;color:#EF4444}
+.card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);margin-bottom:12px;overflow:hidden}
+.card-body{padding:14px}
+.v-channel{font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.v-desc{font-size:12px;font-weight:600;color:var(--muted);line-height:1.5;margin-bottom:8px}
+.v-tags{display:flex;gap:5px;flex-wrap:wrap}
+.vtag{padding:3px 9px;border-radius:12px;font-size:11px;font-weight:800;background:var(--sky-l);color:var(--sky-d)}
+.btn-yt{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:linear-gradient(135deg,#FF0000,#CC0000);color:#fff;border:none;border-radius:var(--rs);font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:12px}
+.timer-card{background:var(--card);border-radius:var(--r);border:2px solid var(--mint);padding:16px;margin-bottom:12px;text-align:center}
+.timer-num{font-family:'Baloo 2',cursive;font-size:48px;font-weight:800;color:var(--mint-d);margin-bottom:10px}
+.timer-num.warn{color:var(--sun)}
+.timer-num.done{color:#EF4444}
+.timer-bar{height:10px;background:var(--border);border-radius:5px;overflow:hidden;margin-bottom:12px}
+.timer-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--mint),var(--sky));transition:width 1s linear}
+.timer-fill.warn{background:linear-gradient(90deg,var(--sun),#EF4444)}
+.timer-status{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px}
+.timer-btns{display:flex;gap:8px}
+.tbtn{flex:1;padding:11px;border-radius:var(--rs);border:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer}
+.tbtn-start{background:var(--mint);color:#fff}
+.tbtn-pause{background:var(--sun-l);color:var(--sun);display:none}
+.tbtn-reset{background:#F1F5F9;color:var(--ink)}
+.done-banner{background:var(--mint-l);border:2px solid var(--mint);border-radius:var(--r);padding:16px;margin-bottom:12px;text-align:center;display:none}
+.done-banner.show{display:block}
+.voc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.voc-card{background:var(--sky-l);border:1.5px solid #BAE6FD;border-radius:var(--rs);padding:11px 12px;cursor:pointer;text-align:center;transition:all .2s}
+.voc-card.flip{background:var(--mint-l);border-color:var(--mint)}
+.voc-em{font-size:22px;margin-bottom:4px}
+.voc-en{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--sky-d)}
+.voc-card.flip .voc-en{color:var(--mint-d)}
+.voc-vn{font-size:12px;font-weight:700;color:var(--mint-d);display:none;margin-top:3px}
+.voc-card.flip .voc-vn{display:block}
+.gram-card{background:var(--sun-l);border:1.5px solid #FCD34D;border-radius:var(--rs);padding:12px 14px;margin-bottom:8px}
+.gc-lbl{font-size:10px;font-weight:900;color:var(--sun);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.gc-formula{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.gc-ex{font-size:12px;font-weight:700;color:var(--ink);line-height:1.8}
+.sec-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:10px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <a href="english-daily.html" class="back">←</a>
+  <div class="logo">📺 Video Học Tiếng Anh</div>
+</div>
+<div id="setup">
+  <div class="s-hero">📺</div>
+  <div class="s-title">Video + Từ vựng<br>hôm nay!</div>
+  <input class="s-in" id="name-in" placeholder="Tên con là..." maxlength="30" autocomplete="off">
+  <button class="s-btn" onclick="startApp()">Bắt đầu! 🚀</button>
+</div>
+<div id="app">
+  <div class="day-tabs" id="day-tabs"></div>
+  <div class="card">
+    <div class="card-body">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:28px" id="v-icon">🐷</span>
+        <div>
+          <div class="v-channel" id="v-channel">Peppa Pig</div>
+          <div class="v-desc" id="v-desc"></div>
+        </div>
+      </div>
+      <div class="v-tags" id="v-tags"></div>
+    </div>
+  </div>
+  <button class="btn-yt" id="btn-yt" onclick="openVideo()">▶ Mở video trên YouTube</button>
+  <div class="timer-card">
+    <div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px">⏱️ Timer học tập</div>
+    <div class="timer-num" id="timer-num">20:00</div>
+    <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+    <div class="timer-status" id="timer-status">Mở YouTube → quay lại → bấm START</div>
+    <div class="timer-btns">
+      <button class="tbtn tbtn-start" id="tbtn-start" onclick="startTimer()">▶ START</button>
+      <button class="tbtn tbtn-pause" id="tbtn-pause" onclick="pauseTimer()">⏸ PAUSE</button>
+      <button class="tbtn tbtn-reset" onclick="resetTimer()">↺ Reset</button>
+    </div>
+  </div>
+  <div class="done-banner" id="done-banner">
+    <div style="font-size:40px;margin-bottom:6px">🎉</div>
+    <div style="font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--mint-d)">Xem xong rồi! Giỏi lắm!</div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:4px" id="done-sub">Ba đã biết rồi nhé! ⭐</div>
+  </div>
+  <div class="sec-title">📚 Từ vựng trong video hôm nay <span style="font-size:11px;font-weight:600;color:var(--muted)">👆 bấm thẻ xem nghĩa</span></div>
+  <div class="voc-grid" id="voc-grid"></div>
+  <div class="sec-title">✏️ Ngữ pháp hôm nay</div>
+  <div id="gram-list"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var NAME='';
+var TODAY=new Date();
+var DAYS=['CN','T2','T3','T4','T5','T6','T7'];
+var curDay=TODAY.getDay();
+var timerInterval=null;
+var timerSec=0;
+var totalSec=0;
+var timerRunning=false;
+var timerDone=false;
+var SUPA_URL='https://cvwcpemkceqtqpauwqzw.supabase.co';
+var SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+
+var VIDEOS=[
+  {day:0,name:'CN',channel:'Super Simple Songs',icon:'🎵',desc:'Học từ vựng qua bài hát ABC!',tags:['Âm nhạc','Từ vựng','ABC'],url:'https://www.youtube.com/results?search_query=super+simple+songs+abc',duration:15,
+   vocab:[{en:'apple',vn:'quả táo',em:'🍎'},{en:'ball',vn:'quả bóng',em:'⚽'},{en:'cat',vn:'con mèo',em:'🐱'},{en:'dog',vn:'con chó',em:'🐶'},{en:'egg',vn:'quả trứng',em:'🥚'},{en:'fish',vn:'con cá',em:'🐟'}],
+   gram:[{lbl:'Bảng chữ cái',formula:'A B C D ... Z',ex:['A is for Apple 🍎','B is for Ball ⚽']}]},
+  {day:1,name:'T2',channel:'Peppa Pig',icon:'🐷',desc:'Từ vựng gia đình và trường học!',tags:['Gia đình','Trường học'],url:'https://www.youtube.com/results?search_query=peppa+pig+english+episodes',duration:20,
+   vocab:[{en:'family',vn:'gia đình',em:'👨‍👩‍👧'},{en:'mummy',vn:'mẹ',em:'👩'},{en:'daddy',vn:'bố',em:'👨'},{en:'school',vn:'trường học',em:'🏫'},{en:'friend',vn:'bạn bè',em:'👫'},{en:'house',vn:'ngôi nhà',em:'🏠'}],
+   gram:[{lbl:'Giới thiệu bản thân',formula:'I am + tên / tuổi',ex:['I am Peppa Pig.','I am four years old.']},{lbl:'This is...',formula:'This is + danh từ',ex:['This is my mummy.','This is my house.']}]},
+  {day:2,name:'T3',channel:'BBC Earth Kids',icon:'🌍',desc:'Động vật kỳ thú trong thiên nhiên!',tags:['Thiên nhiên','Động vật','BBC'],url:'https://www.youtube.com/@BBCEarth',duration:20,
+   vocab:[{en:'lion',vn:'sư tử',em:'🦁'},{en:'elephant',vn:'voi',em:'🐘'},{en:'giraffe',vn:'hươu cao cổ',em:'🦒'},{en:'zebra',vn:'ngựa vằn',em:'🦓'},{en:'monkey',vn:'con khỉ',em:'🐒'},{en:'jungle',vn:'rừng rậm',em:'🌿'}],
+   gram:[{lbl:'Mô tả con vật',formula:'The + animal + is + tính từ',ex:['The lion is big.','The giraffe is tall.']},{lbl:'Con vật + hành động',formula:'The + animal + verb + s',ex:['The elephant eats grass.','The monkey climbs trees.']}]},
+  {day:3,name:'T4',channel:'Bluey',icon:'🐶',desc:'Hoạt hình Úc siêu hay!',tags:['Hoạt hình','Gia đình'],url:'https://www.youtube.com/results?search_query=bluey+full+episodes+english',duration:20,
+   vocab:[{en:'game',vn:'trò chơi',em:'🎮'},{en:'park',vn:'công viên',em:'🌳'},{en:'run',vn:'chạy',em:'🏃'},{en:'jump',vn:'nhảy',em:'🦘'},{en:'play',vn:'chơi',em:'⚽'},{en:'happy',vn:'vui vẻ',em:'😊'}],
+   gram:[{lbl:"Let's + hoạt động",formula:"Let's + verb",ex:["Let's play!","Let's run to the park!"]},{lbl:'Do you want to...?',formula:'Do you want to + verb?',ex:['Do you want to play?','Do you want to jump?']}]},
+  {day:4,name:'T5',channel:'BBC Earth Kids',icon:'🌊',desc:'Đại dương và động vật biển!',tags:['Đại dương','BBC'],url:'https://www.youtube.com/@BBCEarth',duration:20,
+   vocab:[{en:'ocean',vn:'đại dương',em:'🌊'},{en:'whale',vn:'cá voi',em:'🐋'},{en:'dolphin',vn:'cá heo',em:'🐬'},{en:'shark',vn:'cá mập',em:'🦈'},{en:'coral',vn:'san hô',em:'🪸'},{en:'wave',vn:'sóng biển',em:'🌊'}],
+   gram:[{lbl:'Mô tả kích thước',formula:'The + noun + is + big/small',ex:['The whale is very big.','The fish is small.']},{lbl:'Màu sắc + con vật',formula:'The + animal + is + colour',ex:['The dolphin is grey.','The shark is white.']}]},
+  {day:5,name:'T6',channel:'Alphablocks',icon:'🔤',desc:'Học đánh vần và phát âm BBC!',tags:['Phát âm','Đánh vần','BBC'],url:'https://www.youtube.com/results?search_query=alphablocks+full+episodes',duration:15,
+   vocab:[{en:'cat',vn:'con mèo',em:'🐱'},{en:'bat',vn:'con dơi',em:'🦇'},{en:'hat',vn:'cái mũ',em:'🎩'},{en:'rat',vn:'con chuột',em:'🐀'},{en:'mat',vn:'tấm thảm',em:'🟫'},{en:'fan',vn:'cái quạt',em:'🌀'}],
+   gram:[{lbl:'Vần -at',formula:'c/b/h/r/m + at',ex:['c+at = cat','b+at = bat','h+at = hat']},{lbl:'Âm /ae/ ngắn',formula:'"a" đọc như trong cat',ex:['apple - cat - hat - mat']}]},
+  {day:6,name:'T7',channel:'Peppa Pig',icon:'🐷',desc:'Ôn tập với Peppa tập trường học!',tags:['Trường học','Ôn tập'],url:'https://www.youtube.com/results?search_query=peppa+pig+school+episodes+english',duration:20,
+   vocab:[{en:'teacher',vn:'giáo viên',em:'👩‍🏫'},{en:'classroom',vn:'lớp học',em:'🏫'},{en:'pencil',vn:'bút chì',em:'✏️'},{en:'book',vn:'sách',em:'📚'},{en:'draw',vn:'vẽ',em:'🎨'},{en:'learn',vn:'học',em:'📖'}],
+   gram:[{lbl:'Yes/No question',formula:'Do you + verb? Yes/No',ex:['Do you like school? Yes, I do.','Do you have a pencil? Yes, I do.']},{lbl:'We + hành động',formula:'We + verb',ex:['We learn at school.','We draw pictures.']}]},
+];
+
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.className='toast show';setTimeout(function(){t.className='toast';},2600);}
+function el(id){return document.getElementById(id);}
+
+document.getElementById('name-in').addEventListener('keydown',function(e){if(e.key==='Enter')startApp();});
+function startApp(){
+  var n=document.getElementById('name-in').value.trim();
+  if(!n){toast('Con nhập tên vào nhé 😊');return;}
+  NAME=n;localStorage.setItem('en_name',n);
+  el('setup').style.display='none';
+  el('app').style.display='block';
+  buildDayTabs();
+  loadDay(curDay);
+}
+
+function buildDayTabs(){
+  var today=TODAY.getDay();
+  var html='';
+  for(var i=0;i<VIDEOS.length;i++){
+    var v=VIDEOS[i];
+    var cls='dtab'+(v.day===curDay?' on':'')+(v.day===today?' today':'');
+    html+='<button class="'+cls+'" onclick="loadDay('+v.day+',this)">'+v.icon+v.name+(v.day===today?'📌':'')+'</button>';
+  }
+  el('day-tabs').innerHTML=html;
+}
+
+function loadDay(day,btn){
+  curDay=day;
+  var btns=document.querySelectorAll('.dtab');
+  for(var i=0;i<btns.length;i++){btns[i].classList.remove('on');}
+  if(btn)btn.classList.add('on');
+  resetTimer();
+  var v=VIDEOS[day];
+  el('v-icon').textContent=v.icon;
+  el('v-channel').textContent=v.channel;
+  el('v-desc').textContent=v.desc;
+  el('v-tags').innerHTML=v.tags.map(function(t){return'<span class="vtag">'+t+'</span>';}).join('');
+  el('btn-yt').textContent='▶ Mở '+v.channel+' trên YouTube';
+  totalSec=v.duration*60;timerSec=totalSec;
+  updateTimerDisplay();
+  el('timer-status').textContent='Mở YouTube → quay lại → bấm START';
+  el('done-banner').className='done-banner';
+  // Vocab
+  el('voc-grid').innerHTML=v.vocab.map(function(w){
+    return'<div class="voc-card" onclick="this.classList.toggle(\'flip\')">'+
+      '<div class="voc-em">'+w.em+'</div>'+
+      '<div class="voc-en">'+w.en+'</div>'+
+      '<div class="voc-vn">'+w.vn+'</div>'+
+      '</div>';
+  }).join('');
+  // Grammar
+  el('gram-list').innerHTML=v.gram.map(function(g){
+    return'<div class="gram-card">'+
+      '<div class="gc-lbl">📌 '+g.lbl+'</div>'+
+      '<div class="gc-formula">'+g.formula+'</div>'+
+      '<div class="gc-ex">'+g.ex.map(function(e){return'• '+e;}).join('<br>')+'</div>'+
+      '</div>';
+  }).join('');
+}
+
+function openVideo(){
+  var v=VIDEOS[curDay];
+  window.open(v.url,'_blank');
+}
+
+function updateTimerDisplay(){
+  var m=Math.floor(timerSec/60).toString();
+  var s=(timerSec%60).toString();
+  if(m.length<2)m='0'+m;
+  if(s.length<2)s='0'+s;
+  el('timer-num').textContent=m+':'+s;
+  var pct=timerSec/totalSec*100;
+  el('timer-fill').style.width=pct+'%';
+  if(pct<=25){el('timer-fill').className='timer-fill warn';el('timer-num').className='timer-num warn';}
+  else{el('timer-fill').className='timer-fill';el('timer-num').className='timer-num';}
+}
+
+function startTimer(){
+  if(timerDone)return;
+  timerRunning=true;
+  el('tbtn-start').style.display='none';
+  el('tbtn-pause').style.display='block';
+  el('timer-status').textContent='⏱️ Đang đếm — con đang xem video nhé!';
+  timerInterval=setInterval(function(){
+    timerSec--;
+    updateTimerDisplay();
+    if(timerSec<=0){clearInterval(timerInterval);timerRunning=false;timerDone=true;onTimerDone();}
+  },1000);
+}
+
+function pauseTimer(){
+  clearInterval(timerInterval);timerRunning=false;
+  el('tbtn-start').style.display='block';el('tbtn-start').textContent='▶ TIẾP TỤC';
+  el('tbtn-pause').style.display='none';
+  el('timer-status').textContent='⏸ Đã tạm dừng';
+}
+
+function resetTimer(){
+  clearInterval(timerInterval);timerRunning=false;timerDone=false;
+  var v=VIDEOS[curDay];
+  totalSec=v?v.duration*60:1200;timerSec=totalSec;
+  updateTimerDisplay();
+  el('timer-fill').className='timer-fill';el('timer-num').className='timer-num';
+  el('tbtn-start').style.display='block';el('tbtn-start').textContent='▶ START';
+  el('tbtn-pause').style.display='none';
+  el('timer-status').textContent='Mở YouTube → quay lại → bấm START';
+  el('done-banner').className='done-banner';
+}
+
+function onTimerDone(){
+  var v=VIDEOS[curDay];
+  el('timer-num').textContent='00:00';
+  el('timer-num').className='timer-num done';
+  el('timer-fill').style.width='0%';
+  el('timer-status').textContent='✅ Đã xem xong!';
+  el('tbtn-start').style.display='none';el('tbtn-pause').style.display='none';
+  el('done-banner').className='done-banner show';
+  el('done-sub').textContent='Con xem '+v.duration+' phút '+v.icon+' '+v.channel+' — Ba biết rồi! ⭐';
+  toast('🎉 Xem xong! Giỏi lắm!');
+  // Save to Supabase
+  fetch(SUPA_URL+'/rest/v1/english_video_watches',{method:'POST',
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+    body:JSON.stringify({student_name:NAME,day:curDay,channel:v.channel,completed_at:new Date().toISOString(),duration_watched:v.duration,vocab_count:v.vocab.length})
+  }).then(function(){}).catch(function(){});
+}
+
+window.addEventListener('DOMContentLoaded',function(){
+  var s=localStorage.getItem('en_name');
+  if(s)document.getElementById('name-in').value=s;
+  document.getElementById('name-in').addEventListener('input',function(e){localStorage.setItem('en_name',e.target.value);});
+});
+</script>
+</body>
+</html>

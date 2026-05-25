@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>📊 English Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#0EA5E9;--sky-l:#E0F2FE;--sky-d:#0284C7;--mint:#10B981;--mint-l:#ECFDF5;--mint-d:#059669;--sun:#F59E0B;--sun-l:#FEF3C7;--sun-d:#D97706;--violet:#8B5CF6;--violet-l:#EDE9FE;--coral:#F43F5E;--coral-l:#FFF1F2;--ink:#0F172A;--ink2:#475569;--muted:#94A3B8;--bg:#F0F9FF;--card:#FFF;--border:#E2E8F0;--r:16px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+.hdr{background:linear-gradient(135deg,var(--sky-d),var(--violet));padding:14px 16px;position:sticky;top:0;z-index:100}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.logo{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#fff}
+.hdr-sub{font-size:12px;font-weight:700;color:rgba(255,255,255,.8)}
+.wrap{max-width:600px;margin:0 auto;padding:14px 14px 40px}
+.card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);margin-bottom:14px;overflow:hidden}
+.card-hdr{padding:13px 16px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink)}
+.card-sub{font-size:12px;font-weight:700;color:var(--muted)}
+.card-body{padding:14px 16px}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.stat{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:14px;text-align:center}
+.stat-num{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:var(--sky)}
+.stat-lbl{font-size:11px;font-weight:700;color:var(--muted);margin-top:3px}
+/* FILTER */
+.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.filter-btn{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:12px;font-weight:800;cursor:pointer;color:var(--muted)}
+.filter-btn.on{background:var(--sky);color:#fff;border-color:transparent}
+.refresh-btn{padding:7px 14px;border-radius:20px;border:1.5px solid var(--sky);background:var(--sky-l);font-size:12px;font-weight:800;cursor:pointer;color:var(--sky-d);margin-left:auto}
+/* TABLE */
+.tbl-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.tbl-row:last-child{border-bottom:none}
+.tbl-icon{font-size:20px;flex-shrink:0}
+.tbl-info{flex:1}
+.tbl-name{font-size:13px;font-weight:800;color:var(--ink)}
+.tbl-sub{font-size:11px;font-weight:600;color:var(--muted);margin-top:2px}
+.tbl-score{font-family:'Baloo 2',cursive;font-size:16px;font-weight:800}
+.score-hi{color:var(--mint-d)}
+.score-mid{color:var(--sun-d)}
+.score-lo{color:var(--coral)}
+/* ASSIGN */
+.assign-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.assign-item:last-child{border-bottom:none}
+.ai-icon{font-size:18px;flex-shrink:0}
+.ai-name{font-size:13px;font-weight:700;color:var(--ink);flex:1}
+.ai-status{font-size:11px;font-weight:800;padding:3px 9px;border-radius:20px}
+.ais-done{background:var(--mint-l);color:var(--mint-d)}
+.ais-todo{background:var(--border);color:var(--muted)}
+/* VIDEO */
+.vid-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.vid-item:last-child{border-bottom:none}
+.vi-icon{font-size:20px;flex-shrink:0}
+.vi-info{flex:1}
+.vi-ch{font-size:13px;font-weight:800;color:var(--ink)}
+.vi-dt{font-size:11px;color:var(--muted)}
+.vi-dur{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--sky)}
+/* REWARDS */
+.reward-item{margin-bottom:12px}
+.ri-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.ri-icon{font-size:20px}
+.ri-name{font-size:13px;font-weight:800;color:var(--ink);flex:1}
+.ri-badge{font-size:10px;font-weight:800;padding:2px 9px;border-radius:20px}
+.rib-done{background:var(--mint-l);color:var(--mint-d)}
+.rib-prog{background:var(--sun-l);color:var(--sun-d)}
+.rib-lock{background:var(--border);color:var(--muted)}
+.ri-bar{height:7px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:3px}
+.ri-fill{height:100%;border-radius:4px;transition:width .5s}
+.ri-desc{font-size:11px;font-weight:600;color:var(--muted)}
+/* SESSION */
+.sess-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.sess-item:last-child{border-bottom:none}
+.sess-dot{width:10px;height:10px;border-radius:50%;background:var(--mint);flex-shrink:0}
+.sess-dot.live{background:var(--coral);animation:blink .8s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.sess-info{flex:1}
+.sess-name{font-size:13px;font-weight:800;color:var(--ink)}
+.sess-time{font-size:11px;color:var(--muted)}
+.sess-dur{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:var(--sky)}
+.live-badge{font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;background:var(--coral-l);color:var(--coral);margin-left:6px}
+.empty{text-align:center;padding:20px;color:var(--muted)}
+.empty-icon{font-size:36px;margin-bottom:6px}
+.empty p{font-size:13px;font-weight:700}
+.loading{text-align:center;padding:20px;color:var(--muted);font-size:13px;font-weight:700}
+.spin{display:inline-block;width:18px;height:18px;border:3px solid var(--border);border-top-color:var(--sky);border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="logo">📊 English Dashboard</div>
+    <a href="english-daily.html" style="color:#fff;font-size:12px;font-weight:700;text-decoration:none">← Về trang học</a>
+  </div>
+  <div class="hdr-sub">Theo dõi tiến độ học tập của con</div>
+</div>
+<div class="wrap">
+  <div class="filter-row">
+    <button class="filter-btn on" onclick="filterStu('all',this)">👥 Tất cả</button>
+    <button class="filter-btn" id="stu-filter" onclick="filterStu('Huy',this)">👤 Huy</button>
+    <button class="refresh-btn" onclick="loadAll()">🔄 Tải lại</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-lbl">Bài đã làm</div></div>
+    <div class="stat"><div class="stat-num" id="s-avg">0%</div><div class="stat-lbl">Điểm trung bình</div></div>
+    <div class="stat"><div class="stat-num" id="s-days">0</div><div class="stat-lbl">Ngày học</div></div>
+    <div class="stat"><div class="stat-num" id="s-time">0p</div><div class="stat-lbl">Thời gian học</div></div>
+  </div>
+
+  <!-- TODAY ASSIGNMENT -->
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-title">📋 Bài Ba giao hôm nay</div>
+      <div class="card-sub" id="assign-date"></div>
+    </div>
+    <div class="card-body" id="assign-body"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+  </div>
+
+  <!-- SESSIONS -->
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-title">⏱️ Phiên học hôm nay</div>
+      <div class="card-sub" id="sess-count"></div>
+    </div>
+    <div class="card-body" id="sess-body"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-title">📝 Kết quả bài làm</div>
+      <div class="card-sub" id="res-count"></div>
+    </div>
+    <div class="card-body" id="res-body"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+  </div>
+
+  <!-- VIDEO -->
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-title">📺 Lịch sử xem video</div>
+      <div class="card-sub" id="vid-count"></div>
+    </div>
+    <div class="card-body" id="vid-body"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+  </div>
+
+  <!-- REWARDS -->
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-title">🏆 Mục tiêu dài hạn</div>
+      <div class="card-sub">Hoàn thành để nhận huy hiệu!</div>
+    </div>
+    <div class="card-body" id="reward-body"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var SUPA_URL='https://cvwcpemkceqtqpauwqzw.supabase.co';
+var SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+var TODAY=new Date().toISOString().slice(0,10);
+var selectedStu='all';
+var allResults=[];
+var allSessions=[];
+var allVideos=[];
+
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.className='toast show';setTimeout(function(){t.className='toast';},2600);}
+function el(id){return document.getElementById(id);}
+
+function sbFetch(path){
+  return fetch(SUPA_URL+'/rest/v1/'+path,{
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}
+  }).then(function(r){return r.json();}).catch(function(){return [];});
+}
+
+function filterStu(stu,btn){
+  selectedStu=stu;
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  renderAll();
+}
+
+function loadAll(){
+  el('assign-date').textContent=new Date().toLocaleDateString('vi-VN');
+
+  // Load results
+  sbFetch('results?select=*&subject=eq.english&order=created_at.desc&limit=100')
+    .then(function(data){
+      allResults=data||[];
+      renderStats();
+      renderResults();
+      renderRewards();
+    });
+
+  // Load sessions
+  sbFetch('english_sessions?select=*&order=created_at.desc&limit=50')
+    .then(function(data){
+      allSessions=data||[];
+      renderSessions();
+      renderStats();
+    });
+
+  // Load video watches
+  sbFetch('english_video_watches?select=*&order=created_at.desc&limit=30')
+    .then(function(data){
+      allVideos=data||[];
+      renderVideos();
+    });
+
+  // Load assignments
+  sbFetch('english_assignments?select=*&date=eq.'+TODAY+'&limit=1')
+    .then(function(data){
+      renderAssignments(data&&data.length?data[0]:null);
+    });
+
+  // Load task progress
+  sbFetch('english_task_progress?select=*&date=eq.'+TODAY+'&order=created_at.desc')
+    .then(function(data){
+      window._taskProgress=data||[];
+      renderAssignments(window._lastAssign);
+    });
+}
+
+function getFiltered(arr){
+  if(selectedStu==='all')return arr;
+  return arr.filter(function(r){return r.student_name===selectedStu;});
+}
+
+function renderAll(){
+  renderStats();
+  renderResults();
+  renderSessions();
+  renderVideos();
+  renderRewards();
+}
+
+function renderStats(){
+  var res=getFiltered(allResults);
+  var sess=getFiltered(allSessions);
+  el('s-total').textContent=res.length;
+  var totalPct=0;
+  res.forEach(function(r){if(r.total>0)totalPct+=Math.round(r.score/r.total*100);});
+  el('s-avg').textContent=(res.length?Math.round(totalPct/res.length):0)+'%';
+  // Unique days
+  var days={};
+  res.forEach(function(r){if(r.created_at)days[r.created_at.slice(0,10)]=1;});
+  el('s-days').textContent=Object.keys(days).length;
+  // Total time
+  var totalMin=0;
+  sess.forEach(function(s){if(s.duration_seconds)totalMin+=Math.round(s.duration_seconds/60);});
+  el('s-time').textContent=totalMin+'p';
+}
+
+function renderResults(){
+  var res=getFiltered(allResults).slice(0,20);
+  el('res-count').textContent=res.length+' bài';
+  if(!res.length){el('res-body').innerHTML='<div class="empty"><div class="empty-icon">📭</div><p>Chưa có kết quả</p></div>';return;}
+  var icons={english:'📝',quiz:'📝',flashcard:'🃏',reading:'🎤',listen:'👂',speak:'🎤',gram:'✏️'};
+  el('res-body').innerHTML=res.map(function(r){
+    var pct=r.total>0?Math.round(r.score/r.total*100):0;
+    var scoreClass=pct>=80?'score-hi':pct>=60?'score-mid':'score-lo';
+    var d=new Date(r.created_at);
+    var ds=d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    return'<div class="tbl-row">'+
+      '<div class="tbl-icon">📝</div>'+
+      '<div class="tbl-info">'+
+        '<div class="tbl-name">'+(r.level||'Bài tập')+(r.student_name?' · '+r.student_name:'')+'</div>'+
+        '<div class="tbl-sub">'+ds+'</div>'+
+      '</div>'+
+      '<div class="tbl-score '+scoreClass+'">'+r.score+'/'+r.total+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function renderSessions(){
+  var sess=getFiltered(allSessions).filter(function(s){
+    return s.started_at&&s.started_at.slice(0,10)===TODAY;
+  });
+  el('sess-count').textContent=sess.length+' phiên';
+  if(!sess.length){el('sess-body').innerHTML='<div class="empty"><div class="empty-icon">⏰</div><p>Chưa có phiên học hôm nay</p></div>';return;}
+  var taskIcons={flash:'🃏',quiz:'📝',skills:'🎯',reading:'🎤',video:'📺',exam_up:'📤'};
+  el('sess-body').innerHTML=sess.map(function(s){
+    var isLive=!s.ended_at;
+    var dur='';
+    if(s.duration_seconds){
+      var m=Math.floor(s.duration_seconds/60);
+      var sec=s.duration_seconds%60;
+      dur=(m?m+'p ':'')+(sec?sec+'s':'');
+    }
+    var start=s.started_at?new Date(s.started_at).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}):'';
+    var end=s.ended_at?new Date(s.ended_at).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}):'';
+    var icon=taskIcons[s.task_id]||'📚';
+    return'<div class="sess-item">'+
+      '<div class="sess-dot'+(isLive?' live':'')+'"></div>'+
+      '<div class="sess-info">'+
+        '<div class="sess-name">'+icon+' '+(s.task_name||'Học tập')+(isLive?'<span class="live-badge">LIVE</span>':'')+(s.student_name?' · '+s.student_name:'')+'</div>'+
+        '<div class="sess-time">'+start+(end?' → '+end:'')+'</div>'+
+      '</div>'+
+      '<div class="sess-dur">'+(dur||'—')+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function renderAssignments(assign){
+  window._lastAssign=assign;
+  if(!assign||!assign.tasks){
+    el('assign-body').innerHTML='<div class="empty"><div class="empty-icon">📋</div><p>Ba chưa giao bài hôm nay</p></div>';
+    return;
+  }
+  var tasks=[];
+  try{tasks=JSON.parse(assign.tasks);}catch(e){tasks=[];}
+  var progress=window._taskProgress||[];
+  var doneIds={};
+  progress.forEach(function(p){doneIds[p.task_id]=true;});
+  if(!tasks.length){el('assign-body').innerHTML='<div class="empty"><p>Chưa có bài được giao</p></div>';return;}
+  var doneCount=0;
+  var html=tasks.map(function(t){
+    var isDone=doneIds[t.id]||false;
+    if(isDone)doneCount++;
+    return'<div class="assign-item">'+
+      '<div class="ai-icon">'+(t.icon||'📝')+'</div>'+
+      '<div class="ai-name">'+t.name+'</div>'+
+      '<div class="ai-status '+(isDone?'ais-done':'ais-todo')+'">'+(isDone?'✅ Xong':'⭕ Chưa')+'</div>'+
+    '</div>';
+  }).join('');
+  html+='<div style="margin-top:10px;display:flex;align-items:center;gap:8px">'+
+    '<div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden">'+
+    '<div style="height:100%;width:'+Math.round(doneCount/tasks.length*100)+'%;background:var(--mint);border-radius:3px;transition:width .4s"></div></div>'+
+    '<span style="font-size:12px;font-weight:800;color:var(--muted)">'+doneCount+'/'+tasks.length+'</span></div>';
+  el('assign-body').innerHTML=html;
+}
+
+function renderVideos(){
+  var vids=getFiltered(allVideos).slice(0,10);
+  el('vid-count').textContent=vids.length+' buổi';
+  if(!vids.length){el('vid-body').innerHTML='<div class="empty"><div class="empty-icon">📺</div><p>Chưa có lịch sử xem video</p></div>';return;}
+  var icons={'Peppa Pig':'🐷','BBC Earth Kids':'🌍','Bluey':'🐶','Super Simple Songs':'🎵','Alphablocks':'🔤'};
+  el('vid-body').innerHTML=vids.map(function(v){
+    var d=new Date(v.completed_at||v.created_at);
+    var ds=d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    return'<div class="vid-item">'+
+      '<div class="vi-icon">'+(icons[v.channel]||'📺')+'</div>'+
+      '<div class="vi-info">'+
+        '<div class="vi-ch">'+(v.channel||'Video')+(v.student_name?' · '+v.student_name:'')+'</div>'+
+        '<div class="vi-dt">'+ds+'</div>'+
+      '</div>'+
+      '<div class="vi-dur">⏱️ '+(v.duration_watched||'—')+'p</div>'+
+    '</div>';
+  }).join('');
+}
+
+function renderRewards(){
+  var res=getFiltered(allResults);
+  var sess=getFiltered(allSessions);
+  var quizCount=res.length;
+  var days={};
+  res.forEach(function(r){if(r.created_at)days[r.created_at.slice(0,10)]=1;});
+  var dayCount=Object.keys(days).length;
+  var perfectCount=res.filter(function(r){return r.score===r.total&&r.total>=5;}).length;
+  var totalMin=0;
+  sess.forEach(function(s){if(s.duration_seconds)totalMin+=Math.round(s.duration_seconds/60);});
+
+  var GOALS=[
+    {icon:'📝',name:'Làm 10 bài tập',cur:quizCount,target:10,reward:'🎖️ Huy hiệu Chăm chỉ'},
+    {icon:'🔥',name:'Học 7 ngày',cur:dayCount,target:7,reward:'🔥 Huy hiệu Kiên trì'},
+    {icon:'🏆',name:'Đạt 100% điểm 3 lần',cur:perfectCount,target:3,reward:'🏆 Huy hiệu Xuất sắc'},
+    {icon:'⏱️',name:'Học đủ 300 phút',cur:totalMin,target:300,reward:'💎 Huy hiệu Bền bỉ'},
+    {icon:'📚',name:'Làm 30 bài tập',cur:quizCount,target:30,reward:'🎓 Huy hiệu Học giỏi'},
+  ];
+
+  el('reward-body').innerHTML=GOALS.map(function(g){
+    var pct=Math.min(100,Math.round(g.cur/g.target*100));
+    var isDone=g.cur>=g.target;
+    var barColor=isDone?'#10B981':pct>50?'#F59E0B':'#0EA5E9';
+    var badgeClass=isDone?'rib-done':pct>0?'rib-prog':'rib-lock';
+    var badgeTxt=isDone?'✅ Đạt!':g.cur+'/'+g.target;
+    return'<div class="reward-item">'+
+      '<div class="ri-top">'+
+        '<span class="ri-icon">'+g.icon+'</span>'+
+        '<span class="ri-name">'+g.name+'</span>'+
+        '<span class="ri-badge '+badgeClass+'">'+badgeTxt+'</span>'+
+      '</div>'+
+      '<div class="ri-bar"><div class="ri-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div>'+
+      '<div class="ri-desc">'+(isDone?'🎁 Phần thưởng: '+g.reward:'→ '+g.reward)+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+window.addEventListener('DOMContentLoaded',function(){
+  loadAll();
+  setInterval(loadAll,60000);
+});
+</script>
+</body>
+</html>

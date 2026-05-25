@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>🎯 4 Kỹ Năng</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#0EA5E9;--sky-l:#E0F2FE;--sky-d:#0284C7;--mint:#10B981;--mint-l:#ECFDF5;--mint-d:#059669;--sun:#F59E0B;--sun-l:#FEF3C7;--sun-d:#D97706;--violet:#8B5CF6;--violet-l:#EDE9FE;--coral:#F43F5E;--coral-l:#FFF1F2;--ink:#0F172A;--ink2:#475569;--muted:#94A3B8;--bg:#F0F9FF;--card:#FFF;--border:#E2E8F0;--r:16px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+.hdr{background:linear-gradient(135deg,var(--sky-d),var(--violet));padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.back{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.4);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;text-decoration:none;flex-shrink:0}
+.logo{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;color:#fff;flex:1}
+#setup{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:14px;background:linear-gradient(150deg,#DBEAFE,#EDE9FE)}
+.s-hero{font-size:64px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.s-title{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;text-align:center;color:var(--ink)}
+.s-in{width:100%;max-width:300px;padding:12px 16px;border:2px solid var(--border);border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;outline:none;text-align:center;background:var(--card)}
+.s-in:focus{border-color:var(--sky)}
+.s-btn{width:100%;max-width:300px;padding:13px;background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff;border:none;border-radius:var(--rs);font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;cursor:pointer}
+#app{display:none;max-width:480px;margin:0 auto;padding:14px 14px 60px}
+/* SKILL CARDS */
+.skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.skill-card{background:var(--card);border-radius:var(--r);border:2px solid var(--border);padding:20px 12px;text-align:center;cursor:pointer;transition:all .2s}
+.skill-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.skill-card.active{border-color:var(--sky);background:var(--sky-l)}
+.sc-icon{font-size:36px;margin-bottom:8px}
+.sc-name{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink)}
+.sc-done{font-size:11px;color:var(--mint-d);font-weight:700;margin-top:4px}
+/* TARGET */
+.target-bar{background:var(--sun-l);border:1.5px solid var(--sun);border-radius:var(--rs);padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.tb-fill{height:6px;background:linear-gradient(90deg,var(--sun),var(--mint));border-radius:3px;transition:width .4s}
+/* CONTENT AREA */
+.section{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:16px;margin-bottom:12px}
+.sec-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:12px}
+/* LISTEN */
+.listen-item{padding:12px;border-radius:var(--rs);background:var(--bg);border:1.5px solid var(--border);margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px}
+.listen-item:hover{background:var(--sky-l);border-color:var(--sky)}
+.li-icon{font-size:24px;flex-shrink:0}
+.li-text{flex:1;font-size:14px;font-weight:700;color:var(--ink)}
+.li-play{font-size:20px}
+/* ANSWER OPTS */
+.ans-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ans-btn{padding:11px 8px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--card);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;text-align:center;color:var(--ink)}
+.ans-btn.correct{background:var(--mint-l);border-color:var(--mint);color:var(--mint-d)}
+.ans-btn.wrong{background:var(--coral-l);border-color:var(--coral);color:var(--coral)}
+/* SPEAK */
+.mic-btn{width:80px;height:80px;border-radius:50%;border:3px solid var(--violet);background:var(--violet-l);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;margin:0 auto 12px;transition:all .2s}
+.mic-btn.rec{background:var(--coral-l);border-color:var(--coral);animation:pulse .8s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+/* READ */
+.read-text{font-size:15px;font-weight:600;color:var(--ink);line-height:1.9;padding:14px;background:var(--bg);border-radius:var(--rs);margin-bottom:12px}
+/* GRAMMAR */
+.gram-q{background:var(--sun-l);border-radius:var(--rs);padding:14px;margin-bottom:10px;font-size:15px;font-weight:700;color:var(--ink);text-align:center}
+.gram-input{width:100%;padding:10px 14px;border:2px solid var(--border);border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;outline:none;text-align:center}
+.gram-input:focus{border-color:var(--sky)}
+/* RESULT */
+.result-box{background:var(--mint-l);border:2px solid var(--mint);border-radius:var(--r);padding:18px;text-align:center;margin-bottom:12px;display:none}
+.result-box.show{display:block}
+.rb-score{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:var(--mint-d);margin-bottom:6px}
+.rb-msg{font-size:13px;font-weight:700;color:var(--muted)}
+/* BTN */
+.btn-primary{width:100%;padding:12px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff;font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:8px}
+.btn-done{width:100%;padding:12px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--mint),var(--mint-d));color:#fff;font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:8px;display:none}
+.btn-done.show{display:block}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <a href="english-daily.html" class="back">←</a>
+  <div class="logo">🎯 4 Kỹ Năng</div>
+</div>
+
+<div id="setup">
+  <div class="s-hero">🎯</div>
+  <div class="s-title">Luyện 4 Kỹ Năng</div>
+  <input class="s-in" id="name-in" placeholder="Tên con là..." maxlength="30" autocomplete="off">
+  <button class="s-btn" onclick="startApp()">Bắt đầu! 🚀</button>
+</div>
+
+<div id="app">
+  <div class="skill-grid">
+    <div class="skill-card" id="sk-listen" onclick="openSkill('listen')">
+      <div class="sc-icon">👂</div>
+      <div class="sc-name">Nghe</div>
+      <div class="sc-done" id="done-listen">0/3 bài</div>
+    </div>
+    <div class="skill-card" id="sk-speak" onclick="openSkill('speak')">
+      <div class="sc-icon">🎤</div>
+      <div class="sc-name">Nói</div>
+      <div class="sc-done" id="done-speak">0/3 bài</div>
+    </div>
+    <div class="skill-card" id="sk-read" onclick="openSkill('read')">
+      <div class="sc-icon">📖</div>
+      <div class="sc-name">Đọc</div>
+      <div class="sc-done" id="done-read">0/3 bài</div>
+    </div>
+    <div class="skill-card" id="sk-gram" onclick="openSkill('gram')">
+      <div class="sc-icon">✏️</div>
+      <div class="sc-name">Ngữ pháp</div>
+      <div class="sc-done" id="done-gram">0/3 bài</div>
+    </div>
+  </div>
+  <div id="skill-area"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var NAME = '';
+var TODAY = new Date().toISOString().slice(0,10);
+var SUPA_URL = 'https://cvwcpemkceqtqpauwqzw.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+var TARGET = 3;
+var skillDone = {listen:0,speak:0,read:0,gram:0};
+var currentSkill = '';
+var srActive = false;
+var srObj = null;
+
+// ══ DATA ══
+var LISTEN_DATA = [
+  {word:'apple',vn:'quả táo',emoji:'🍎',opts:['quả táo','quả cam','quả chuối','quả nho']},
+  {word:'elephant',vn:'con voi',emoji:'🐘',opts:['con hổ','con voi','con khỉ','sư tử']},
+  {word:'swimming',vn:'bơi lội',emoji:'🏊',opts:['đọc sách','nấu ăn','bơi lội','đạp xe']},
+  {word:'happy',vn:'vui vẻ',emoji:'😊',opts:['buồn','tức giận','vui vẻ','mệt mỏi']},
+  {word:'mountain',vn:'ngọn núi',emoji:'⛰️',opts:['đại dương','sa mạc','ngọn núi','con sông']},
+  {word:'teacher',vn:'giáo viên',emoji:'👩‍🏫',opts:['học sinh','giáo viên','bác sĩ','kỹ sư']},
+];
+
+var SPEAK_DATA = [
+  {word:'banana',vn:'quả chuối',emoji:'🍌'},
+  {word:'library',vn:'thư viện',emoji:'📚'},
+  {word:'dancing',vn:'nhảy múa',emoji:'💃'},
+  {word:'elephant',vn:'con voi',emoji:'🐘'},
+  {word:'favourite',vn:'yêu thích',emoji:'❤️'},
+  {word:'excited',vn:'hào hứng',emoji:'🤩'},
+];
+
+var READ_DATA = [
+  {title:'My Hobbies',text:'My name is Huy. I am a student. My hobby is reading books. I also like swimming and cycling. At the weekend, I usually go to the park with my family. We always have a great time together.'},
+  {title:'My Favourite Food',text:'I love eating fruits and vegetables. My favourite fruit is mango. It is sweet and delicious. I also like rice and noodles. My mum cooks wonderful food every day.'},
+  {title:'My School',text:'I go to school every day. My favourite subject is English. I also like Maths and Science. My teacher is very kind. I have many good friends at school. We study and play together.'},
+];
+
+var GRAM_DATA = [
+  {q:'My hobby ___ reading books.',blank:'is',hint:'động từ "to be"',opts:['is','are','am','be']},
+  {q:'She ___ like swimming.',blank:'does not',hint:'phủ định hiện tại đơn',opts:['does not','do not','is not','are not']},
+  {q:'What ___ your favourite subject?',blank:'is',hint:'động từ "to be"',opts:['is','are','am','do']},
+  {q:'I ___ usually walk to school.',blank:'always',hint:'trạng từ tần suất',opts:['always','never','sometimes','usually']},
+  {q:'He ___ swimming every weekend.',blank:'goes',hint:'hiện tại đơn với He',opts:['go','goes','going','went']},
+  {q:'___ you like playing chess?',blank:'Do',hint:'câu hỏi Yes/No',opts:['Do','Does','Are','Is']},
+];
+
+// ══ HELPERS ══
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.className='toast show';setTimeout(function(){t.className='toast';},2600);}
+function el(id){return document.getElementById(id);}
+function speak(w){if(window.speechSynthesis){var u=new window.SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;window.speechSynthesis.speak(u);}}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function getDoneKey(sk){return 'sk_'+sk+'_'+TODAY;}
+function saveToDB(skill,score,total){
+  fetch(SUPA_URL+'/rest/v1/results',{method:'POST',
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+    body:JSON.stringify({subject:'english',level:'Kỹ năng '+skill,score:score,total:total,hints_used:0,student_name:NAME,answers:{skill:skill,date:TODAY}})
+  }).then(function(){}).catch(function(){});
+}
+
+// ══ SETUP ══
+document.getElementById('name-in').addEventListener('keydown',function(e){if(e.key==='Enter')startApp();});
+function startApp(){
+  var n=document.getElementById('name-in').value.trim();
+  if(!n){toast('Con nhập tên vào nhé 😊');return;}
+  NAME=n;localStorage.setItem('en_name',n);
+  el('setup').style.display='none';
+  el('app').style.display='block';
+  loadDoneStatus();
+}
+function loadDoneStatus(){
+  var skills=['listen','speak','read','gram'];
+  for(var i=0;i<skills.length;i++){
+    var sk=skills[i];
+    var d=parseInt(localStorage.getItem(getDoneKey(sk))||'0');
+    skillDone[sk]=d;
+    el('done-'+sk).textContent=d+'/'+TARGET+' bài';
+    if(d>=TARGET)el('sk-'+sk).style.borderColor='var(--mint)';
+  }
+}
+
+// ══ OPEN SKILL ══
+function openSkill(sk){
+  currentSkill=sk;
+  document.querySelectorAll('.skill-card').forEach(function(c){c.classList.remove('active');});
+  el('sk-'+sk).classList.add('active');
+  if(sk==='listen')renderListen();
+  else if(sk==='speak')renderSpeak();
+  else if(sk==='read')renderRead();
+  else if(sk==='gram')renderGram();
+}
+
+// ══ TARGET BAR ══
+function targetBarHTML(sk){
+  var done=skillDone[sk]||0;
+  var pct=Math.min(100,Math.round(done/TARGET*100));
+  return '<div class="target-bar"><div style="flex:1"><div style="font-size:12px;font-weight:800;color:var(--sun-d)">🎯 Mục tiêu: '+TARGET+' bài/ngày</div>'+
+    '<div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:2px">'+done+'/'+TARGET+' bài đã hoàn thành</div>'+
+    '<div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:5px"><div class="tb-fill" style="width:'+pct+'%"></div></div></div></div>';
+}
+
+function doneButtonHTML(sk){
+  var done=skillDone[sk]||0;
+  var show=done>=TARGET?'show':'';
+  return '<button class="btn-done '+show+'" id="btn-done-'+sk+'" onclick="completeSkill(\''+sk+'\')">✅ Hoàn thành luyện hôm nay!</button>';
+}
+
+function incrementDone(sk){
+  skillDone[sk]=(skillDone[sk]||0)+1;
+  localStorage.setItem(getDoneKey(sk),String(skillDone[sk]));
+  el('done-'+sk).textContent=skillDone[sk]+'/'+TARGET+' bài';
+  if(skillDone[sk]>=TARGET){
+    el('sk-'+sk).style.borderColor='var(--mint)';
+    var btn=el('btn-done-'+sk);
+    if(btn)btn.className='btn-done show';
+    toast('🎉 Hoàn thành '+TARGET+' bài '+sk+'!');
+  }
+}
+
+function completeSkill(sk){
+  saveToDB(sk,skillDone[sk],TARGET);
+  toast('✅ Đã lưu! Ba có thể xem trên dashboard.');
+}
+
+// ══ LISTEN ══
+var listenIdx=0;var listenScore=0;var listenItems=[];
+function renderListen(){
+  listenItems=shuffle(LISTEN_DATA).slice(0,TARGET);
+  listenIdx=0;listenScore=0;
+  showListenQ();
+}
+function showListenQ(){
+  if(listenIdx>=listenItems.length){
+    var pct=Math.round(listenScore/listenItems.length*100);
+    el('skill-area').innerHTML=targetBarHTML('listen')+doneButtonHTML('listen')+
+      '<div class="result-box show"><div class="rb-score">'+listenScore+'/'+listenItems.length+'</div>'+
+      '<div class="rb-msg">'+(pct>=80?'🏆 Xuất sắc!':pct>=60?'👍 Tốt lắm!':'📖 Cố gắng nhé!')+'</div></div>'+
+      '<button class="btn-primary" onclick="renderListen()">🔄 Luyện lại</button>';
+    incrementDone('listen');
+    return;
+  }
+  var q=listenItems[listenIdx];
+  var opts=shuffle(q.opts);
+  var html=targetBarHTML('listen')+doneButtonHTML('listen')+
+    '<div class="section"><div class="sec-title">👂 Câu '+(listenIdx+1)+'/'+listenItems.length+' — Nghe và chọn nghĩa đúng</div>'+
+    '<div style="text-align:center;padding:20px 0">'+
+    '<div style="font-size:48px;margin-bottom:8px">'+q.emoji+'</div>'+
+    '<button onclick="speak(\''+q.word+'\')" style="padding:10px 20px;border:none;border-radius:30px;background:var(--sky);color:#fff;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer">🔊 Nghe: '+q.word+'</button></div>'+
+    '<div class="ans-opts">';
+  for(var i=0;i<opts.length;i++){
+    var correct=(opts[i]===q.vn);
+    html+='<button class="ans-btn" onclick="answerListen(this,'+correct+',\''+q.vn+'\')">'+opts[i]+'</button>';
+  }
+  html+='</div></div>';
+  el('skill-area').innerHTML=html;
+  speak(q.word);
+}
+function answerListen(btn,correct,rightAns){
+  var btns=btn.parentElement.querySelectorAll('.ans-btn');
+  for(var i=0;i<btns.length;i++){btns[i].onclick=null;}
+  if(correct){btn.className='ans-btn correct';listenScore++;toast('✅ Đúng!');}
+  else{btn.className='ans-btn wrong';for(var i=0;i<btns.length;i++){if(btns[i].textContent===rightAns)btns[i].className='ans-btn correct';}toast('❌ Sai! Đáp án: '+rightAns);}
+  setTimeout(function(){listenIdx++;showListenQ();},1200);
+}
+
+// ══ SPEAK ══
+var speakIdx=0;var speakScore=0;var speakItems=[];
+var srSupported=!!(window.webkitSpeechRecognition||window.SpeechRecognition);
+function renderSpeak(){
+  speakItems=shuffle(SPEAK_DATA).slice(0,TARGET);
+  speakIdx=0;speakScore=0;
+  showSpeakQ();
+}
+function showSpeakQ(){
+  if(speakIdx>=speakItems.length){
+    el('skill-area').innerHTML=targetBarHTML('speak')+doneButtonHTML('speak')+
+      '<div class="result-box show"><div class="rb-score">'+speakScore+'/'+speakItems.length+'</div>'+
+      '<div class="rb-msg">'+speakScore+'/'+ speakItems.length+' từ đọc đúng!</div></div>'+
+      '<button class="btn-primary" onclick="renderSpeak()">🔄 Luyện lại</button>';
+    incrementDone('speak');
+    return;
+  }
+  var q=speakItems[speakIdx];
+  var html=targetBarHTML('speak')+doneButtonHTML('speak')+
+    '<div class="section"><div class="sec-title">🎤 Đọc to từ này ('+( speakIdx+1)+'/'+speakItems.length+')</div>'+
+    '<div style="text-align:center;padding:16px 0">'+
+    '<div style="font-size:48px;margin-bottom:8px">'+q.emoji+'</div>'+
+    '<div style="font-family:\'Baloo 2\',cursive;font-size:26px;font-weight:800;color:var(--ink);margin-bottom:4px">'+q.word+'</div>'+
+    '<div style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:16px">'+q.vn+'</div>'+
+    '<div class="mic-btn" id="mic-btn" onclick="toggleSpeak(\''+q.word+'\')">🎤</div>'+
+    '<div style="font-size:13px;font-weight:700;color:var(--muted)" id="sp-status">'+(srSupported?'Bấm 🎤 và đọc to!':'Trình duyệt chưa hỗ trợ')+'</div>'+
+    '<div style="font-size:14px;font-weight:700;margin-top:8px" id="sp-result"></div></div>'+
+    '<button onclick="speak(\''+q.word+'\')" style="width:100%;padding:10px;border:none;border-radius:var(--rs);background:var(--sky-l);color:var(--sky-d);font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer;margin-bottom:8px">🔊 Nghe mẫu</button>'+
+    '<button onclick="nextSpeak()" style="width:100%;padding:10px;border:none;border-radius:var(--rs);background:var(--violet-l);color:var(--violet);font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer">⏭️ Bỏ qua</button>'+
+    '</div>';
+  el('skill-area').innerHTML=html;
+  speak(q.word);
+}
+function toggleSpeak(target){
+  if(!srSupported){toast('Dùng Chrome để luyện nói nhé!');return;}
+  if(srActive){if(srObj)srObj.stop();return;}
+  var SR=window.webkitSpeechRecognition||window.SpeechRecognition;
+  srObj=new SR();srObj.lang='en-US';srObj.continuous=false;srObj.interimResults=false;
+  srActive=true;
+  el('mic-btn').className='mic-btn rec';
+  el('sp-status').textContent='🔴 Đang nghe...';
+  srObj.onresult=function(e){
+    var said=e.results[0][0].transcript.toLowerCase().trim();
+    var ok=said.indexOf(target.toLowerCase())>=0;
+    if(ok){speakScore++;el('sp-result').innerHTML='<span style="color:var(--mint-d)">✅ Giỏi lắm! "'+said+'"</span>';}
+    else{el('sp-result').innerHTML='<span style="color:var(--coral)">❌ Con nói: "'+said+'"<br>Thử lại: "'+target+'"</span>';}
+    el('mic-btn').className='mic-btn';el('sp-status').textContent='Bấm để thử lại';srActive=false;
+    if(ok)setTimeout(function(){nextSpeak();},1000);
+  };
+  srObj.onerror=function(){el('mic-btn').className='mic-btn';el('sp-status').textContent='Lỗi! Thử lại nhé.';srActive=false;};
+  srObj.onend=function(){el('mic-btn').className='mic-btn';srActive=false;};
+  srObj.start();
+}
+function nextSpeak(){speakIdx++;showSpeakQ();}
+
+// ══ READ ══
+var readIdx=0;var readScore=0;
+function renderRead(){
+  readIdx=0;readScore=0;
+  showReadQ();
+}
+function showReadQ(){
+  if(readIdx>=Math.min(TARGET,READ_DATA.length)){
+    el('skill-area').innerHTML=targetBarHTML('read')+doneButtonHTML('read')+
+      '<div class="result-box show"><div class="rb-score">✅</div>'+
+      '<div class="rb-msg">Đã đọc '+readIdx+' đoạn văn! Giỏi lắm!</div></div>'+
+      '<button class="btn-primary" onclick="renderRead()">🔄 Đọc lại</button>';
+    incrementDone('read');
+    return;
+  }
+  var p=READ_DATA[readIdx%READ_DATA.length];
+  var html=targetBarHTML('read')+doneButtonHTML('read')+
+    '<div class="section">'+
+    '<div class="sec-title">📖 Đọc đoạn văn ('+(readIdx+1)+'/'+TARGET+')</div>'+
+    '<div style="font-family:\'Baloo 2\',cursive;font-size:15px;font-weight:800;color:var(--sky-d);margin-bottom:8px">'+p.title+'</div>'+
+    '<div class="read-text">'+p.text+'</div>'+
+    '<button onclick="speak(\''+p.text.replace(/'/g,"\\'")+'\')" style="width:100%;padding:10px;border:none;border-radius:var(--rs);background:var(--sky-l);color:var(--sky-d);font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer;margin-bottom:8px">🔊 Nghe mẫu</button>'+
+    '<button onclick="readIdx++;showReadQ()" style="width:100%;padding:11px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--mint),var(--mint-d));color:#fff;font-family:\'Baloo 2\',cursive;font-size:14px;font-weight:800;cursor:pointer">✅ Đã đọc xong!</button>'+
+    '</div>';
+  el('skill-area').innerHTML=html;
+}
+
+// ══ GRAMMAR ══
+var gramIdx=0;var gramScore=0;var gramItems=[];
+function renderGram(){
+  gramItems=shuffle(GRAM_DATA).slice(0,TARGET);
+  gramIdx=0;gramScore=0;
+  showGramQ();
+}
+function showGramQ(){
+  if(gramIdx>=gramItems.length){
+    var pct=Math.round(gramScore/gramItems.length*100);
+    el('skill-area').innerHTML=targetBarHTML('gram')+doneButtonHTML('gram')+
+      '<div class="result-box show"><div class="rb-score">'+gramScore+'/'+gramItems.length+'</div>'+
+      '<div class="rb-msg">'+(pct>=80?'🏆 Xuất sắc!':pct>=60?'👍 Tốt lắm!':'📖 Ôn lại nhé!')+'</div></div>'+
+      '<button class="btn-primary" onclick="renderGram()">🔄 Luyện lại</button>';
+    incrementDone('gram');
+    return;
+  }
+  var q=gramItems[gramIdx];
+  var opts=shuffle(q.opts);
+  var html=targetBarHTML('gram')+doneButtonHTML('gram')+
+    '<div class="section"><div class="sec-title">✏️ Ngữ pháp ('+(gramIdx+1)+'/'+gramItems.length+')</div>'+
+    '<div class="gram-q">'+q.q.replace('___','<span style="color:var(--coral);font-weight:900">___</span>')+'</div>'+
+    '<div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px;text-align:center">💡 Gợi ý: '+q.hint+'</div>'+
+    '<div class="ans-opts">';
+  for(var i=0;i<opts.length;i++){
+    var correct=(opts[i]===q.blank);
+    html+='<button class="ans-btn" onclick="answerGram(this,'+correct+',\''+q.blank+'\',\''+q.q.replace(/'/g,"\\'")+'\')">'+ opts[i]+'</button>';
+  }
+  html+='</div></div>';
+  el('skill-area').innerHTML=html;
+}
+function answerGram(btn,correct,rightAns,question){
+  var btns=btn.parentElement.querySelectorAll('.ans-btn');
+  for(var i=0;i<btns.length;i++){btns[i].onclick=null;}
+  if(correct){btn.className='ans-btn correct';gramScore++;toast('✅ Đúng!');}
+  else{btn.className='ans-btn wrong';for(var i=0;i<btns.length;i++){if(btns[i].textContent===rightAns)btns[i].className='ans-btn correct';}toast('❌ Sai! Đáp án: '+rightAns);}
+  setTimeout(function(){gramIdx++;showGramQ();},1200);
+}
+
+// ══ INIT ══
+window.addEventListener('DOMContentLoaded',function(){
+  var s=localStorage.getItem('en_name');
+  if(s)document.getElementById('name-in').value=s;
+  document.getElementById('name-in').addEventListener('input',function(e){localStorage.setItem('en_name',e.target.value);});
+});
+</script>
+</body>
+</html>

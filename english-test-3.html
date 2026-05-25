@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Practice Test – No.3</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:#22C55E;--green-l:#DCFCE7;--green-d:#15803D;
+    --blue:#3B82F6;--blue-l:#DBEAFE;--blue-d:#1D4ED8;
+    --orange:#F97316;--orange-l:#FFEDD5;--orange-d:#C2410C;
+    --pink:#EC4899;--pink-l:#FCE7F3;--pink-d:#9D174D;
+    --yellow:#EAB308;--yellow-l:#FEF9C3;--yellow-d:#A16207;
+    --ink:#1E293B;--muted:#64748B;--border:#E2E8F0;--bg:#F8FAFC;--card:#FFFFFF;
+    --r:14px;--rs:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:40px}
+
+  /* HEADER */
+  .hdr{background:linear-gradient(135deg,#1E293B 0%,#334155 100%);padding:20px 20px 16px;text-align:center;position:relative;overflow:hidden}
+  .hdr::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+  .hdr-badge{display:inline-block;background:var(--orange);color:#fff;font-size:11px;font-weight:900;padding:4px 12px;border-radius:20px;letter-spacing:.05em;margin-bottom:8px;text-transform:uppercase}
+  .hdr-title{font-family:'Fredoka One',cursive;font-size:26px;color:#fff;letter-spacing:.5px;line-height:1.2}
+  .hdr-sub{font-size:13px;color:#94A3B8;font-weight:600;margin-top:4px}
+  .info-strip{background:#fff;border-radius:var(--r);margin:12px 16px 0;padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap}
+  .info-field{flex:1;min-width:120px}
+  .info-lbl{font-size:10px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+  .info-line{border:none;border-bottom:2px solid var(--border);width:100%;font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;outline:none;background:transparent;padding:2px 4px;color:var(--ink)}
+  .info-line:focus{border-bottom-color:var(--orange)}
+
+  /* SCORE STRIP */
+  .score-strip{display:flex;gap:2px;padding:12px 16px 0;overflow-x:auto}
+  .score-pill{flex:1;min-width:60px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:8px 6px;text-align:center}
+  .sp-val{font-family:'Fredoka One',cursive;font-size:22px;color:var(--ink)}
+  .sp-lbl{font-size:10px;font-weight:800;color:var(--muted)}
+  .sp-pts{font-size:10px;font-weight:700;color:var(--muted);margin-top:1px}
+
+  /* SECTION */
+  .section{margin:14px 16px 0;background:var(--card);border-radius:var(--r);overflow:hidden;border:1.5px solid var(--border)}
+  .sec-hdr{padding:12px 16px;display:flex;align-items:center;gap:10px}
+  .sec-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .sec-info{flex:1}
+  .sec-title{font-family:'Fredoka One',cursive;font-size:16px;color:var(--ink)}
+  .sec-sub{font-size:11px;font-weight:700;color:var(--muted);margin-top:1px}
+  .sec-pts{font-family:'Fredoka One',cursive;font-size:15px;padding:4px 12px;border-radius:20px}
+  .sec-body{padding:0 16px 16px;border-top:1.5px solid var(--border)}
+
+  /* PART A — MCQ */
+  .mcq-item{padding:12px 0;border-bottom:1px solid var(--border)}
+  .mcq-item:last-child{border-bottom:none}
+  .mcq-num{font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+  .mcq-q{font-size:14px;font-weight:800;color:var(--ink);line-height:1.5;margin-bottom:10px}
+  .mcq-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .mcq-opt{display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:var(--rs);border:1.5px solid var(--border);cursor:pointer;transition:all .15s;font-size:13px;font-weight:700;background:var(--bg)}
+  .mcq-opt:hover{border-color:var(--orange);background:var(--orange-l)}
+  .mcq-opt input{accent-color:var(--orange);width:14px;height:14px;flex-shrink:0}
+  .mcq-opt.selected{border-color:var(--orange);background:var(--orange-l)}
+
+  /* FOCUS BOX */
+  .focus-box{background:linear-gradient(135deg,#FFF7ED,#FFF);border:1.5px solid #FED7AA;border-radius:var(--rs);padding:10px 13px;margin:10px 0;font-size:12px;font-weight:700;color:#9A3412;line-height:1.7}
+  .focus-box b{color:var(--orange-d)}
+
+  /* PART B — FILL */
+  .fill-item{padding:11px 0;border-bottom:1px solid var(--border)}
+  .fill-item:last-child{border-bottom:none}
+  .fill-num{font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+  .fill-sent{font-size:14px;font-weight:700;color:var(--ink);line-height:2.2;flex-wrap:wrap;display:flex;align-items:center;gap:4px}
+  .fill-blank{border:none;border-bottom:2.5px solid var(--blue);min-width:100px;font-size:14px;font-family:'Nunito',sans-serif;font-weight:800;color:var(--ink);background:transparent;outline:none;text-align:center;padding:0 4px;transition:all .2s}
+  .fill-blank:focus{border-bottom-color:var(--blue-d);background:var(--blue-l);border-radius:4px 4px 0 0}
+  .word-bank{background:var(--blue-l);border:1.5px dashed #93C5FD;border-radius:var(--rs);padding:10px 13px;margin:10px 0 0;font-size:12px;font-weight:700;color:var(--blue-d)}
+  .word-bank span{font-weight:900;color:var(--blue-d)}
+
+  /* PART C — ARRANGE */
+  .arr-item{padding:11px 0;border-bottom:1px solid var(--border)}
+  .arr-item:last-child{border-bottom:none}
+  .arr-num{font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+  .arr-words{background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:var(--rs);padding:8px 13px;font-size:13px;font-weight:800;color:var(--green-d);margin-bottom:7px;letter-spacing:.3px}
+  .arr-input{border:none;border-bottom:2px solid var(--border);width:100%;font-size:14px;font-family:'Nunito',sans-serif;font-weight:700;padding:4px 6px;background:transparent;outline:none;color:var(--ink);transition:all .2s}
+  .arr-input:focus{border-bottom-color:var(--green);background:#F0FDF4;border-radius:4px 4px 0 0}
+
+  /* PART D — READING */
+  .passage{background:linear-gradient(135deg,#EFF6FF,#F5F3FF);border-left:4px solid var(--blue);border-radius:0 var(--rs) var(--rs) 0;padding:14px 16px;margin:10px 0;font-size:14px;font-weight:700;line-height:2;color:var(--ink)}
+  .passage .name{color:var(--pink-d);font-weight:900}
+  .passage b{color:var(--blue-d)}
+
+  /* PART E — ERROR CORRECTION (NEW!) */
+  .err-item{padding:11px 0;border-bottom:1px solid var(--border)}
+  .err-item:last-child{border-bottom:none}
+  .err-num{font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+  .err-sent{background:#FFF1F2;border:1.5px solid #FECDD3;border-radius:var(--rs);padding:9px 13px;font-size:13.5px;font-weight:800;color:#9F1239;margin-bottom:7px}
+  .err-input{border:none;border-bottom:2px solid var(--border);width:100%;font-size:14px;font-family:'Nunito',sans-serif;font-weight:700;padding:4px 6px;background:transparent;outline:none;color:var(--ink);transition:all .2s}
+  .err-input:focus{border-bottom-color:var(--pink);background:var(--pink-l);border-radius:4px 4px 0 0}
+
+  /* TOTAL SCORE */
+  .total-box{margin:14px 16px 0;background:linear-gradient(135deg,#1E293B,#334155);border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+  .total-lbl{font-family:'Fredoka One',cursive;font-size:18px;color:#fff}
+  .total-score{font-family:'Fredoka One',cursive;font-size:32px;color:var(--yellow)}
+  .total-max{font-size:14px;color:#94A3B8;font-weight:700;margin-top:2px;text-align:right}
+
+  /* ANSWER KEY */
+  .answer-key{margin:14px 16px 0;background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden}
+  .ak-trigger{padding:13px 16px;cursor:pointer;font-size:13px;font-weight:800;color:var(--orange);display:flex;align-items:center;gap:6px;user-select:none}
+  .ak-trigger:hover{background:var(--orange-l)}
+  .ak-body{padding:14px 16px;border-top:1.5px solid var(--border);font-size:12.5px;font-weight:700;color:var(--muted);line-height:2.2;display:none}
+  .ak-body.open{display:block}
+  .ak-part{font-weight:900;color:var(--ink);margin-top:8px}
+  .ak-part:first-child{margin-top:0}
+
+  @media print{
+    body{background:#fff}
+    .hdr{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .mcq-opt:hover{border-color:var(--border);background:var(--bg)}
+  }
+
+/* ── TEST COMPLETION ── */
+.test-result-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:var(--card);border-top:2px solid var(--border);padding:14px 16px;
+  display:none;box-shadow:0 -4px 20px rgba(0,0,0,.1)}
+.test-result-bar.show{display:block}
+.trb-score{font-family:'Fredoka One',cursive;font-size:28px;text-align:center;margin-bottom:6px}
+.trb-sub{font-size:13px;font-weight:700;color:var(--muted);text-align:center;margin-bottom:10px}
+.trb-btns{display:flex;gap:8px}
+.trb-btn{flex:1;padding:12px;border-radius:var(--rs);border:none;
+  font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;transition:all .15s}
+.trb-submit{background:linear-gradient(135deg,#22C55E,#15803D);color:#fff}
+.trb-review{background:#F1F5F9;color:var(--ink);border:1.5px solid var(--border)!important;border:none}
+.btn-start-test{display:block;width:calc(100% - 32px);margin:14px 16px 0;padding:13px;
+  background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:#fff;border:none;
+  border-radius:var(--rs);font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer}
+.btn-start-test:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(59,130,246,.4)}
+.wrong-highlight{background:#FEF2F2!important;border-color:#FECACA!important}
+.correct-highlight{background:#F0FDF4!important;border-color:#A7F3D0!important}
+
+</style>
+
+
+<script>
+function saveTestResult(testNum, score, total, studentName) {
+  var url = 'https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results';
+  var key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+  var name = studentName || localStorage.getItem('en_name') || 'con';
+  var body = JSON.stringify({
+    subject: 'english',
+    level: 'De so ' + testNum,
+    score: score,
+    total: total,
+    hints_used: 0,
+    student_name: name,
+    answers: {test_num: testNum, date: new Date().toISOString().slice(0,10)}
+  });
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'apikey': key,
+      'Authorization': 'Bearer ' + key,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    },
+    body: body
+  }).then(function() {
+    console.log('Saved!');
+  }).catch(function(e) {
+    console.log('Save error:', e);
+  });
+}
+</script>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-badge">⭐ English Star</div>
+  <div class="hdr-title">Practice Test – No. 3</div>
+  <div class="hdr-sub">Hobbies · School Subjects · Grammar</div>
+  <div class="info-strip">
+    <div class="info-field"><div class="info-lbl">Tên con</div><input class="info-line" placeholder="Viết tên vào đây..."></div>
+    <div class="info-field"><div class="info-lbl">Lớp</div><input class="info-line" placeholder="2 / 3"></div>
+    <div class="info-field"><div class="info-lbl">Ngày</div><input class="info-line" type="date"></div>
+  </div>
+</div>
+
+<!-- SCORE PILLS -->
+<div class="score-strip">
+  <div class="score-pill"><div class="sp-val" id="sp-a">—</div><div class="sp-lbl">Part A</div><div class="sp-pts">/10đ</div></div>
+  <div class="score-pill"><div class="sp-val" id="sp-b">—</div><div class="sp-lbl">Part B</div><div class="sp-pts">/10đ</div></div>
+  <div class="score-pill"><div class="sp-val" id="sp-c">—</div><div class="sp-lbl">Part C</div><div class="sp-pts">/10đ</div></div>
+  <div class="score-pill"><div class="sp-val" id="sp-d">—</div><div class="sp-lbl">Part D</div><div class="sp-pts">/10đ</div></div>
+  <div class="score-pill"><div class="sp-val" id="sp-e">—</div><div class="sp-lbl">Part E</div><div class="sp-pts">/10đ</div></div>
+</div>
+
+<!-- ═══ PART A — MCQ ═══ -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:var(--orange-l)">🎯</div>
+    <div class="sec-info">
+      <div class="sec-title">Part A – Choose the correct answer</div>
+      <div class="sec-sub">Chọn đáp án đúng (10 câu)</div>
+    </div>
+    <div class="sec-pts" style="background:var(--orange-l);color:var(--orange-d)">10đ</div>
+  </div>
+  <div class="sec-body">
+    <div class="focus-box">⚡ <b>Chú ý:</b> "What IS your hobby?" dùng <b>IS</b> — "What DO/DOES … like doing?" dùng <b>DO/DOES</b></div>
+
+    <!-- Q1 -->
+    <div class="mcq-item">
+      <div class="mcq-num">Question 1</div>
+      <div class="mcq-q">______ your hobby? – My hobby is singing.</div>
+      <div class="mcq-opts">
+        <label class="mcq-opt"><input type="radio" name="q1" value="A"> A. What do</label>
+        <label class="mcq-opt"><input type="radio" name="q1" value="B"> B. What is</label>
+        <label class="mcq-opt"><input type="radio" name="q1" value="C"> C. What are</label>
+        <label class="mcq-opt"><input type="radio" name="q1" value="D"> D. What does</label>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="mcq-item">
+      <div class="mcq-num">Question 2</div>
+      <div class="mcq-q">What ______ she like doing? – She likes cooking.</div>
+      <div class="mcq-opts">
+        <label class="mcq-opt"><input type="radio" name="q2" value="A"> A. is</label>
+        <label class="mcq-opt"><input type="radio" name="q2" value="B"> B. are</label>
+        <label class="mcq-opt"><input type="radio" name="q2" value="C"> C. does</label>
+        <label class="mcq-opt"><input type="radio" name="q2" value="D"> D. do</label>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="mcq-item">
+      <div class="mcq-num">Question 3</div>
+      <div class="mcq-q">I ______ have Science on Wednesday.</div>
+      <div class="mcq-opts">
+        <label class="mcq-opt"><input type="radio" name="q3" value="A"> A. doesn't</label>
+        <label class="mcq-opt"><input type="radio" name="q3" value="B"> B. isn't</label>
+        <label class="mcq-opt"><input type="radio" name="q3" value="C"> C. don't</label>
+        <label class="mcq-opt"><input type="radio" name="q3" value="D"> D. not</label>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="mcq-item">
+      <div class="mcq-num">Question 4</div>
+      <div class="mcq-q">His hobby is ______ TV every evening.</div>
+      <div class="mcq-opts">
+        <label class="mcq-opt"><input type="radio" name="q4" value="A"> A. watch</label>
+        <label class="mcq-opt"><input type="radio" name="q4" value="B"> B. watches</label>
+        <label class="mcq-opt"><input type="radio" name="q4" value="C"> C. watched</label>
+        <label class="mcq-opt"><input type="radio" name="q4" value="D"> D. watching</label>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="mcq-item">
+      <div class="mcq-num">Question 5</div>
+      <div class="mcq-q">______ they have Maths today? – Yes, they do.</div>
+      <div class="mcq-opts">
+        <label class="mcq-opt"><input type="radio" name="q5" value="A"> A. Is</label>
+        <label class="mcq-opt"><input type="radio" name="q5" value="B"> B. Are</label>
+        <label class="mcq-opt"><input type="radio" name="q5" value="C"> C. Does</label>
+        <label class="mcq-opt"><input type="radio" name="q5" value="D"> D. Do</label>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="mcq-item">
+      <div class="mcq-num">Question 6</div>
+      <div class="mcq-q">What ______ their hobby? – Their hobby is playing football.</div>
+      <div class="mcq-opts">
+        <label class="mcq-opt"><input type="radio" name="q6" value="A"> A. do</label>
+        <label class="mcq-opt"><input type="radio" name="q6" value="B"> B. does</label>
+        <label class="mcq-opt"><input type="radio" name="q6" value="C"> C. is</label>
+        <label class="mcq-opt"><input type="radio" name="q6" value="D"> D. are</label>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="mcq-item">
+      <div class="mcq-num">Question 7</div>
+      <div class="mcq-q">She ______ have Art on Thursday.</div>
+      <div class="mcq-opts">
+        <label class="mcq-opt"><input type="radio" name="q7" value="A"> A. don't</label>
+        <label class="mcq-opt"><input type="radio" name="q7" value="B"> B. doesn't</label>
+        <label class="mcq-opt"><input type="radio" name="q7" value="C"> C. isn't</label>
+        <label class="mcq-opt"><input type="radio" name="q7" value="D"> D. not</label>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="mcq-item">
+      <div class="mcq-num">Question 8</div>
+      <div class="mcq-q">Môn học "Tin học" trong tiếng Anh là gì?</div>
+      <div class="mcq-opts">
+        <label class="mcq-opt"><input type="radio" name="q8" value="A"> A. PE</label>
+        <label class="mcq-opt"><input type="radio" name="q8" value="B"> B. Art</label>
+        <label class="mcq-opt"><input type="radio" name="q8" value="C"> C. IT</label>
+        <label class="mcq-opt"><input type="radio" name="q8" value="D"> D. Music</label>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="mcq-item">
+      <div class="mcq-num">Question 9</div>
+      <div class="mcq-q">What do you like ______? – I like reading books.</div>
+      <div class="mcq-opts">
+        <label class="mcq-opt"><input type="radio" name="q9" value="A"> A. do</label>
+        <label class="mcq-opt"><input type="radio" name="q9" value="B"> B. did</label>
+        <label class="mcq-opt"><input type="radio" name="q9" value="C"> C. done</label>
+        <label class="mcq-opt"><input type="radio" name="q9" value="D"> D. doing</label>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="mcq-item">
+      <div class="mcq-num">Question 10</div>
+      <div class="mcq-q">______ does she have on Tuesday? – She has Music and PE.</div>
+      <div class="mcq-opts">
+        <label class="mcq-opt"><input type="radio" name="q10" value="A"> A. Who</label>
+        <label class="mcq-opt"><input type="radio" name="q10" value="B"> B. Where</label>
+        <label class="mcq-opt"><input type="radio" name="q10" value="C"> C. What</label>
+        <label class="mcq-opt"><input type="radio" name="q10" value="D"> D. When</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PART B — FILL IN THE BLANK ═══ -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:var(--blue-l)">✏️</div>
+    <div class="sec-info">
+      <div class="sec-title">Part B – Fill in the blank</div>
+      <div class="sec-sub">Điền từ thích hợp (7 chỗ trống)</div>
+    </div>
+    <div class="sec-pts" style="background:var(--blue-l);color:var(--blue-d)">10đ</div>
+  </div>
+  <div class="sec-body">
+    <div class="word-bank">📦 <span>Word bank:</span> &nbsp; is &nbsp;|&nbsp; doesn't &nbsp;|&nbsp; don't &nbsp;|&nbsp; has &nbsp;|&nbsp; have &nbsp;|&nbsp; drawing &nbsp;|&nbsp; What &nbsp;|&nbsp; does &nbsp;|&nbsp; swimming &nbsp;|&nbsp; likes</div>
+
+    <div class="fill-item">
+      <div class="fill-num">1.</div>
+      <div class="fill-sent"><input class="fill-blank" style="width:90px"> is your hobby? – My hobby <input class="fill-blank" style="width:70px"> singing.</div>
+    </div>
+    <div class="fill-item">
+      <div class="fill-num">2.</div>
+      <div class="fill-sent">She <input class="fill-blank" style="width:100px"> have Geography on Friday.</div>
+    </div>
+    <div class="fill-item">
+      <div class="fill-num">3.</div>
+      <div class="fill-sent">They <input class="fill-blank" style="width:80px"> have IT today. (phủ định)</div>
+    </div>
+    <div class="fill-item">
+      <div class="fill-num">4.</div>
+      <div class="fill-sent">What <input class="fill-blank" style="width:70px"> she like doing? – She likes <input class="fill-blank" style="width:100px"> pictures.</div>
+    </div>
+    <div class="fill-item">
+      <div class="fill-num">5.</div>
+      <div class="fill-sent">He <input class="fill-blank" style="width:70px"> Science on Monday. (khẳng định)</div>
+    </div>
+    <div class="fill-item">
+      <div class="fill-num">6.</div>
+      <div class="fill-sent">My hobby is <input class="fill-blank" style="width:110px">. I love the water!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PART C — ARRANGE ═══ -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:var(--green-l)">🔀</div>
+    <div class="sec-info">
+      <div class="sec-title">Part C – Arrange the words</div>
+      <div class="sec-sub">Sắp xếp thành câu đúng (5 câu)</div>
+    </div>
+    <div class="sec-pts" style="background:var(--green-l);color:var(--green-d)">10đ</div>
+  </div>
+  <div class="sec-body">
+    <div class="arr-item">
+      <div class="arr-num">1.</div>
+      <div class="arr-words">hobby / is / her / What ?</div>
+      <input class="arr-input" placeholder="→ Viết câu đúng vào đây...">
+    </div>
+    <div class="arr-item">
+      <div class="arr-num">2.</div>
+      <div class="arr-words">does / like / she / doing / What ?</div>
+      <input class="arr-input" placeholder="→ Viết câu đúng vào đây...">
+    </div>
+    <div class="arr-item">
+      <div class="arr-num">3.</div>
+      <div class="arr-words">doesn't / he / on / have / PE / Friday .</div>
+      <input class="arr-input" placeholder="→ Viết câu đúng vào đây...">
+    </div>
+    <div class="arr-item">
+      <div class="arr-num">4.</div>
+      <div class="arr-words">hobby / cycling / My / is .</div>
+      <input class="arr-input" placeholder="→ Viết câu đúng vào đây...">
+    </div>
+    <div class="arr-item">
+      <div class="arr-num">5.</div>
+      <div class="arr-words">have / Do / English / you / today ?</div>
+      <input class="arr-input" placeholder="→ Viết câu đúng vào đây...">
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PART D — READING ═══ -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:var(--pink-l)">📖</div>
+    <div class="sec-info">
+      <div class="sec-title">Part D – Reading comprehension</div>
+      <div class="sec-sub">Đọc hiểu + trả lời câu đầy đủ (5 câu)</div>
+    </div>
+    <div class="sec-pts" style="background:var(--pink-l);color:var(--pink-d)">10đ</div>
+  </div>
+  <div class="sec-body">
+    <div class="passage">
+      Hi! My name is <span class="name">Anna</span>. I am 8 years old. My hobby is <b>drawing pictures</b>. I like drawing every day after school.<br><br>
+      My brother's name is <span class="name">Jack</span>. He is 10 years old. His hobby is <b>playing football</b>. He doesn't like drawing. He likes <b>swimming</b> too.<br><br>
+      At school, Anna has <b>English and Maths</b> on Monday. She has <b>Art</b> on Wednesday. She doesn't have Science on Friday.<br>
+      Jack has <b>PE and Music</b> on Tuesday. He doesn't have IT today.
+    </div>
+
+    <div class="arr-item">
+      <div class="arr-num">1. What is Anna's hobby?</div>
+      <input class="arr-input" placeholder="→ Her hobby is ...">
+    </div>
+    <div class="arr-item">
+      <div class="arr-num">2. Does Jack like drawing?</div>
+      <input class="arr-input" placeholder="→ No, ...">
+    </div>
+    <div class="arr-item">
+      <div class="arr-num">3. What does Jack like doing?</div>
+      <input class="arr-input" placeholder="→ He likes ...">
+    </div>
+    <div class="arr-item">
+      <div class="arr-num">4. What does Anna have on Monday?</div>
+      <input class="arr-input" placeholder="→ She has ...">
+    </div>
+    <div class="arr-item">
+      <div class="arr-num">5. Does Anna have Science on Friday?</div>
+      <input class="arr-input" placeholder="→ No, ...">
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PART E — ERROR CORRECTION (NEW) ═══ -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:var(--yellow-l)">🔧</div>
+    <div class="sec-info">
+      <div class="sec-title">Part E – Find & correct the mistake</div>
+      <div class="sec-sub">Tìm lỗi sai và viết câu đúng (5 câu)</div>
+    </div>
+    <div class="sec-pts" style="background:var(--yellow-l);color:var(--yellow-d)">10đ</div>
+  </div>
+  <div class="sec-body">
+    <div class="focus-box">⚡ Mỗi câu có <b>1 lỗi sai</b>. Tìm lỗi và viết lại câu đúng bên dưới.</div>
+
+    <div class="err-item">
+      <div class="err-num">1.</div>
+      <div class="err-sent">What do your hobby? – My hobby is singing.</div>
+      <input class="err-input" placeholder="→ Câu đúng: ...">
+    </div>
+    <div class="err-item">
+      <div class="err-num">2.</div>
+      <div class="err-sent">She doesn't have does Art on Monday.</div>
+      <input class="err-input" placeholder="→ Câu đúng: ...">
+    </div>
+    <div class="err-item">
+      <div class="err-num">3.</div>
+      <div class="err-sent">His hobby is play football every weekend.</div>
+      <input class="err-input" placeholder="→ Câu đúng: ...">
+    </div>
+    <div class="err-item">
+      <div class="err-num">4.</div>
+      <div class="err-sent">What does she like doing? She like singing.</div>
+      <input class="err-input" placeholder="→ Câu đúng: ...">
+    </div>
+    <div class="err-item">
+      <div class="err-num">5.</div>
+      <div class="err-sent">I don't have Maths on doesn't Tuesday.</div>
+      <input class="err-input" placeholder="→ Câu đúng: ...">
+    </div>
+  </div>
+</div>
+
+<!-- TOTAL -->
+<div class="total-box">
+  <div>
+    <div class="total-lbl">🏆 TỔNG ĐIỂM</div>
+    <div style="font-size:12px;color:#94A3B8;font-weight:600;margin-top:3px">Xếp loại: _______________</div>
+  </div>
+  <div style="text-align:right">
+    <div class="total-score">___ / 50</div>
+    <div class="total-max">điểm tối đa</div>
+  </div>
+</div>
+
+<!-- ANSWER KEY -->
+</div><!-- /test-sections -->
+
+<div class="answer-key">
+  <div class="ak-trigger" onclick="this.nextElementSibling.classList.toggle('open');if(!this.dataset.saved){this.dataset.saved='1';saveTestResult(3,0,50);}">
+    🔑 Đáp án (Ba/Mẹ nhấn để xem) <span style="margin-left:auto">▼</span>
+  </div>
+  <div class="ak-body">
+    <div class="ak-part">PART A:</div>
+    1-B &nbsp;|&nbsp; 2-C &nbsp;|&nbsp; 3-C &nbsp;|&nbsp; 4-D &nbsp;|&nbsp; 5-D &nbsp;|&nbsp; 6-C &nbsp;|&nbsp; 7-B &nbsp;|&nbsp; 8-C &nbsp;|&nbsp; 9-D &nbsp;|&nbsp; 10-C
+    <div class="ak-part">PART B:</div>
+    1. What / is &nbsp;|&nbsp; 2. doesn't &nbsp;|&nbsp; 3. don't &nbsp;|&nbsp; 4. does / drawing &nbsp;|&nbsp; 5. has &nbsp;|&nbsp; 6. swimming
+    <div class="ak-part">PART C:</div>
+    1. What is her hobby? &nbsp;|&nbsp; 2. What does she like doing? &nbsp;|&nbsp; 3. He doesn't have PE on Friday. &nbsp;|&nbsp; 4. My hobby is cycling. &nbsp;|&nbsp; 5. Do you have English today?
+    <div class="ak-part">PART D:</div>
+    1. Her hobby is drawing pictures. &nbsp;|&nbsp; 2. No, he doesn't. &nbsp;|&nbsp; 3. He likes playing football and swimming. &nbsp;|&nbsp; 4. She has English and Maths on Monday. &nbsp;|&nbsp; 5. No, she doesn't.
+    <div class="ak-part">PART E:</div>
+    1. What <u>is</u> your hobby? (do→is) &nbsp;|&nbsp; 2. She doesn't have Art on Monday. (bỏ "does") &nbsp;|&nbsp; 3. His hobby is <u>playing</u> football. (play→playing) &nbsp;|&nbsp; 4. She <u>likes</u> singing. (like→likes) &nbsp;|&nbsp; 5. I don't have Maths on Tuesday. (bỏ "doesn't")
+  </div>
+</div>
+
+<script>
+// Highlight selected MCQ options
+document.querySelectorAll('.mcq-opt input').forEach(function(inp){
+  inp.addEventListener('change',function(){
+    var name=inp.name;
+    document.querySelectorAll('input[name="'+(name)+'"]').forEach(function(r){
+      r.closest('.mcq-opt').classList.toggle('selected',r.checked);
+    });
+  });
+});
+</script>
+
+<!-- RESULT BAR -->
+<div class="test-result-bar" id="test-result-bar">
+  <div class="trb-score" id="trb-score">— / 50</div>
+  <div class="trb-sub" id="trb-sub">Bấm "Nộp bài" để xem kết quả</div>
+  <div class="trb-btns">
+    <button class="trb-btn trb-review" onclick="reviewAnswers()">🔍 Xem lại bài</button>
+    <button class="trb-btn trb-submit" id="trb-submit-btn" onclick="submitTest()">✅ Nộp bài</button>
+  </div>
+</div>
+<div style="height:120px"></div><!-- spacer for fixed bar -->
+
+<script>
+var testStartTime = new Date();
+var testSubmitted = false;
+
+window.addEventListener('DOMContentLoaded', function(){
+  var n = localStorage.getItem('en_name') || '';
+  if(n){
+    var inputs = document.querySelectorAll('.info-line');
+    if(inputs.length > 0 && !inputs[0].value) inputs[0].value = n;
+  }
+  testStartTime = new Date();
+});
+
+function startTest(){
+  testStartTime = new Date();
+  var startBtn = document.getElementById('btn-start-test');
+  if(startBtn) startBtn.style.display = 'none';
+  var sections = document.getElementById('test-sections');
+  if(sections) sections.style.display = 'block';
+  var bar = document.getElementById('test-result-bar');
+  if(bar) bar.classList.add('show');
+  var sub = document.getElementById('trb-sub');
+  if(sub) sub.textContent = 'Làm bài và bấm "Nộp bài" khi xong';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function reviewAnswers(){
+  var ak = document.querySelector('.ak-body');
+  if(ak) ak.classList.add('open');
+  var akEl = document.querySelector('.answer-key');
+  if(akEl) akEl.scrollIntoView({behavior:'smooth'});
+}
+
+function submitTest(){
+  if(testSubmitted) return;
+  testSubmitted = true;
+  var dur = Math.round((new Date() - testStartTime) / 1000);
+  var inputs = document.querySelectorAll('.info-line');
+  var name = (inputs.length > 0 ? inputs[0].value : '') || localStorage.getItem('en_name') || 'con';
+  var checked = document.querySelectorAll('input[type=radio]:checked').length;
+  var btn = document.getElementById('trb-submit-btn');
+  if(btn){ btn.textContent = '✅ Đã nộp!'; btn.disabled = true; btn.style.background = '#94A3B8'; }
+  var score = document.getElementById('trb-score');
+  if(score) score.textContent = checked + ' câu đã chọn';
+  var sub = document.getElementById('trb-sub');
+  if(sub) sub.textContent = 'Ba đã nhận! Xem đáp án bên dưới 👇';
+  var ak = document.querySelector('.ak-body');
+  if(ak) ak.classList.add('open');
+  saveTestResult(window.TEST_NUM || 1, checked, window.TEST_TOTAL || 40, name);
+  setTimeout(function(){
+    var akEl = document.querySelector('.answer-key');
+    if(akEl) akEl.scrollIntoView({behavior:'smooth'});
+  }, 800);
+}
+</script>
+</body>
+</html>

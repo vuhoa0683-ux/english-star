@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>⭐ English Star</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+// Lightweight Supabase client - no CDN needed
+var SUPA_URL = 'https://cvwcpemkceqtqpauwqzw.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+
+function supabase(){ return {createClient: sbCreateClient}; }
+supabase.createClient = sbCreateClient;
+
+function sbCreateClient(url, key){
+  var base = url + '/rest/v1';
+  var headers = {
+    'apikey': key,
+    'Authorization': 'Bearer ' + key,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=representation'
+  };
+  
+  function buildQuery(table, opts){
+    var q = base + '/' + table + '?';
+    var params = [];
+    if(opts.select) params.push('select=' + encodeURIComponent(opts.select));
+    if(opts.filters){
+      opts.filters.forEach(function(f){ params.push(f); });
+    }
+    if(opts.order) params.push('order=' + opts.order);
+    if(opts.limit) params.push('limit=' + opts.limit);
+    if(opts.single) { headers['Accept'] = 'application/vnd.pgrst.object+json'; }
+    return q + params.join('&');
+  }
+  
+  function sbFetch(method, url, body, hdrs){
+    var h = {};
+    for(var k in headers){ h[k] = headers[k]; }
+    if(hdrs){ for(var k in hdrs){ h[k] = hdrs[k]; } }
+    return fetch(url, {method: method, headers: h, body: body ? JSON.stringify(body) : undefined})
+      .then(function(r){
+        if(!r.ok && r.status !== 409) return r.json().then(function(e){ return {data:null,error:e}; });
+        return r.json().then(function(d){ return {data:d,error:null}; });
+      })
+      .catch(function(e){ return {data:null,error:e}; });
+  }
+  
+  function makeChain(table){
+    var opts = {select:'*', filters:[], table:table};
+    var chain = {
+      select: function(s){ opts.select=s; return chain; },
+      eq: function(col,val){ opts.filters.push(col+'=eq.'+encodeURIComponent(val)); return chain; },
+      neq: function(col,val){ opts.filters.push(col+'=neq.'+encodeURIComponent(val)); return chain; },
+      gt: function(col,val){ opts.filters.push(col+'=gt.'+encodeURIComponent(val)); return chain; },
+      gte: function(col,val){ opts.filters.push(col+'=gte.'+encodeURIComponent(val)); return chain; },
+      lt: function(col,val){ opts.filters.push(col+'=lt.'+encodeURIComponent(val)); return chain; },
+      lte: function(col,val){ opts.filters.push(col+'=lte.'+encodeURIComponent(val)); return chain; },
+      is: function(col,val){ opts.filters.push(col+'=is.'+val); return chain; },
+      order: function(col,o){ opts.order=col+(o&&o.ascending===false?'.desc':'.asc'); return chain; },
+      limit: function(n){ opts.limit=n; return chain; },
+      single: function(){ opts.single=true; return chain.then_get(); },
+      then: function(fn){ return chain.then_get().then(fn); },
+      catch: function(fn){ return chain.then_get().catch(fn); },
+      then_get: function(){
+        var url = buildQuery(table, opts);
+        if(opts.single){ delete headers['Accept']; headers['Accept']='application/vnd.pgrst.object+json'; }
+        return sbFetch('GET', url).then(function(r){
+          delete headers['Accept'];
+          return r;
+        });
+      }
+    };
+    return chain;
+  }
+  
+  return {
+    from: function(table){
+      var chain = makeChain(table);
+      chain.insert = function(data){
+        return sbFetch('POST', base+'/'+table, data);
+      };
+      chain.upsert = function(data, opts2){
+        var h = {'Prefer': 'resolution=merge-duplicates,return=representation'};
+        if(opts2&&opts2.onConflict) h['Prefer'] += ',resolution=merge-duplicates';
+        return sbFetch('POST', base+'/'+table, data, h);
+      };
+      chain.update = function(data){
+        chain._updateData = data;
+        chain._isUpdate = true;
+        var origEq = chain.eq.bind(chain);
+        chain.eq = function(col,val){
+          if(chain._isUpdate){
+            chain._updateFilters = chain._updateFilters||[];
+            chain._updateFilters.push(col+'=eq.'+encodeURIComponent(val));
+            return chain;
+          }
+          return origEq(col,val);
+        };
+        chain.then = function(fn){
+          var f = (chain._updateFilters||[]).join('&');
+          var url = base+'/'+table+'?'+(f||'id=neq.null');
+          return sbFetch('PATCH', url, data).then(fn);
+        };
+        return chain;
+      };
+      chain.delete = function(){
+        chain.then = function(fn){
+          var f = (chain._filters||[]).join('&');
+          return sbFetch('DELETE', base+'/'+table+'?'+f).then(fn);
+        };
+        return chain;
+      };
+      return chain;
+    }
+  };
+}
+</script>
+<style>
+:root{--sky:#0EA5E9;--sky-l:#E0F2FE;--sky-d:#0284C7;--mint:#10B981;--mint-l:#ECFDF5;--mint-d:#059669;--coral:#F43F5E;--coral-l:#FFF1F2;--sun:#F59E0B;--sun-l:#FEF3C7;--sun-d:#D97706;--violet:#8B5CF6;--violet-l:#EDE9FE;--ink:#0F172A;--ink2:#475569;--muted:#94A3B8;--bg:#F0F9FF;--card:#FFF;--border:#E2E8F0;--r:16px;--rs:10px;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+.hdr{background:linear-gradient(135deg,var(--sky-d),var(--violet));padding:14px 16px;position:sticky;top:0;z-index:100}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.logo{font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;color:#fff}
+.hdr-date{font-size:11px;font-weight:700;color:rgba(255,255,255,.8)}
+.hdr-name{font-size:12px;font-weight:700;color:rgba(255,255,255,.9)}
+#setup{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:14px;background:linear-gradient(150deg,#DBEAFE,#EDE9FE)}
+.s-hero{font-size:72px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.s-title{font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:var(--ink);text-align:center}
+.s-input{width:100%;max-width:300px;padding:12px 16px;border:2px solid var(--border);border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;outline:none;text-align:center;background:var(--card)}
+.s-input:focus{border-color:var(--sky)}
+.s-btn{width:100%;max-width:300px;padding:13px;background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff;border:none;border-radius:var(--rs);font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;cursor:pointer}
+#app{display:none;max-width:480px;margin:0 auto;padding:14px 14px 40px}
+.today-banner{border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
+.assign-card{background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:2px solid var(--sun);border-radius:var(--r);margin-bottom:14px;overflow:hidden}
+.ac-hdr{background:linear-gradient(135deg,var(--sun),var(--sun-d));padding:11px 14px;display:flex;align-items:center;justify-content:space-between}
+.ac-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:#fff}
+.ac-date{font-size:11px;font-weight:700;color:rgba(255,255,255,.85)}
+.ac-body{padding:12px 14px}
+.ac-empty{font-size:13px;font-weight:600;color:var(--muted);font-style:italic;text-align:center;padding:8px}
+.ac-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #FEF3C7}
+.ac-item:last-child{border-bottom:none}
+.ac-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--sun);background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;cursor:pointer;transition:all .2s}
+.ac-check.done{background:var(--mint);border-color:var(--mint);color:#fff}
+.ac-main{flex:1}
+.ac-text{font-size:13px;font-weight:700;color:var(--ink);line-height:1.4}
+.ac-text.done{text-decoration:line-through;color:var(--muted)}
+.ac-time{font-size:11px;font-weight:600;color:var(--muted);margin-top:2px}
+.ac-time.active{color:var(--mint-d);font-weight:800}
+.ac-open{padding:5px 11px;border-radius:20px;border:1.5px solid var(--sky);background:var(--sky-l);color:var(--sky-d);font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.ac-prog{margin-top:10px;display:flex;align-items:center;gap:8px}
+.ac-prog-bar{flex:1;height:6px;background:#FEF3C7;border-radius:3px;overflow:hidden}
+.ac-prog-fill{height:100%;background:var(--mint);border-radius:3px;transition:width .4s}
+.ac-prog-txt{font-size:11px;font-weight:700;color:var(--sun-d);white-space:nowrap}
+.ac-edit-btn{width:100%;padding:9px;margin-top:10px;border-radius:var(--rs);border:1.5px dashed var(--sun);background:transparent;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:var(--sun-d);cursor:pointer}
+.editor-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;display:none;align-items:flex-end;justify-content:center}
+.editor-overlay.show{display:flex}
+.editor-sheet{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:85vh;overflow-y:auto;padding:0 0 30px;animation:slideup .3s ease-out}
+@keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.editor-hdr{padding:16px 18px 12px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--card);z-index:1}
+.editor-title{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;color:var(--ink)}
+.editor-close{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);background:var(--card);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.editor-sub{padding:10px 18px 6px;font-size:12px;font-weight:700;color:var(--muted)}
+.task-option{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border);cursor:pointer}
+.task-option:last-child{border-bottom:none}
+.to-check{width:26px;height:26px;border-radius:8px;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all .2s}
+.to-check.on{background:var(--sun);border-color:var(--sun-d);color:#fff}
+.to-icon{font-size:22px;flex-shrink:0}
+.to-info{flex:1}
+.to-name{font-size:14px;font-weight:800;color:var(--ink)}
+.to-sub{font-size:11px;font-weight:600;color:var(--muted);margin-top:1px}
+.editor-footer{padding:14px 18px 0;position:sticky;bottom:0;background:var(--card)}
+.btn-assign{width:100%;padding:13px;border-radius:var(--rs);border:none;background:linear-gradient(135deg,var(--sun),var(--sun-d));color:#fff;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;cursor:pointer}
+/* Timer popup */
+.timer-popup{position:fixed;bottom:20px;right:16px;z-index:500;background:var(--card);border-radius:var(--r);border:2px solid var(--mint);padding:14px 16px;box-shadow:0 8px 30px rgba(0,0,0,.15);min-width:220px;display:none}
+.timer-popup.show{display:block}
+.tp-title{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.tp-time{font-family:'Baloo 2',cursive;font-size:32px;font-weight:800;color:var(--mint-d);text-align:center;margin-bottom:10px}
+.tp-btns{display:flex;gap:6px;margin-bottom:8px}
+.tp-btn{flex:1;padding:9px;border:none;border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer}
+.tp-start{background:var(--mint);color:#fff}
+.tp-stop{background:var(--coral);color:#fff;display:none}
+.tp-done{background:var(--sky);color:#fff}
+.tp-close{width:100%;padding:7px;border:1.5px solid var(--border);border-radius:var(--rs);background:transparent;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer}
+.mistake-banner{background:var(--coral-l);border:1.5px solid #FECDD3;border-radius:var(--r);margin-bottom:14px;padding:12px 14px;display:none}
+.mistake-banner.show{display:block}
+.mb-title{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:#9F1239;margin-bottom:8px}
+.mb-item{font-size:12px;font-weight:700;color:var(--ink2);padding:4px 0;border-bottom:1px solid #FECDD3;line-height:1.6}
+.mb-item:last-child{border-bottom:none}
+.video-today{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.vt-icon{font-size:30px;flex-shrink:0}
+.vt-info{flex:1}
+.vt-title{font-size:14px;font-weight:800;color:var(--ink)}
+.vt-sub{font-size:11px;font-weight:600;color:var(--muted);margin-top:2px}
+.goals-mini{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:12px 14px;margin-bottom:14px}
+.gm-title{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.gm-pct{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--sky)}
+.gm-bar{height:7px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.gm-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--violet));border-radius:4px;transition:width .5s}
+.gm-items{display:flex;gap:6px;flex-wrap:wrap}
+.gm-chip{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800}
+.gmc-done{background:var(--mint-l);color:var(--mint-d)}
+.gmc-todo{background:var(--border);color:var(--muted)}
+.sec-hdr{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:8px}
+.links-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.lnk{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:14px 8px;background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);cursor:pointer;text-align:center;position:relative}
+.lnk .li{font-size:28px}
+.lnk .lt{font-size:12px;font-weight:800;color:var(--ink)}
+.lnk .ls{font-size:10px;font-weight:600;color:var(--muted)}
+.lnk.highlight{border-color:var(--sky);background:var(--sky-l)}
+.lnk.highlight .lt{color:var(--sky-d)}
+.lnk-new{position:absolute;top:6px;right:6px;background:var(--coral);color:#fff;font-size:9px;font-weight:800;padding:1px 6px;border-radius:10px}
+.folder{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden}
+.folder-hdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.folder-icon{font-size:22px;flex-shrink:0}
+.folder-info{flex:1}
+.folder-name{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:var(--ink)}
+.folder-sub{font-size:11px;font-weight:600;color:var(--muted);margin-top:1px}
+.folder-right{display:flex;align-items:center;gap:6px}
+.folder-badge{background:var(--violet-l);color:var(--violet);font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px}
+.folder-arrow{color:var(--muted);font-size:14px;transition:transform .25s;font-weight:800}
+.folder.open .folder-arrow{transform:rotate(90deg)}
+.folder-body{display:none;border-top:1.5px solid var(--border)}
+.folder.open .folder-body{display:block}
+.exam-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer}
+.exam-item:last-child{border-bottom:none}
+.ei-icon{font-size:18px;flex-shrink:0}
+.ei-info{flex:1}
+.ei-name{font-size:13px;font-weight:800;color:var(--ink)}
+.ei-meta{font-size:11px;font-weight:600;color:var(--muted);margin-top:1px}
+.ei-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.eib-done{background:var(--mint-l);color:var(--mint-d)}
+.eib-normal{background:var(--border);color:var(--muted)}
+.folder-empty{padding:14px;text-align:center;font-size:12px;font-weight:700;color:var(--muted);font-style:italic}
+.achieve-pop{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
+.achieve-pop.show{display:flex}
+.achieve-box{background:var(--card);border-radius:var(--r);padding:28px 24px;text-align:center;max-width:320px;width:100%}
+.ab-em{font-size:60px;margin-bottom:8px}
+.ab-title{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--ink)}
+.ab-sub{font-size:13px;font-weight:700;color:var(--muted);margin-top:6px;line-height:1.6}
+.ab-close{margin-top:16px;padding:10px 28px;border-radius:var(--rs);background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff;border:none;font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;cursor:pointer}
+.cf-wrap{position:fixed;inset:0;pointer-events:none;z-index:400;display:none}
+.cf-wrap.show{display:block}
+.cf{position:absolute;width:9px;height:9px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="cf-wrap" id="cf"></div>
+<div class="achieve-pop" id="achieve-pop">
+  <div class="achieve-box">
+    <div class="ab-em" id="ab-em">🏆</div>
+    <div class="ab-title" id="ab-title">Tuyệt vời!</div>
+    <div class="ab-sub" id="ab-sub"></div>
+    <button class="ab-close" onclick="closeAchieve()">Cảm ơn! 😊</button>
+  </div>
+</div>
+
+<!-- TIMER POPUP -->
+<div class="timer-popup" id="timer-popup">
+  <div class="tp-title" id="tp-title">Đang học...</div>
+  <div class="tp-time" id="tp-time">00:00</div>
+  <div style="font-size:11px;font-weight:700;color:var(--mint-d);text-align:center;margin-bottom:8px" id="tp-status">⏱️ Đang đếm giờ học...</div>
+  <div class="tp-btns">
+    <button class="tp-btn tp-done" onclick="confirmDone()">✅ Xong!</button>
+  </div>
+  <button class="tp-close" onclick="closeTimer()">Tạm dừng & đóng</button>
+</div>
+
+<div class="hdr">
+  <div class="hdr-top"><div class="logo">⭐ English Star</div><div class="hdr-date" id="hdr-date"></div></div>
+  <div class="hdr-name" id="hdr-name"></div>
+</div>
+
+<div id="setup">
+  <div class="s-hero">🌟</div>
+  <div class="s-title">Chào mừng đến<br>English Star!</div>
+  <input class="s-input" id="name-in" placeholder="Tên con là..." maxlength="30" autocomplete="off">
+  <button class="s-btn" onclick="startApp()">Bắt đầu học! 🚀</button>
+</div>
+
+<div id="app">
+  <div id="today-banner"></div>
+  <div class="assign-card">
+    <div class="ac-hdr">
+      <div class="ac-title">📋 Ba giao cho con hôm nay</div>
+      <div class="ac-date" id="assign-date"></div>
+    </div>
+    <div class="ac-body">
+      <div id="assign-list"><div class="ac-empty">Ba chưa giao bài — tự ôn tập nhé con! 📚</div></div>
+      <div class="ac-prog" id="assign-prog" style="display:none">
+        <div class="ac-prog-bar"><div class="ac-prog-fill" id="assign-fill" style="width:0%"></div></div>
+        <span class="ac-prog-txt" id="assign-pct">0/0 hoàn thành</span>
+      </div>
+      <button class="ac-edit-btn" onclick="openEditor()">⚙️ Ba giao bài cho con</button>
+    </div>
+  </div>
+  <div class="editor-overlay" id="editor-overlay" onclick="closeEditorOutside(event)">
+    <div class="editor-sheet">
+      <div class="editor-hdr">
+        <div class="editor-title">📋 Chọn bài giao cho con</div>
+        <button class="editor-close" onclick="closeEditor()">✕</button>
+      </div>
+      <div class="editor-sub">Tick chọn → Bấm "Giao bài" → Con thấy ngay!</div>
+      <div id="task-options"></div>
+      <div class="editor-footer"><button class="btn-assign" onclick="saveAssignment()">✅ Giao bài cho con!</button></div>
+    </div>
+  </div>
+  <div class="mistake-banner" id="mistake-banner">
+    <div class="mb-title">⚠️ Con hay sai — ôn lại nhé!</div>
+    <div id="mistake-list"></div>
+  </div>
+  <div class="video-today" onclick="openTask('english-video.html','📺 Video hôm nay','video')">
+    <div class="vt-icon" id="vt-icon">📺</div>
+    <div class="vt-info">
+      <div class="vt-title" id="vt-title">Video hôm nay</div>
+      <div class="vt-sub">Bấm để xem · Timer · Học từ vựng</div>
+    </div>
+    <span style="color:var(--muted)">→</span>
+  </div>
+  <div class="goals-mini">
+    <div class="gm-title">🎯 Tiến độ hôm nay <span class="gm-pct" id="gm-pct">0%</span></div>
+    <div class="gm-bar"><div class="gm-fill" id="gm-fill" style="width:0%"></div></div>
+    <div class="gm-items" id="gm-items"></div>
+  </div>
+  <div class="sec-hdr">📁 Đề kiểm tra</div>
+  <div id="test-folders" style="margin-bottom:14px"></div>
+  <div class="sec-hdr">🚀 Vào học ngay</div>
+  <div class="links-grid">
+    <div class="lnk highlight" onclick="openTask('english-star.html','🃏 Flashcard + Quiz','flash')"><span class="li">🃏</span><span class="lt">Flashcard + Quiz</span><span class="ls">Từ vựng · Lộ trình</span></div>
+    <div class="lnk" onclick="openTask('english-skills.html','🎯 4 Kỹ Năng','skills')"><span class="li">🎯</span><span class="lt">4 Kỹ Năng</span><span class="ls">Nghe · Nói · Đọc · NGP</span></div>
+    <div class="lnk" onclick="openTask('english-reading.html','🎤 Luyện Đọc','reading')"><span class="li">🎤</span><span class="lt">Luyện Đọc</span><span class="ls">Phát âm · Chấm điểm</span></div>
+    <div class="lnk" onclick="openTask('english-exam-uploader.html','📝 Bài luyện thi','exam_up')" id="lnk-exam"><span class="li">📝</span><span class="lt">Bài luyện thi</span><span class="ls">Ba upload · AI tạo đề</span><span class="lnk-new" id="exam-new" style="display:none">Mới!</span></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ SUPABASE ══
+var SB = supabase.createClient(
+  'https://cvwcpemkceqtqpauwqzw.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc'
+);
+
+// ══ CONSTANTS ══
+var TODAY = new Date();
+var TODAY_STR = TODAY.toISOString().slice(0,10);
+var DAYS = ['Chủ nhật','Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'];
+var VIDEO_NAMES = ['Super Simple Songs','Peppa Pig','BBC Earth Kids','Bluey','BBC Earth Kids','Alphablocks','Peppa Pig'];
+var VIDEO_ICONS = ['🎵','🐷','🌍','🐶','🌊','🔤','🐷'];
+var ASSIGN_KEY = 'en_assign_';
+var DONE_KEY = 'en_done_';
+var NAME = '';
+var editorSelected = {};
+var currentTaskId = '';
+var timerInterval = null;
+var timerSeconds = 0;
+var timerRunning = false;
+
+var ALL_TASKS = [
+  {id:'flash',  icon:'🃏', name:'Luyện Flashcard',      sub:'15 từ vựng mới hôm nay',       url:'english-star.html'},
+  {id:'quiz',   icon:'📝', name:'Làm bài Quiz',          sub:'1 chủ đề trong English Star',  url:'english-star.html'},
+  {id:'skills', icon:'🎯', name:'Luyện 4 Kỹ Năng',      sub:'Nghe · Nói · Đọc · Ngữ pháp',url:'english-skills.html'},
+  {id:'reading',icon:'🎤', name:'Luyện đọc phát âm',    sub:'Đoạn văn · Chấm điểm',        url:'english-reading.html'},
+  {id:'exam1',  icon:'📋', name:'Làm Đề số 1',          sub:'40 điểm',                       url:'english-test-1.html'},
+  {id:'exam2',  icon:'📋', name:'Làm Đề số 2',          sub:'50 điểm',                       url:'english-test-2.html'},
+  {id:'exam3',  icon:'📋', name:'Làm Đề số 3',          sub:'50 điểm',                       url:'english-test-3.html'},
+  {id:'exam_up',icon:'📤', name:'Làm bài Ba upload',    sub:'Bài thi từ ảnh Ba chụp',       url:'english-exam-uploader.html'},
+  {id:'video',  icon:'📺', name:'Xem video hôm nay',    sub:'Làm cuối sau các bài học',     url:'english-video.html'},
+];
+
+var TEST_FOLDERS = [
+  {id:'ontap', icon:'📚', name:'Đề ôn tập',  sub:'Bài ôn luyện hàng tuần',
+   exams:[{name:'Đề số 1',meta:'Trái cây · Đồ ăn · 40đ',url:'english-test-1.html',lock:false},{name:'Đề số 2',meta:'Hobbies · Grammar · 50đ',url:'english-test-2.html',lock:false},{name:'Đề số 3',meta:'Error correction · 50đ',url:'english-test-3.html',lock:false},{name:'Đề số 4',meta:'Animals · Nature · 50đ',url:'english-test-4.html',lock:true,unlock:'exam_done_english-test-3.html'},{name:'Đề số 5',meta:'Emotions · Transport · 50đ',url:'english-test-5.html',lock:true,unlock:'exam_done_english-test-4.html'},{name:'Đề số 6',meta:'Mixed Review · 50đ',url:'english-test-6.html',lock:true,unlock:'exam_done_english-test-5.html'}]},
+  {id:'ioe',   icon:'🌐', name:'Đề IOE',     sub:'Luyện thi IOE cấp trường & tỉnh', exams:[]},
+  {id:'olympic',icon:'🏅',name:'Đề Olympic', sub:'Luyện thi Olympic Tiếng Anh',     exams:[]},
+];
+
+var WEEKLY_TOPICS = [
+  {week:1,id:'fruits', name:'Trái cây',    icon:'🍎',color:'#10B981'},
+  {week:2,id:'hobbies',name:'Sở thích',    icon:'🎨',color:'#8B5CF6'},
+  {week:3,id:'school', name:'Môn học',     icon:'📚',color:'#0EA5E9'},
+  {week:4,id:'food',   name:'Đồ ăn/uống', icon:'🍜',color:'#F59E0B'},
+  {week:5,id:'grammar',name:'Ngữ pháp',   icon:'✏️',color:'#F43F5E'},
+  {week:6,id:'mixed',  name:'Ôn tổng hợp',icon:'🏆',color:'#6D28D9'},
+];
+var DAILY_SKILLS = [
+  {day:0,skill:'Ôn tổng hợp',  icon:'🏆',desc:'Làm quiz tổng hợp chủ đề tuần'},
+  {day:1,skill:'Từ vựng mới',  icon:'🃏',desc:'Học flashcard từ mới chưa biết'},
+  {day:2,skill:'Luyện nghe',   icon:'👂',desc:'Nghe và nhận diện từ vựng'},
+  {day:3,skill:'Luyện nói',    icon:'🎤',desc:'Đọc to và luyện phát âm'},
+  {day:4,skill:'Đọc hiểu',     icon:'📖',desc:'Đọc đoạn văn và trả lời câu hỏi'},
+  {day:5,skill:'Ngữ pháp',     icon:'✏️',desc:'Luyện cấu trúc ngữ pháp'},
+  {day:6,skill:'Kiểm tra tuần',icon:'📝',desc:'Làm bài kiểm tra cuối tuần'},
+];
+
+// ══ HELPERS ══
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+function el(id){return document.getElementById(id);}
+
+// ══ SETUP ══
+document.getElementById('name-in').addEventListener('keydown',function(e){if(e.key==='Enter')startApp();});
+
+
+/* ══ LỊCH GIAO BÀI TỰ ĐỘNG ══ */
+var AUTO_SCHEDULE = {
+  1: ['flash','skills'],
+  2: ['video','reading'],
+  3: ['flash','quiz'],
+  4: ['skills','reading'],
+  5: ['flash','quiz'],
+  6: ['exam1'],
+  0: ['video']
+};
+var TASK_TIME = {flash:15,quiz:10,skills:20,reading:15,video:20,exam1:25,exam2:25,exam3:25,exam_up:20};
+
+function getAutoSchedule(){
+  var day = TODAY.getDay();
+  var ids = AUTO_SCHEDULE[day] || ['flash','quiz'];
+  if(day === 6){
+    var exams = ['exam1','exam2','exam3'];
+    ids = [exams[Math.floor(Math.random()*3)]];
+  }
+  return ids;
+}
+
+function getTotalTime(ids){
+  var total = 0;
+  ids.forEach(function(id){ total += (TASK_TIME[id]||15); });
+  return total;
+}
+
+function autoAssignIfEmpty(){
+  var saved = localStorage.getItem(ASSIGN_KEY+TODAY_STR);
+  if(saved && JSON.parse(saved).length > 0) return;
+  var ids = getAutoSchedule();
+  localStorage.setItem(ASSIGN_KEY+TODAY_STR, JSON.stringify(ids));
+  var tasks = ALL_TASKS.filter(function(t){ return ids.indexOf(t.id)>=0; })
+    .map(function(t){ return {id:t.id,name:t.name,icon:t.icon}; });
+  SB.from('english_assignments').upsert({
+    date:TODAY_STR, tasks:JSON.stringify(tasks),
+    assigned_at:new Date().toISOString(), assigned_by:'auto'
+  },{onConflict:'date'}).then(function(){}).catch(function(){});
+}
+
+function startApp(){
+  var n=document.getElementById('name-in').value.trim();
+  if(!n){toast('Con nhập tên vào nhé 😊');return;}
+  NAME=n;
+  localStorage.setItem('en_name',n);
+  el('hdr-name').textContent='👋 Xin chào, '+n+'!';
+  el('hdr-date').textContent=DAYS[TODAY.getDay()]+', '+TODAY.toLocaleDateString('vi-VN');
+  el('assign-date').textContent=TODAY.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+  el('setup').style.display='none';
+  el('app').style.display='block';
+  var dow=TODAY.getDay();
+  el('vt-icon').textContent=VIDEO_ICONS[dow];
+  el('vt-title').textContent='Video hôm nay: '+VIDEO_NAMES[dow];
+  renderTodayBanner();
+  // Show time estimate
+  var autoIds=getAutoSchedule();var tEl=document.getElementById('today-time');if(tEl)tEl.textContent='⏱️ Khoảng '+getTotalTime(autoIds)+' phút hôm nay';
+  autoAssignIfEmpty();
+  loadAssignments();
+  loadMistakes();
+  loadGoals();
+  checkNewContent();
+  buildTestFolders();
+}
+
+// ══ TODAY BANNER ══
+function renderTodayBanner(){
+  var week=getCurrentWeek();
+  var topic=WEEKLY_TOPICS[(week-1)%WEEKLY_TOPICS.length];
+  var skill=DAILY_SKILLS[TODAY.getDay()];
+  el('today-banner').innerHTML='<div style="background:'+topic.color+'18;border:1.5px solid '+topic.color+'44;border-radius:var(--r);padding:12px 14px;margin-bottom:14px"><div style="font-size:10px;font-weight:800;color:'+topic.color+';text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">📅 Tuần '+week+' · Hôm nay học</div><div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">'+topic.icon+'</span><div><div style="font-family:\'Baloo 2\',cursive;font-size:16px;font-weight:800;color:var(--ink)">'+skill.icon+' '+skill.skill+' — '+topic.name+'</div><div style="font-size:12px;font-weight:600;color:var(--muted);margin-top:2px">'+skill.desc+'</div></div></div></div>';
+}
+function getCurrentWeek(){
+  var start=new Date('2026-04-28');
+  var diff=Math.floor((TODAY-start)/(7*24*3600*1000));
+  return(diff%WEEKLY_TOPICS.length)+1;
+}
+
+// ══ TASK OPEN + TIMER ══
+function openTask(url,title,taskId){
+  currentTaskId=taskId;
+  el('tp-title').textContent=title;
+  el('tp-time').textContent='00:00';
+  el('timer-popup').classList.add('show');
+  timerSeconds=0;
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+  window.open(url,'_blank');
+  // Auto start timer after short delay
+  setTimeout(function(){startTimer();},500);
+}
+function startTimer(){
+  if(timerRunning)return;
+  timerRunning=true;
+  el('tp-start').style.display='none';
+  el('tp-stop').style.display='block';
+  timerInterval=setInterval(function(){
+    timerSeconds++;
+    var m=Math.floor(timerSeconds/60).toString().padStart(2,'0');
+    var s=(timerSeconds%60).toString().padStart(2,'0');
+    el('tp-time').textContent=m+':'+s;
+  },1000);
+  SB.from('english_sessions').insert({student_name:NAME,started_at:new Date().toISOString(),task_id:currentTaskId,task_name:getTaskName(currentTaskId)}).then(function(){}).catch(function(){});
+}
+function stopTimer(){
+  if(!timerRunning)return;
+  clearInterval(timerInterval);timerInterval=null;timerRunning=false;
+  el('tp-start').style.display='block';el('tp-start').textContent='▶ Tiếp tục';
+  el('tp-stop').style.display='none';
+  saveTimerLocal();
+}
+function saveTimerLocal(){
+  if(currentTaskId&&timerSeconds>5){
+    var key='en_sess_'+TODAY_STR+'_'+currentTaskId;
+    var prev=parseInt(localStorage.getItem(key)||'0');
+    localStorage.setItem(key,String(prev+timerSeconds));
+    SB.from('english_sessions').update({ended_at:new Date().toISOString(),duration_seconds:timerSeconds,student_name:NAME}).eq('student_name',NAME).is('ended_at',null).then(function(){}).catch(function(){});
+    timerSeconds=0;
+  }
+}
+function confirmDone(){
+  stopTimer();
+  closeTimer();
+  toggleDone(currentTaskId,false);
+  toast('✅ Xác nhận xong! Giỏi lắm! 🌟');
+}
+function closeTimer(){
+  if(timerRunning) stopTimer();
+  el('timer-popup').classList.remove('show');
+  if(timerSeconds>5){
+    var m=Math.floor(timerSeconds/60);
+    var s=timerSeconds%60;
+    toast('⏱️ Đã học '+(m>0?m+'p ':'')+(s>0?s+'s':''));
+  }
+  loadGoals();
+  var ids=JSON.parse(localStorage.getItem(ASSIGN_KEY+TODAY_STR)||'[]');
+  renderAssignList(ids);
+}
+function getTaskName(id){
+  var t=ALL_TASKS.find(function(x){return x.id===id;});
+  return t?t.name:id;
+}
+
+// ══ ASSIGNMENTS ══
+function loadAssignments(){
+  var saved=localStorage.getItem(ASSIGN_KEY+TODAY_STR);
+  renderAssignList(saved?JSON.parse(saved):[]);
+  SB.from('english_assignments').select('tasks').eq('date',TODAY_STR).single().then(function(r){
+    if(r.data&&r.data.tasks){
+      var ids=JSON.parse(r.data.tasks).map(function(t){return t.id;});
+      localStorage.setItem(ASSIGN_KEY+TODAY_STR,JSON.stringify(ids));
+      renderAssignList(ids);
+    }
+  }).catch(function(){});
+}
+
+function renderAssignList(ids){
+  var list=el('assign-list'),prog=el('assign-prog');
+  if(!ids||!ids.length){
+    list.innerHTML='<div class="ac-empty">Ba chưa giao bài — tự ôn tập nhé con! 📚</div>';
+    prog.style.display='none';return;
+  }
+  var doneData=JSON.parse(localStorage.getItem(DONE_KEY+TODAY_STR)||'{}');
+  var tasks=ALL_TASKS.filter(function(t){return ids.indexOf(t.id)>=0;});
+  var doneCount=tasks.filter(function(t){return doneData[t.id];}).length;
+  prog.style.display='flex';
+  var pct=Math.round(doneCount/tasks.length*100);
+  el('assign-fill').style.width=pct+'%';
+  el('assign-pct').textContent=doneCount+'/'+tasks.length+' hoàn thành';
+  var html='';
+  tasks.forEach(function(t){
+    var isDone=doneData[t.id]||false;
+    var durKey='en_sess_'+TODAY_STR+'_'+t.id;
+    var dur=parseInt(localStorage.getItem(durKey)||'0');
+    var durTxt=dur>0?(Math.floor(dur/60)+'p'+(dur%60?' '+dur%60+'s':'')):'Chưa bắt đầu';
+    html+='<div class="ac-item">';
+    html+='<div class="ac-check'+(isDone?' done':'')+'" onclick="toggleDone(\''+t.id+'\','+isDone+')">'+(isDone?'✓':'')+'</div>';
+    html+='<div class="ac-main"><div class="ac-text'+(isDone?' done':'')+'">'+t.icon+' '+t.name+'</div>';
+    html+='<div class="ac-time'+(dur>0?' active':'')+'">⏱️ '+durTxt+'</div></div>';
+    html+='<button class="ac-open" onclick="openTask(\''+t.url+'\',\''+t.icon+' '+t.name+'\',\''+t.id+'\')">Học →</button>';
+    html+='</div>';
+  });
+  list.innerHTML=html;
+  if(doneCount===tasks.length&&tasks.length>0){
+    setTimeout(function(){showAchieve('🎉','Hoàn thành tất cả!','Con đã làm hết bài Ba giao hôm nay! ⭐⭐⭐');},300);
+  }
+  // Sync done from Supabase
+  SB.from('english_task_progress').select('task_id').eq('date',TODAY_STR).eq('done',true).then(function(r){
+    if(r.data&&r.data.length){
+      r.data.forEach(function(x){doneData[x.task_id]=true;});
+      localStorage.setItem(DONE_KEY+TODAY_STR,JSON.stringify(doneData));
+    }
+  }).catch(function(){});
+}
+
+function toggleDone(id,isDone){
+  var doneData=JSON.parse(localStorage.getItem(DONE_KEY+TODAY_STR)||'{}');
+  doneData[id]=!isDone;
+  localStorage.setItem(DONE_KEY+TODAY_STR,JSON.stringify(doneData));
+  var ids=JSON.parse(localStorage.getItem(ASSIGN_KEY+TODAY_STR)||'[]');
+  renderAssignList(ids);
+  if(!isDone){
+    toast('✅ Hoàn thành! Giỏi lắm! 🌟');
+    SB.from('english_task_progress').insert({student_name:NAME,date:TODAY_STR,task_id:id,task_name:getTaskName(id),done:true,done_at:new Date().toISOString()}).then(function(){}).catch(function(){});
+  }
+}
+
+function openEditor(){
+  var saved=JSON.parse(localStorage.getItem(ASSIGN_KEY+TODAY_STR)||'[]');
+  editorSelected={};
+  saved.forEach(function(id){editorSelected[id]=true;});
+  var html='';
+  ALL_TASKS.forEach(function(t){
+    var on=editorSelected[t.id]?'on':'';
+    html+='<div class="task-option" onclick="toggleTaskOpt(\''+t.id+'\')">';
+    html+='<div class="to-check '+on+'" id="tc-'+t.id+'">'+(on?'✓':'')+'</div>';
+    html+='<div class="to-icon">'+t.icon+'</div>';
+    html+='<div class="to-info"><div class="to-name">'+t.name+'</div><div class="to-sub">'+t.sub+'</div></div>';
+    html+='</div>';
+  });
+  el('task-options').innerHTML=html;
+  el('editor-overlay').classList.add('show');
+}
+function toggleTaskOpt(id){
+  editorSelected[id]=!editorSelected[id];
+  var el2=el('tc-'+id);
+  if(el2){el2.classList.toggle('on',editorSelected[id]);el2.textContent=editorSelected[id]?'✓':'';}
+}
+function saveAssignment(){
+  var ids=Object.keys(editorSelected).filter(function(k){return editorSelected[k];});
+  localStorage.setItem(ASSIGN_KEY+TODAY_STR,JSON.stringify(ids));
+  closeEditor();renderAssignList(ids);
+  toast('✅ Đã giao bài! Con vào là thấy ngay 😊');
+  var tasks=ALL_TASKS.filter(function(t){return ids.indexOf(t.id)>=0;}).map(function(t){return{id:t.id,name:t.name,icon:t.icon};});
+  SB.from('english_assignments').upsert({date:TODAY_STR,tasks:JSON.stringify(tasks),assigned_at:new Date().toISOString(),assigned_by:'ba'},{onConflict:'date'}).then(function(){}).catch(function(){});
+}
+function closeEditor(){el('editor-overlay').classList.remove('show');}
+function closeEditorOutside(e){if(e.target===el('editor-overlay'))closeEditor();}
+
+// ══ MISTAKES ══
+function loadMistakes(){
+  SB.from('results').select('answers').eq('subject','english').eq('student_name',NAME).order('created_at',{ascending:false}).limit(20).then(function(r){
+    var map={};
+    (r.data||[]).forEach(function(row){(row.answers&&row.answers.wrong||[]).forEach(function(w){if(!map[w.question]){map[w.question]={question:w.question,chosen:w.chosen,correct:w.correct,count:0};}map[w.question].count++;});});
+    var top=Object.values(map).filter(function(w){return w.count>=2;}).sort(function(a,b){return b.count-a.count;}).slice(0,3);
+    if(top.length>0){
+      el('mistake-banner').classList.add('show');
+      el('mistake-list').innerHTML=top.map(function(w){return'<div class="mb-item"><b>'+w.question+'</b><br><span style="color:var(--coral)">❌ Hay chọn: '+w.chosen+'</span> <span style="color:var(--mint-d)">✅ Đúng: '+w.correct+'</span></div>';}).join('');
+    }
+  }).catch(function(){});
+}
+
+// ══ GOALS ══
+function loadGoals(){
+  var goals=[{icon:'📺',label:'Video',done:false},{icon:'🃏',label:'Flashcard',done:false},{icon:'📝',label:'Quiz',done:false}];
+  SB.from('results').select('created_at').eq('subject','english').eq('student_name',NAME).gte('created_at',TODAY_STR+'T00:00:00').limit(5).then(function(r){
+    if((r.data||[]).length>0)goals[2].done=true;
+    SB.from('english_video_watches').select('completed_at').eq('student_name',NAME).gte('completed_at',TODAY_STR+'T00:00:00').then(function(v){
+      if((v.data||[]).length>0)goals[0].done=true;
+      SB.from('english_sessions').select('task_id').eq('student_name',NAME).eq('task_id','flash').gte('started_at',TODAY_STR+'T00:00:00').then(function(s){
+        if((s.data||[]).length>0)goals[1].done=true;
+        renderGoals(goals);
+      }).catch(function(){renderGoals(goals);});
+    }).catch(function(){renderGoals(goals);});
+  }).catch(function(){renderGoals(goals);});
+}
+function renderGoals(goals){
+  var done=goals.filter(function(g){return g.done;}).length;
+  var pct=Math.round(done/goals.length*100);
+  el('gm-pct').textContent=pct+'%';
+  el('gm-fill').style.width=pct+'%';
+  el('gm-items').innerHTML=goals.map(function(g){return'<div class="gm-chip '+(g.done?'gmc-done':'gmc-todo')+'">'+(g.done?'✅':'⭕')+' '+g.icon+' '+g.label+'</div>';}).join('');
+}
+
+// ══ NEW CONTENT ══
+function checkNewContent(){
+  var lastSeen=localStorage.getItem('en_last_seen')||'2000-01-01T00:00:00';
+  SB.from('english_quizzes').select('id').gt('created_at',lastSeen).limit(5).then(function(r){
+    if(r.data&&r.data.length>0){el('exam-new').style.display='block';el('exam-new').textContent=r.data.length+' mới';}
+  }).catch(function(){});
+}
+
+// ══ TEST FOLDERS ══
+function buildTestFolders(){
+  var html='';
+  TEST_FOLDERS.forEach(function(f){
+    var count=f.exams.length;
+    var items='';
+    if(count===0){items='<div class="folder-empty">📭 Ba chưa thêm đề — sẽ có sớm nhé con!</div>';}
+    else{f.exams.forEach(function(e){var isDone=localStorage.getItem('exam_done_'+e.url)==='1';items+='<div class="exam-item" onclick="openTask(\''+e.url+'\',\'📋 '+e.name+'\',\''+e.url.replace('.html','')+'\');localStorage.setItem(\'exam_done_'+e.url+'\',\'1\')"><div class="ei-icon">📋</div><div class="ei-info"><div class="ei-name">'+e.name+'</div><div class="ei-meta">'+e.meta+'</div></div><span class="ei-badge '+(isDone?'eib-done':'eib-normal')+'">'+(isDone?'✅ Đã làm':'📝 Chưa làm')+'</span></div>';});}
+    html+='<div class="folder" id="folder-'+f.id+'"><div class="folder-hdr" onclick="toggleFolder(\''+f.id+'\')"><div class="folder-icon">'+f.icon+'</div><div class="folder-info"><div class="folder-name">'+f.name+'</div><div class="folder-sub">'+f.sub+'</div></div><div class="folder-right">'+(count>0?'<span class="folder-badge">'+count+' đề</span>':'')+'<span class="folder-arrow">›</span></div></div><div class="folder-body">'+items+'</div></div>';
+  });
+  el('test-folders').innerHTML=html;
+  toggleFolder('ontap');
+}
+function toggleFolder(id){var e=el('folder-'+id);if(e)e.classList.toggle('open');}
+
+// ══ ACHIEVE ══
+function showAchieve(em,title,sub){el('ab-em').textContent=em;el('ab-title').textContent=title;el('ab-sub').textContent=sub;el('achieve-pop').classList.add('show');launchConfetti();}
+function closeAchieve(){el('achieve-pop').classList.remove('show');}
+function launchConfetti(){var w=el('cf');w.innerHTML='';w.classList.add('show');var c=['#0EA5E9','#10B981','#F59E0B','#F43F5E','#8B5CF6'];for(var i=0;i<50;i++){var d=document.createElement('div');d.className='cf';d.style.cssText='left:'+Math.random()*100+'vw;background:'+c[i%5]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px';w.appendChild(d);}setTimeout(function(){w.classList.remove('show');w.innerHTML='';},4000);}
+
+// ══ INIT ══
+window.addEventListener('DOMContentLoaded',function(){
+  buildTestFolders();
+  var s=localStorage.getItem('en_name');
+  if(s)document.getElementById('name-in').value=s;
+  document.getElementById('name-in').addEventListener('input',function(e){localStorage.setItem('en_name',e.target.value);});
+});
+</script>
+</body>
+</html>

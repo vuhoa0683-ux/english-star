@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📋 Báo Cáo Học Tập – English Star</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --sky:#0EA5E9;--sky-l:#E0F2FE;--sky-d:#0284C7;
+  --mint:#10B981;--mint-l:#ECFDF5;--mint-d:#059669;
+  --coral:#F43F5E;--coral-l:#FFF1F2;
+  --sun:#F59E0B;--sun-l:#FEF3C7;--sun-d:#D97706;
+  --violet:#8B5CF6;--violet-l:#EDE9FE;
+  --ink:#0F172A;--ink2:#475569;--muted:#94A3B8;
+  --bg:#F8FAFC;--card:#FFF;--border:#E2E8F0;
+  --r:14px;--rs:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+
+.hdr{background:linear-gradient(135deg,#0F172A,#1E293B);padding:18px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hdr-left{display:flex;flex-direction:column;gap:3px}
+.hdr-title{font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;color:#fff}
+.hdr-sub{font-size:12px;color:#94A3B8;font-weight:600}
+.btn-copy-all{padding:9px 16px;border-radius:var(--rs);
+  background:linear-gradient(135deg,var(--sky),var(--violet));
+  color:#fff;border:none;font-family:'Baloo 2',cursive;font-size:13px;font-weight:800;
+  cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.btn-copy-all:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(14,165,233,.4)}
+.btn-copy-all:active{transform:scale(.97)}
+
+.wrap{max-width:600px;margin:0 auto;padding:14px 14px 40px}
+
+/* STUDENT FILTER */
+.stu-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.stu-lbl{font-size:12px;font-weight:800;color:var(--ink2)}
+.stu-btn{padding:6px 13px;border-radius:20px;border:1.5px solid var(--border);
+  background:var(--card);font-size:12px;font-weight:800;cursor:pointer;color:var(--ink2);transition:all .15s}
+.stu-btn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* SUMMARY ROW */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:480px){.summary{grid-template-columns:1fr 1fr}}
+.sum-c{background:var(--card);border-radius:var(--rs);padding:12px 10px;text-align:center;border:1.5px solid var(--border)}
+.sum-i{font-size:22px;margin-bottom:3px}
+.sum-v{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--ink)}
+.sum-l{font-size:10px;font-weight:700;color:var(--muted)}
+
+/* SECTION CARD */
+.rcard{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);
+  margin-bottom:12px;overflow:hidden}
+.rc-hdr{padding:12px 14px;display:flex;align-items:center;gap:9px;border-bottom:1.5px solid var(--border)}
+.rc-icon{font-size:20px;flex-shrink:0}
+.rc-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink);flex:1}
+.rc-count{font-size:11px;font-weight:800;padding:3px 9px;border-radius:20px}
+.cnt-bad{background:var(--coral-l);color:var(--coral)}
+.cnt-ok{background:var(--mint-l);color:var(--mint-d)}
+.cnt-warn{background:var(--sun-l);color:var(--sun-d)}
+.rc-body{padding:12px 14px}
+
+/* SKILL BARS */
+.sk-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sk-row:last-child{margin-bottom:0}
+.sk-name{font-size:13px;font-weight:800;color:var(--ink);min-width:90px}
+.sk-bar-wrap{flex:1;height:9px;background:var(--border);border-radius:5px;overflow:hidden}
+.sk-bar-fill{height:100%;border-radius:5px;transition:width .6s}
+.sk-pct{font-size:12px;font-weight:800;min-width:38px;text-align:right}
+.sk-status{font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:4px;flex-shrink:0}
+.ss-weak{background:var(--coral-l);color:var(--coral)}
+.ss-ok  {background:var(--mint-l);color:var(--mint-d)}
+.ss-na  {background:var(--border);color:var(--muted)}
+
+/* WRONG ITEMS */
+.wi{padding:9px 0;border-bottom:1px solid var(--border)}
+.wi:last-child{border-bottom:none}
+.wi-q{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.wi-detail{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:700}
+.wi-wrong{color:var(--coral)}
+.wi-right{color:var(--mint-d)}
+.wi-topic{color:var(--muted);font-size:11px}
+.wi-count{display:inline-block;background:var(--coral-l);color:var(--coral);
+  font-size:10px;font-weight:800;padding:1px 7px;border-radius:10px;margin-left:5px}
+
+/* VOCAB WEAK */
+.vw-chips{display:flex;flex-wrap:wrap;gap:6px}
+.vw-chip{padding:5px 11px;border-radius:20px;border:1.5px solid var(--coral);
+  background:var(--coral-l);font-size:12px;font-weight:800;color:var(--coral)}
+.vw-chip.ok{border-color:var(--mint);background:var(--mint-l);color:var(--mint-d)}
+
+/* COPY BOX */
+.copy-box{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);
+  margin-bottom:12px;overflow:hidden}
+.cb-hdr{padding:12px 14px;border-bottom:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.cb-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink)}
+.btn-copy{padding:7px 14px;border-radius:var(--rs);background:var(--sky-l);
+  border:1.5px solid var(--sky);color:var(--sky-d);
+  font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all .15s}
+.btn-copy:hover{background:var(--sky);color:#fff}
+.cb-body{padding:12px 14px}
+.copy-text{background:#F8FAFC;border-radius:var(--rs);padding:11px 13px;
+  font-size:12px;font-weight:600;color:var(--ink2);line-height:1.8;
+  white-space:pre-wrap;border:1px solid var(--border);max-height:300px;overflow-y:auto}
+
+/* EMPTY / LOADING */
+.empty{text-align:center;padding:24px;color:var(--muted)}
+.empty .ei{font-size:40px;margin-bottom:6px}
+.empty p{font-size:13px;font-weight:700}
+.spin-w{text-align:center;padding:24px;color:var(--muted);font-size:13px;font-weight:700}
+.spin{display:inline-block;width:22px;height:22px;border:3px solid var(--border);
+  border-top-color:var(--sky);border-radius:50%;animation:sp .7s linear infinite;margin-bottom:5px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);
+  background:var(--ink);color:#fff;padding:9px 18px;border-radius:30px;
+  font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;
+  white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="hdr-title">📋 Báo Cáo Học Tập</div>
+    <div class="hdr-sub" id="report-date">Đang tải...</div>
+  </div>
+  <button class="btn-copy-all" onclick="copyFullReport()">📤 Copy báo cáo → gửi em</button>
+</div>
+
+<div class="wrap">
+  <div id="loading" class="spin-w"><div class="spin"></div><div>Đang phân tích dữ liệu...</div></div>
+  <div id="content" style="display:none">
+
+    <!-- STUDENT FILTER -->
+    <div class="stu-row">
+      <span class="stu-lbl">👤 Học sinh:</span>
+      <div id="stu-btns"></div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary">
+      <div class="sum-c"><div class="sum-i">📝</div><div class="sum-v" id="s-quizzes">0</div><div class="sum-l">Bài đã làm</div></div>
+      <div class="sum-c"><div class="sum-i">✅</div><div class="sum-v" id="s-pct">—</div><div class="sum-l">Tỉ lệ đúng</div></div>
+      <div class="sum-c"><div class="sum-i">❌</div><div class="sum-v" id="s-wrongs">0</div><div class="sum-l">Tổng lỗi sai</div></div>
+      <div class="sum-c"><div class="sum-i">🔁</div><div class="sum-v" id="s-repeat">0</div><div class="sum-l">Lỗi lặp lại</div></div>
+    </div>
+
+    <!-- SKILL PERFORMANCE -->
+    <div class="rcard">
+      <div class="rc-hdr">
+        <div class="rc-icon">📊</div>
+        <div class="rc-title">Kết quả 4 kỹ năng</div>
+      </div>
+      <div class="rc-body" id="skill-bars"></div>
+    </div>
+
+    <!-- GRAMMAR MISTAKES -->
+    <div class="rcard">
+      <div class="rc-hdr">
+        <div class="rc-icon">✏️</div>
+        <div class="rc-title">Lỗi ngữ pháp hay sai</div>
+        <div class="rc-count cnt-bad" id="gram-count">0 lỗi</div>
+      </div>
+      <div class="rc-body" id="gram-mistakes">
+        <div class="empty"><div class="ei">✅</div><p>Không có lỗi ngữ pháp!</p></div>
+      </div>
+    </div>
+
+    <!-- VOCABULARY WEAK -->
+    <div class="rcard">
+      <div class="rc-hdr">
+        <div class="rc-icon">📚</div>
+        <div class="rc-title">Từ vựng cần ôn lại</div>
+        <div class="rc-count cnt-warn" id="vocab-count">0 từ</div>
+      </div>
+      <div class="rc-body" id="vocab-weak">
+        <div class="empty"><div class="ei">✅</div><p>Từ vựng ổn!</p></div>
+      </div>
+    </div>
+
+    <!-- TOPIC PERFORMANCE -->
+    <div class="rcard">
+      <div class="rc-hdr">
+        <div class="rc-icon">🎯</div>
+        <div class="rc-title">Kết quả theo chủ đề</div>
+      </div>
+      <div class="rc-body" id="topic-perf"></div>
+    </div>
+
+    <!-- REPEATED MISTAKES -->
+    <div class="rcard">
+      <div class="rc-hdr">
+        <div class="rc-icon">🔁</div>
+        <div class="rc-title">Lỗi lặp lại nhiều lần</div>
+        <div class="rc-count cnt-bad" id="repeat-count">0</div>
+      </div>
+      <div class="rc-body" id="repeat-mistakes">
+        <div class="empty"><div class="ei">🎉</div><p>Không có lỗi lặp lại!</p></div>
+      </div>
+    </div>
+
+    <!-- COPY BOX FOR CLAUDE -->
+    <div class="copy-box">
+      <div class="cb-hdr">
+        <div class="cb-title">📤 Gửi em tạo bài tập</div>
+        <button class="btn-copy" onclick="copyReport()">📋 Copy</button>
+      </div>
+      <div class="cb-body">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px">
+          Anh copy đoạn này → paste vào chat với em → em ra bài tập đúng điểm yếu ngay!
+        </div>
+        <div class="copy-text" id="copy-text">Đang tạo báo cáo...</div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SB=supabase.createClient(
+  'https://cvwcpemkceqtqpauwqzw.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc'
+);
+
+const TNAME={fruits:'Trái cây',school:'Môn học',hobbies:'Sở thích',food:'Đồ ăn',grammar:'Ngữ pháp',mixed:'Tổng hợp'};
+const TICO={fruits:'🍎',school:'📚',hobbies:'🎨',food:'🍜',grammar:'✏️',mixed:'🎲'};
+const SKILL_MAP={fruits:'Từ vựng/Nghe',school:'Đọc hiểu',hobbies:'Sở thích/Đọc',food:'Từ vựng/Nghe',grammar:'Ngữ pháp',mixed:'Tổng hợp'};
+
+let allResults=[], allStudents=[], selectedStu='all', reportText='';
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+
+async function loadAll(){
+  try{
+    const{data}=await SB.from('results').select('*')
+      .eq('subject','english').order('created_at',{ascending:false}).limit(300);
+    allResults=data||[];
+    const stuSet=new Set(allResults.map(r=>r.student_name).filter(Boolean));
+    allStudents=[...stuSet];
+    buildStudentBtns();
+    renderAll();
+    document.getElementById('loading').style.display='none';
+    document.getElementById('content').style.display='block';
+    document.getElementById('report-date').textContent=
+      'Cập nhật: '+new Date().toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  }catch(e){
+    document.getElementById('loading').innerHTML=
+      '<div style="color:#F43F5E;font-size:13px;font-weight:700;text-align:center;padding:20px">⚠️ Lỗi kết nối Supabase</div>';
+  }
+}
+
+function buildStudentBtns(){
+  const wrap=document.getElementById('stu-btns');
+  wrap.innerHTML=`<button class="stu-btn ${selectedStu==='all'?'on':''}" onclick="selectStu('all')">Tất cả</button>`
+    +allStudents.map(s=>`<button class="stu-btn ${selectedStu===s?'on':''}" onclick="selectStu('${s}')">${s}</button>`).join('');
+}
+
+function selectStu(s){selectedStu=s;buildStudentBtns();renderAll()}
+
+function renderAll(){
+  const results=selectedStu==='all'?allResults:allResults.filter(r=>r.student_name===selectedStu);
+  renderSummary(results);
+  renderSkills(results);
+  renderGramMistakes(results);
+  renderVocabWeak(results);
+  renderTopicPerf(results);
+  renderRepeatMistakes(results);
+  buildReportText(results);
+}
+
+/* SUMMARY */
+function renderSummary(results){
+  const totQ=results.reduce((a,r)=>a+r.total,0);
+  const totC=results.reduce((a,r)=>a+r.score,0);
+  const pct=totQ>0?Math.round(totC/totQ*100):0;
+  const allWrongs=results.flatMap(r=>r.answers?.wrong||[]);
+  const wrongMap={};
+  allWrongs.forEach(w=>{wrongMap[w.question]=(wrongMap[w.question]||0)+1});
+  const repeated=Object.values(wrongMap).filter(c=>c>=2).length;
+  document.getElementById('s-quizzes').textContent=results.length;
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('s-wrongs').textContent=allWrongs.length;
+  document.getElementById('s-repeat').textContent=repeated;
+}
+
+/* SKILLS */
+function renderSkills(results){
+  const topicPct={};
+  results.forEach(r=>{
+    const t=r.answers?.topic;if(!t)return;
+    const p=r.total>0?Math.round(r.score/r.total*100):0;
+    if(!topicPct[t])topicPct[t]=[];
+    topicPct[t].push(p);
+  });
+  const avg=t=>topicPct[t]?Math.round(topicPct[t].reduce((a,b)=>a+b,0)/topicPct[t].length):null;
+
+  const skills=[
+    {name:'👂 Nghe (Từ vựng)',topics:['fruits','food'],color:'#0EA5E9'},
+    {name:'📖 Đọc hiểu',topics:['school','hobbies'],color:'#10B981'},
+    {name:'✏️ Ngữ pháp',topics:['grammar','mixed'],color:'#F59E0B'},
+    {name:'🎤 Nói/Phát âm',topics:[],color:'#8B5CF6',note:'Dùng english-reading.html'},
+  ];
+
+  document.getElementById('skill-bars').innerHTML=skills.map(sk=>{
+    const scores=sk.topics.flatMap(t=>topicPct[t]||[]);
+    const pct=scores.length>0?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):null;
+    const isWeak=pct!==null&&pct<70;
+    const barColor=pct===null?'#E2E8F0':isWeak?'#F43F5E':sk.color;
+    const statusClass=pct===null?'ss-na':isWeak?'ss-weak':'ss-ok';
+    const statusTxt=pct===null?'Chưa có dữ liệu':isWeak?'⚠️ Cần ôn':'✅ Tốt';
+    return`<div class="sk-row">
+      <span class="sk-name">${sk.name}</span>
+      <div class="sk-bar-wrap"><div class="sk-bar-fill" style="width:${pct||0}%;background:${barColor}"></div></div>
+      <span class="sk-pct" style="color:${barColor}">${pct!==null?pct+'%':'—'}</span>
+      <span class="sk-status ${statusClass}">${statusTxt}</span>
+    </div>`;
+  }).join('');
+}
+
+/* GRAMMAR MISTAKES */
+function renderGramMistakes(results){
+  const wrongs=results.flatMap(r=>r.answers?.wrong||[]);
+  const gramWrongs=wrongs.filter(w=>w.topic==='grammar'||w.topic==='mixed'||
+    /what|does|don|have|has|is|are/i.test(w.question));
+  const map={};
+  gramWrongs.forEach(w=>{
+    if(!map[w.question])map[w.question]={...w,count:0};
+    map[w.question].count++;
+  });
+  const sorted=Object.values(map).sort((a,b)=>b.count-a.count);
+  document.getElementById('gram-count').textContent=sorted.length+' lỗi';
+  document.getElementById('gram-count').className='rc-count '+(sorted.length>0?'cnt-bad':'cnt-ok');
+  if(!sorted.length){
+    document.getElementById('gram-mistakes').innerHTML='<div class="empty"><div class="ei">✅</div><p>Không có lỗi ngữ pháp!</p></div>';
+    return;
+  }
+  document.getElementById('gram-mistakes').innerHTML=sorted.slice(0,8).map(w=>`
+    <div class="wi">
+      <div class="wi-q">❓ ${w.question} ${w.count>=2?`<span class="wi-count">🔁 ${w.count}x</span>`:''}</div>
+      <div class="wi-detail">
+        <span class="wi-wrong">❌ Hay chọn: <b>${w.chosen}</b></span>
+        <span class="wi-right">✅ Đúng: <b>${w.correct}</b></span>
+      </div>
+    </div>`).join('');
+}
+
+/* VOCAB WEAK */
+function renderVocabWeak(results){
+  const wrongs=results.flatMap(r=>r.answers?.wrong||[]);
+  const vocabWrongs=wrongs.filter(w=>['fruits','food','school','hobbies'].includes(w.topic));
+  const map={};
+  vocabWrongs.forEach(w=>{
+    const key=w.correct||w.chosen;
+    if(!map[key])map[key]={word:key,count:0,topic:w.topic};
+    map[key].count++;
+  });
+  const sorted=Object.values(map).sort((a,b)=>b.count-a.count).slice(0,12);
+  document.getElementById('vocab-count').textContent=sorted.length+' từ';
+  if(!sorted.length){
+    document.getElementById('vocab-weak').innerHTML='<div class="empty"><div class="ei">✅</div><p>Từ vựng ổn!</p></div>';
+    return;
+  }
+  document.getElementById('vocab-weak').innerHTML=`<div class="vw-chips">`+
+    sorted.map(v=>`<span class="vw-chip">${TICO[v.topic]||'📝'} ${v.word} ${v.count>=2?`(${v.count}x)`:''}</span>`).join('')+
+    `</div>`;
+}
+
+/* TOPIC PERFORMANCE */
+function renderTopicPerf(results){
+  const topicMap={};
+  results.forEach(r=>{
+    const t=r.answers?.topic;if(!t)return;
+    if(!topicMap[t])topicMap[t]={correct:0,total:0,count:0};
+    topicMap[t].correct+=r.score;
+    topicMap[t].total+=r.total;
+    topicMap[t].count++;
+  });
+  const sorted=Object.entries(topicMap).sort((a,b)=>{
+    const pa=a[1].total>0?a[1].correct/a[1].total:1;
+    const pb=b[1].total>0?b[1].correct/b[1].total:1;
+    return pa-pb;
+  });
+  if(!sorted.length){
+    document.getElementById('topic-perf').innerHTML='<div class="empty"><div class="ei">📭</div><p>Chưa có dữ liệu</p></div>';
+    return;
+  }
+  document.getElementById('topic-perf').innerHTML=sorted.map(([t,s])=>{
+    const pct=s.total>0?Math.round(s.correct/s.total*100):0;
+    const isWeak=pct<70;
+    const barColor=isWeak?'#F43F5E':pct>=80?'#10B981':'#F59E0B';
+    return`<div class="sk-row">
+      <span class="sk-name">${TICO[t]||'📝'} ${TNAME[t]||t}</span>
+      <div class="sk-bar-wrap"><div class="sk-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+      <span class="sk-pct" style="color:${barColor}">${pct}%</span>
+      <span class="sk-status ${isWeak?'ss-weak':'ss-ok'}">${isWeak?'⚠️ Yếu':'✅ Tốt'}</span>
+    </div>`;
+  }).join('');
+}
+
+/* REPEATED MISTAKES */
+function renderRepeatMistakes(results){
+  const wrongs=results.flatMap(r=>r.answers?.wrong||[]);
+  const map={};
+  wrongs.forEach(w=>{
+    if(!map[w.question])map[w.question]={...w,count:0};
+    map[w.question].count++;
+  });
+  const repeated=Object.values(map).filter(w=>w.count>=2).sort((a,b)=>b.count-a.count);
+  document.getElementById('repeat-count').textContent=repeated.length;
+  document.getElementById('repeat-count').className='rc-count '+(repeated.length>0?'cnt-bad':'cnt-ok');
+  if(!repeated.length){
+    document.getElementById('repeat-mistakes').innerHTML='<div class="empty"><div class="ei">🎉</div><p>Không có lỗi lặp lại!</p></div>';
+    return;
+  }
+  document.getElementById('repeat-mistakes').innerHTML=repeated.map(w=>`
+    <div class="wi">
+      <div class="wi-q">❓ ${w.question} <span class="wi-count">🔁 ${w.count} lần</span></div>
+      <div class="wi-detail">
+        <span class="wi-wrong">❌ Hay chọn: <b>${w.chosen}</b></span>
+        <span class="wi-right">✅ Đúng: <b>${w.correct}</b></span>
+        <span class="wi-topic">${TICO[w.topic]||''} ${TNAME[w.topic]||''}</span>
+      </div>
+    </div>`).join('');
+}
+
+/* BUILD REPORT TEXT for Claude */
+function buildReportText(results){
+  const name=selectedStu==='all'?'Con':selectedStu;
+  const totQ=results.reduce((a,r)=>a+r.total,0);
+  const totC=results.reduce((a,r)=>a+r.score,0);
+  const pct=totQ>0?Math.round(totC/totQ*100):0;
+
+  // Topic scores
+  const topicMap={};
+  results.forEach(r=>{
+    const t=r.answers?.topic;if(!t)return;
+    if(!topicMap[t])topicMap[t]={c:0,tot:0};
+    topicMap[t].c+=r.score;topicMap[t].tot+=r.total;
+  });
+
+  // Wrong answers
+  const allWrongs=results.flatMap(r=>r.answers?.wrong||[]);
+  const wrongMap={};
+  allWrongs.forEach(w=>{
+    if(!wrongMap[w.question])wrongMap[w.question]={...w,count:0};
+    wrongMap[w.question].count++;
+  });
+  const sortedWrongs=Object.values(wrongMap).sort((a,b)=>b.count-a.count).slice(0,10);
+  const repeated=sortedWrongs.filter(w=>w.count>=2);
+  const weakTopics=Object.entries(topicMap)
+    .filter(([_,s])=>s.tot>0&&s.c/s.tot<0.7)
+    .map(([t,s])=>`${TNAME[t]||t} (${Math.round(s.c/s.tot*100)}%)`);
+
+  let text=`📋 BÁO CÁO HỌC TIẾNG ANH CỦA ${name.toUpperCase()}
+📅 Ngày: ${new Date().toLocaleDateString('vi-VN')}
+━━━━━━━━━━━━━━━━━━━━━━
+
+📊 TỔNG QUAN:
+• Số bài đã làm: ${results.length}
+• Tỉ lệ đúng tổng: ${pct}%
+• Tổng lỗi sai: ${allWrongs.length}
+• Lỗi lặp lại (≥2 lần): ${repeated.length}
+
+📈 KẾT QUẢ THEO CHỦ ĐỀ:\n`;
+
+  Object.entries(topicMap).forEach(([t,s])=>{
+    const p=s.tot>0?Math.round(s.c/s.tot*100):0;
+    text+=`• ${TNAME[t]||t}: ${p}% ${p<70?'⚠️ CẦN ÔN':'✅'}\n`;
+  });
+
+  if(weakTopics.length>0){
+    text+=`\n⚠️ CHỦ ĐỀ YẾU CẦN ÔN THÊM:\n`;
+    weakTopics.forEach(t=>text+=`• ${t}\n`);
+  }
+
+  if(repeated.length>0){
+    text+=`\n🔁 LỖI LẶP LẠI NHIỀU LẦN:\n`;
+    repeated.forEach(w=>{
+      text+=`• Câu: "${w.question}"\n  ❌ Hay chọn: "${w.chosen}" | ✅ Đúng: "${w.correct}" (sai ${w.count} lần)\n`;
+    });
+  }
+
+  if(sortedWrongs.length>0){
+    text+=`\n❌ CÁC LỖI SAI GẦN ĐÂY:\n`;
+    sortedWrongs.slice(0,6).forEach(w=>{
+      text+=`• "${w.question}" → Con chọn: "${w.chosen}" | Đúng: "${w.correct}"\n`;
+    });
+  }
+
+  text+=`\n━━━━━━━━━━━━━━━━━━━━━━
+💬 Nhờ em ra bài tập luyện thêm cho các phần yếu trên nhé!`;
+
+  reportText=text;
+  document.getElementById('copy-text').textContent=text;
+}
+
+function copyReport(){
+  navigator.clipboard.writeText(reportText).then(()=>toast('✅ Đã copy! Paste vào chat với em nhé!')).catch(()=>{
+    const el=document.getElementById('copy-text');
+    const range=document.createRange();range.selectNode(el);
+    window.getSelection().removeAllRanges();window.getSelection().addRange(range);
+    document.execCommand('copy');
+    toast('✅ Đã copy!');
+  });
+}
+
+function copyFullReport(){copyReport();}
+
+window.addEventListener('DOMContentLoaded', loadAll);
+</script>
+</body>
+</html>
