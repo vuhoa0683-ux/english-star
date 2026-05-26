@@ -249,6 +249,66 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;white-space:nowrap;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ══ REWARD SYSTEM ══ */
+.reward-popup{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.reward-popup.show{display:flex}
+.reward-box{background:#fff;border-radius:24px;padding:32px 24px;text-align:center;max-width:320px;width:100%;position:relative;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.rw-emoji{font-size:72px;margin-bottom:8px;animation:bounce 1s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.rw-title{font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.rw-sub{font-size:14px;font-weight:700;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.rw-badge{display:inline-block;background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff;font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;padding:8px 24px;border-radius:30px;margin-bottom:16px}
+.rw-close{width:100%;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;cursor:pointer}
+.rw-stars{font-size:28px;letter-spacing:4px;margin-bottom:8px}
+/* Daily progress bar on main page */
+.daily-progress{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:14px;margin-bottom:14px}
+.dp-title{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.dp-streak{font-size:13px;font-weight:800;color:var(--coral)}
+.dp-items{display:flex;gap:8px;margin-bottom:10px}
+.dp-item{flex:1;text-align:center;padding:8px 4px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--bg)}
+.dp-item.done{background:var(--mint-l);border-color:var(--mint)}
+.dp-item.active{background:var(--sky-l);border-color:var(--sky);animation:glow .8s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 rgba(14,165,233,0)}50%{box-shadow:0 0 12px rgba(14,165,233,.4)}}
+.dp-icon{font-size:20px}
+.dp-name{font-size:10px;font-weight:800;color:var(--ink2);margin-top:3px}
+.dp-status{font-size:9px;font-weight:700;color:var(--muted);margin-top:1px}
+.dp-item.done .dp-status{color:var(--mint-d)}
+.dp-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.dp-fill{height:100%;background:linear-gradient(90deg,var(--mint),var(--sky));border-radius:4px;transition:width .6s cubic-bezier(.34,1.56,.64,1)}
+.dp-pct{font-size:12px;font-weight:800;color:var(--sky-d);text-align:right;margin-top:4px}
+/* Confetti */
+.conf{position:fixed;inset:0;pointer-events:none;z-index:999;display:none}
+.conf.show{display:block}
+.cf-piece{position:absolute;width:10px;height:10px;border-radius:2px;animation:cffall linear forwards}
+@keyframes cffall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:0}}
+
+
+/* ══ POINTS SYSTEM ══ */
+.pts-card{background:linear-gradient(135deg,#1E3A5F,#1a2f4e);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;color:#fff}
+.pts-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.pts-title{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:#fff}
+.pts-month{font-size:11px;font-weight:700;color:rgba(255,255,255,.6)}
+.pts-big{font-family:'Baloo 2',cursive;font-size:32px;font-weight:800;color:#FFD700}
+.pts-unit{font-size:12px;font-weight:700;color:rgba(255,255,255,.7);margin-left:4px}
+.pts-money{background:rgba(255,215,0,.15);border:1.5px solid rgba(255,215,0,.4);border-radius:var(--rs);padding:8px 12px;display:flex;align-items:center;justify-content:space-between}
+.pm-left{font-size:12px;font-weight:700;color:rgba(255,255,255,.8)}
+.pm-amt{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#FFD700}
+.pts-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.pb-item{background:rgba(255,255,255,.08);border-radius:8px;padding:6px 8px;text-align:center}
+.pb-icon{font-size:16px}
+.pb-pts{font-family:'Baloo 2',cursive;font-size:13px;font-weight:800;color:#FFD700}
+.pb-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,.6);margin-top:1px}
+.pts-history{margin-top:10px}
+.ph-title{font-size:10px;font-weight:800;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.ph-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.ph-item:last-child{border-bottom:none}
+.ph-icon{font-size:14px}
+.ph-name{font-size:12px;font-weight:700;color:rgba(255,255,255,.8);flex:1}
+.ph-pts{font-size:12px;font-weight:800;color:#FFD700}
+.ph-date{font-size:10px;color:rgba(255,255,255,.4)}
+
 </style>
 </head>
 <body>
@@ -276,6 +336,20 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 <div class="hdr">
   <div class="hdr-top"><div class="logo">⭐ English Star</div><div class="hdr-date" id="hdr-date"></div></div>
   <div class="hdr-name" id="hdr-name"></div>
+  <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+    <div style="background:rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;display:flex;align-items:center;gap:5px">
+      <span style="font-size:13px">⭐</span>
+      <span style="font-size:12px;font-weight:800;color:#fff" id="hdr-pts">0 điểm</span>
+    </div>
+    <div style="background:rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;display:flex;align-items:center;gap:5px">
+      <span style="font-size:13px">💰</span>
+      <span style="font-size:12px;font-weight:800;color:#FFD700" id="hdr-money">0đ</span>
+    </div>
+    <div style="background:rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;display:flex;align-items:center;gap:5px" id="hdr-streak-wrap" style="display:none">
+      <span style="font-size:13px">🔥</span>
+      <span style="font-size:12px;font-weight:800;color:#FFA500" id="hdr-streak">0 ngày</span>
+    </div>
+  </div>
 </div>
 
 <div id="setup">
@@ -287,6 +361,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 
 <div id="app">
   <div id="today-banner"></div>
+  <div class="daily-progress" id="daily-progress"></div>
+  <div class="pts-card" id="pts-card"></div>
   <div class="assign-card">
     <div class="ac-hdr">
       <div class="ac-title">📋 Ba giao cho con hôm nay</div>
@@ -463,6 +539,8 @@ function startApp(){
   el('vt-icon').textContent=VIDEO_ICONS[dow];
   el('vt-title').textContent='Video hôm nay: '+VIDEO_NAMES[dow];
   renderTodayBanner();
+  updateHeaderPts();
+  renderPointsCard();
   // Show time estimate
   var autoIds=getAutoSchedule();var tEl=document.getElementById('today-time');if(tEl)tEl.textContent='⏱️ Khoảng '+getTotalTime(autoIds)+' phút hôm nay';
   autoAssignIfEmpty();
@@ -470,6 +548,7 @@ function startApp(){
   loadMistakes();
   loadGoals();
   checkNewContent();
+  renderDailyProgress();
   buildTestFolders();
 }
 
@@ -529,21 +608,73 @@ function saveTimerLocal(){
 }
 function confirmDone(){
   stopTimer();
+  var mins = timerSeconds / 60;
   closeTimer();
   toggleDone(currentTaskId,false);
-  toast('✅ Xác nhận xong! Giỏi lắm! 🌟');
+  // Calculate points with actual time
+  var pts = addPoints(currentTaskId, mins, 0, 0);
+  if(pts > 0){
+    toast('✅ Xong! +'+pts+' điểm thưởng! Giỏi lắm! 🌟');
+  } else {
+    var rule = SCORE_RULES[currentTaskId];
+    if(rule && mins < rule.minTime){
+      toast('⏱️ Học thêm '+(Math.ceil(rule.minTime-mins))+'p nữa để có điểm nhé!');
+    } else {
+      toast('✅ Hoàn thành! Giỏi lắm! 🌟');
+    }
+  }
 }
 function closeTimer(){
   if(timerRunning) stopTimer();
   el('timer-popup').classList.remove('show');
-  if(timerSeconds>5){
-    var m=Math.floor(timerSeconds/60);
-    var s=timerSeconds%60;
-    toast('⏱️ Đã học '+(m>0?m+'p ':'')+(s>0?s+'s':''));
+  var mins = timerSeconds / 60;
+
+  // Check if exam/quiz result is available from other page
+  var lastResult = null;
+  try{ lastResult = JSON.parse(localStorage.getItem('en_last_result')||'null'); }catch(e){}
+
+  if(lastResult && lastResult.taskId && currentTaskId){
+    // Match result to current task
+    var taskMatch = (lastResult.taskId === currentTaskId) ||
+      (currentTaskId.indexOf('exam') >= 0 && lastResult.taskId.indexOf('exam') >= 0);
+    if(taskMatch && lastResult.time){
+      var resultTime = new Date(lastResult.time);
+      var nowTime = new Date();
+      var diffMin = (nowTime - resultTime) / 60000;
+      if(diffMin < 120){ // result within last 2 hours
+        var pts = addPoints(currentTaskId, mins, lastResult.score, lastResult.total);
+        if(pts > 0){
+          toast('🎉 +'+pts+' điểm! '+lastResult.score+'/'+lastResult.total+' câu đúng · '+Math.round(mins)+'p!');
+        } else {
+          var rule2 = SCORE_RULES[currentTaskId];
+          if(rule2 && lastResult.pct < rule2.minScore){
+            toast('📖 '+lastResult.score+'/'+lastResult.total+' câu — cần '+rule2.minScore+'% để có điểm nhé!');
+          }
+        }
+        localStorage.removeItem('en_last_result');
+        loadGoals();
+        var ids2=JSON.parse(localStorage.getItem(ASSIGN_KEY+TODAY_STR)||'[]');
+        renderAssignList(ids2);
+        renderDailyProgress();
+        return;
+      }
+    }
+  }
+
+  // No exam result - use timer only (for flash/video/skills/reading)
+  var pts2 = addPoints(currentTaskId, mins, 0, 0);
+  if(pts2 > 0){
+    toast('⏱️ +'+pts2+' điểm! Đã học '+Math.round(mins)+'p! 🌟');
+  } else if(mins > 0) {
+    var rule3 = SCORE_RULES[currentTaskId];
+    if(rule3 && mins < rule3.minTime){
+      toast('⏱️ '+Math.round(mins)+'p — cần '+rule3.minTime+'p để có điểm nhé!');
+    }
   }
   loadGoals();
-  var ids=JSON.parse(localStorage.getItem(ASSIGN_KEY+TODAY_STR)||'[]');
-  renderAssignList(ids);
+  var ids3=JSON.parse(localStorage.getItem(ASSIGN_KEY+TODAY_STR)||'[]');
+  renderAssignList(ids3);
+  renderDailyProgress();
 }
 function getTaskName(id){
   var t=ALL_TASKS.find(function(x){return x.id===id;});
@@ -609,7 +740,8 @@ function toggleDone(id,isDone){
   var ids=JSON.parse(localStorage.getItem(ASSIGN_KEY+TODAY_STR)||'[]');
   renderAssignList(ids);
   if(!isDone){
-    toast('✅ Hoàn thành! Giỏi lắm! 🌟');
+    // Points are calculated in confirmDone with actual timer
+  setTimeout(renderDailyProgress, 300);
     SB.from('english_task_progress').insert({student_name:NAME,date:TODAY_STR,task_id:id,task_name:getTaskName(id),done:true,done_at:new Date().toISOString()}).then(function(){}).catch(function(){});
   }
 }
@@ -710,6 +842,374 @@ function closeAchieve(){el('achieve-pop').classList.remove('show');}
 function launchConfetti(){var w=el('cf');w.innerHTML='';w.classList.add('show');var c=['#0EA5E9','#10B981','#F59E0B','#F43F5E','#8B5CF6'];for(var i=0;i<50;i++){var d=document.createElement('div');d.className='cf';d.style.cssText='left:'+Math.random()*100+'vw;background:'+c[i%5]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px';w.appendChild(d);}setTimeout(function(){w.classList.remove('show');w.innerHTML='';},4000);}
 
 // ══ INIT ══
+
+// ══ REWARD SYSTEM ══
+var REWARDS = [
+  {tasks:1, emoji:'⭐', title:'Bắt đầu tốt!',   sub:'Con đã làm xong bài đầu tiên hôm nay!',  badge:'⭐ Khởi đầu xuất sắc', stars:'⭐'},
+  {tasks:2, emoji:'🌟', title:'Giỏi lắm!',       sub:'Con đã hoàn thành 2 nhiệm vụ rồi!',      badge:'🌟 Chăm chỉ tuyệt vời', stars:'⭐⭐'},
+  {tasks:3, emoji:'🏆', title:'Xuất sắc!',       sub:'Con đã làm xong tất cả bài hôm nay!',    badge:'🏆 Hoàn thành ngày học', stars:'⭐⭐⭐'},
+];
+
+var STREAK_REWARDS = [
+  {days:3,  emoji:'🔥', title:'Chuỗi 3 ngày!',   sub:'Con học liên tiếp 3 ngày rồi!',          badge:'🔥 Ngọn lửa học tập'},
+  {days:7,  emoji:'💎', title:'Chuỗi 1 tuần!',   sub:'Con học đủ 7 ngày liên tiếp! Tuyệt vời!',badge:'💎 Kim cương kiên trì'},
+  {days:14, emoji:'👑', title:'Chuỗi 2 tuần!',   sub:'14 ngày không nghỉ! Con thật xuất sắc!', badge:'👑 Vương miện nỗ lực'},
+  {days:30, emoji:'🚀', title:'Chuỗi 1 tháng!',  sub:'30 ngày học liên tiếp! Con là siêu sao!', badge:'🚀 Siêu sao tiếng Anh'},
+];
+
+function launchConfetti(){
+  var conf = document.getElementById('conf');
+  conf.innerHTML='';conf.classList.add('show');
+  var colors=['#0EA5E9','#10B981','#F59E0B','#F43F5E','#8B5CF6','#FFD700'];
+  for(var i=0;i<80;i++){
+    var d=document.createElement('div');
+    d.className='cf-piece';
+    d.style.left=Math.random()*100+'vw';
+    d.style.background=colors[Math.floor(Math.random()*colors.length)];
+    d.style.animationDuration=(1.5+Math.random()*2.5)+'s';
+    d.style.animationDelay=(Math.random()*1.5)+'s';
+    d.style.width=(6+Math.random()*8)+'px';
+    d.style.height=(6+Math.random()*8)+'px';
+    d.style.borderRadius=Math.random()>.5?'50%':'2px';
+    conf.appendChild(d);
+  }
+  setTimeout(function(){conf.classList.remove('show');conf.innerHTML='';},4500);
+}
+
+function showReward(emoji,title,sub,badge,stars){
+  document.getElementById('rw-emoji').textContent=emoji;
+  document.getElementById('rw-title').textContent=title;
+  document.getElementById('rw-sub').textContent=sub;
+  document.getElementById('rw-badge').textContent=badge;
+  document.getElementById('rw-stars').textContent=stars||'';
+  document.getElementById('reward-popup').classList.add('show');
+  launchConfetti();
+}
+
+function closeReward(){
+  document.getElementById('reward-popup').classList.remove('show');
+}
+
+function checkRewards(doneCount, totalCount){
+  // Check task completion rewards
+  var DONE_KEY2 = 'en_reward_shown_'+TODAY_STR;
+  var shownStr = localStorage.getItem(DONE_KEY2)||'';
+  
+  for(var i=0;i<REWARDS.length;i++){
+    var r=REWARDS[i];
+    var key='task'+r.tasks;
+    if(doneCount>=r.tasks && shownStr.indexOf(key)<0){
+      localStorage.setItem(DONE_KEY2, shownStr+','+key);
+      setTimeout(function(rw){
+        showReward(rw.emoji,rw.title,rw.sub,rw.badge,rw.stars);
+      }.bind(null,r),500);
+      return;
+    }
+  }
+  
+  // Check streak rewards
+  var streak2 = getStreak();
+  var streakLevels = [3,7,14,30];
+  for(var k=0;k<streakLevels.length;k++){
+    var days=streakLevels[k];
+    var skey2='streak'+days;
+    if(streak2>=days && shownStr.indexOf(skey2)<0){
+      localStorage.setItem(DONE_KEY2, shownStr+','+skey2);
+      addStreakBonus(days);
+      var bonus=STREAK_BONUS[days]||0;
+      setTimeout(function(d2,b2){
+        var emojis={3:'🔥',7:'💎',14:'👑',30:'🚀'};
+        showReward(emojis[d2]||'🔥','Chuỗi '+d2+' ngày!','Con học liên tiếp '+d2+' ngày! +'+b2+' điểm thưởng!','🎁 +'+b2+' điểm bonus','🔥'.repeat(Math.min(5,k+1)));
+      }.bind(null,days,bonus),800);
+      return;
+    }
+  }
+}
+
+function getStreak(){
+  var streak=0;
+  var d=new Date();
+  for(var i=0;i<60;i++){
+    var dateStr=d.toISOString().slice(0,10);
+    var done=localStorage.getItem(DONE_KEY+dateStr);
+    if(done&&parseInt(done)>0){
+      streak++;
+      d.setDate(d.getDate()-1);
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+function renderDailyProgress(){
+  var ids=JSON.parse(localStorage.getItem(ASSIGN_KEY+TODAY_STR)||'[]');
+  if(!ids.length) ids=getAutoSchedule();
+  var doneData=JSON.parse(localStorage.getItem(DONE_KEY+TODAY_STR)||'{}');
+  var tasks=ALL_TASKS.filter(function(t){return ids.indexOf(t.id)>=0;});
+  if(!tasks.length){document.getElementById('daily-progress').style.display='none';return;}
+  
+  var doneCount=tasks.filter(function(t){return doneData[t.id];}).length;
+  var pct=Math.round(doneCount/tasks.length*100);
+  var streak=getStreak();
+  
+  var html='<div class="dp-title"><span>📅 Hôm nay của con</span>';
+  if(streak>1) html+='<span class="dp-streak">🔥 '+streak+' ngày liên tiếp!</span>';
+  html+='</div>';
+  html+='<div class="dp-items">';
+  tasks.forEach(function(t){
+    var isDone=doneData[t.id]||false;
+    var cls=isDone?'done':'';
+    html+='<div class="dp-item '+cls+'">';
+    html+='<div class="dp-icon">'+t.icon+'</div>';
+    html+='<div class="dp-name">'+t.name.split(' ').slice(0,2).join(' ')+'</div>';
+    html+='<div class="dp-status">'+(isDone?'✅ Xong':'⭕ Chờ')+'</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div class="dp-bar"><div class="dp-fill" style="width:'+pct+'%"></div></div>';
+  html+='<div class="dp-pct">'+doneCount+'/'+tasks.length+' nhiệm vụ · '+pct+'%</div>';
+  
+  document.getElementById('daily-progress').innerHTML=html;
+  
+  // Check if reward should show
+  checkRewards(doneCount, tasks.length);
+}
+
+
+// ══ POINTS SYSTEM ══
+// Điểm thưởng mỗi hoạt động
+// ══ BẢNG QUY TẮC TÍNH ĐIỂM THƯỞNG ══
+// Mỗi loại có: ngưỡng thời gian tối thiểu (phút) + ngưỡng kết quả tối thiểu
+// Điểm = điểm_thời_gian + điểm_kết_quả
+var SCORE_RULES = {
+  // taskId: {icon, name, minTime(phút), maxTimePts, minScore(%), maxScorePts}
+  flash:   {icon:'🃏', name:'Flashcard',   minTime:10, maxTimePts:5,  minScore:0,  maxScorePts:0,  timeOnly:true},
+  quiz:    {icon:'📝', name:'Quiz',        minTime:5,  maxTimePts:3,  minScore:70, maxScorePts:8,  correctMin:7, correctTotal:10},
+  skills:  {icon:'🎯', name:'4 Kỹ năng',  minTime:10, maxTimePts:4,  minScore:60, maxScorePts:4,  timeOnly:false},
+  reading: {icon:'🎤', name:'Luyện đọc',  minTime:8,  maxTimePts:4,  minScore:60, maxScorePts:5,  timeOnly:false},
+  video:   {icon:'📺', name:'Xem video',  minTime:15, maxTimePts:4,  minScore:0,  maxScorePts:0,  timeOnly:true},
+  exam1:   {icon:'📋', name:'Đề số 1',   minTime:15, maxTimePts:5,  minScore:60, maxScorePts:15, correctMin:24, correctTotal:40},
+  exam2:   {icon:'📋', name:'Đề số 2',   minTime:15, maxTimePts:5,  minScore:60, maxScorePts:15, correctMin:30, correctTotal:50},
+  exam3:   {icon:'📋', name:'Đề số 3',   minTime:15, maxTimePts:5,  minScore:60, maxScorePts:15, correctMin:30, correctTotal:50},
+  exam4:   {icon:'📋', name:'Đề số 4',   minTime:20, maxTimePts:5,  minScore:60, maxScorePts:20, correctMin:30, correctTotal:50},
+  exam5:   {icon:'📋', name:'Đề số 5',   minTime:20, maxTimePts:5,  minScore:60, maxScorePts:20, correctMin:30, correctTotal:50},
+  exam6:   {icon:'📋', name:'Đề số 6',   minTime:20, maxTimePts:5,  minScore:60, maxScorePts:20, correctMin:30, correctTotal:50},
+  exam_up: {icon:'📤', name:'Bài upload', minTime:10, maxTimePts:5,  minScore:60, maxScorePts:8,  timeOnly:false},
+};
+var STREAK_BONUS = {3:10, 7:30, 14:70, 30:150};
+var PTS_TO_VND = 100; // 1 điểm = 100đ
+
+// Tính điểm từ thời gian thực + kết quả thực
+function calcPoints(taskId, actualMinutes, actualScore, totalScore){
+  var rule = SCORE_RULES[taskId];
+  if(!rule) return {pts:0, reason:'Không có quy tắc'};
+
+  var timePts = 0;
+  var scorePts = 0;
+  var reasons = [];
+
+  // Điểm thời gian
+  if(actualMinutes >= rule.minTime){
+    // Tỉ lệ: học đủ giờ tối thiểu → max time pts, học lâu hơn thì không thêm
+    var timeRatio = Math.min(1, actualMinutes / (rule.minTime * 1.5));
+    timePts = Math.round(rule.maxTimePts * timeRatio);
+    reasons.push('⏱️ '+Math.round(actualMinutes)+'p → +'+timePts+' điểm');
+  } else {
+    reasons.push('⏱️ Chỉ '+Math.round(actualMinutes)+'p (cần '+rule.minTime+'p)');
+  }
+
+  // Điểm kết quả
+  if(!rule.timeOnly && totalScore > 0){
+    var pct = Math.round(actualScore / totalScore * 100);
+    if(pct >= rule.minScore){
+      // Điểm tỉ lệ theo kết quả
+      var scoreRatio = (pct - rule.minScore) / (100 - rule.minScore);
+      scorePts = Math.round(rule.maxScorePts * (0.5 + scoreRatio * 0.5));
+      scorePts = Math.min(rule.maxScorePts, scorePts);
+      reasons.push('📊 '+actualScore+'/'+totalScore+' ('+pct+'%) → +'+scorePts+' điểm');
+    } else {
+      reasons.push('📊 '+actualScore+'/'+totalScore+' ('+pct+'%) — chưa đạt '+rule.minScore+'%');
+      // Vẫn cho ít điểm nếu đã học đủ giờ
+      if(timePts > 0) scorePts = 0;
+    }
+  } else if(rule.timeOnly && timePts > 0){
+    scorePts = 0; // timeOnly tasks don't need score
+  }
+
+  var total = timePts + scorePts;
+  return {pts: total, timePts: timePts, scorePts: scorePts, reasons: reasons};
+}
+
+function getPtsData(){
+  try{ return JSON.parse(localStorage.getItem('en_pts_data')||'{"total":0,"thisMonth":0,"history":[],"lastMonth":""}'); }
+  catch(e){ return {total:0,thisMonth:0,history:[],lastMonth:''}; }
+}
+
+function savePtsData(data){
+  localStorage.setItem('en_pts_data', JSON.stringify(data));
+}
+
+function getThisMonth(){
+  var d=new Date();
+  return d.getFullYear()+'-'+(d.getMonth()+1);
+}
+
+// Thêm điểm với thời gian và kết quả thực tế
+function addPoints(taskId, actualMinutes, actualScore, totalScore){
+  var rule = SCORE_RULES[taskId];
+  if(!rule) return 0;
+
+  // Lấy thời gian từ timer nếu không truyền vào
+  if(!actualMinutes || actualMinutes <= 0){
+    var durKey = 'en_sess_'+TODAY_STR+'_'+taskId;
+    var durSec = parseInt(localStorage.getItem(durKey)||'0');
+    actualMinutes = durSec / 60;
+  }
+
+  var result = calcPoints(taskId, actualMinutes, actualScore||0, totalScore||0);
+  if(result.pts <= 0){
+    // Vẫn hiện thông báo nhưng không cộng điểm
+    return 0;
+  }
+
+  var data = getPtsData();
+  var month = getThisMonth();
+  if(data.lastMonth !== month){ data.thisMonth=0; data.lastMonth=month; }
+
+  // Cho phép cộng điểm nhiều lần trong ngày nếu làm lại (lấy lần cao nhất)
+  var todayKey = 'en_pts_earned_'+TODAY_STR+'_'+taskId;
+  var prevPts = parseInt(localStorage.getItem(todayKey)||'0');
+  var addPts = result.pts - prevPts;
+  if(addPts <= 0) return 0;
+
+  localStorage.setItem(todayKey, String(result.pts));
+  data.total += addPts;
+  data.thisMonth += addPts;
+  data.history.unshift({
+    taskId: taskId,
+    icon: rule.icon,
+    name: rule.name,
+    pts: result.pts,
+    timePts: result.timePts,
+    scorePts: result.scorePts,
+    minutes: Math.round(actualMinutes),
+    score: actualScore,
+    total: totalScore,
+    date: TODAY_STR,
+    reasons: result.reasons
+  });
+  if(data.history.length > 50) data.history = data.history.slice(0,50);
+  savePtsData(data);
+  renderPointsCard();
+  updateHeaderPts();
+  return result.pts;
+}
+
+// Cộng điểm streak
+function addStreakBonus(days){
+  var bonus = STREAK_BONUS[days];
+  if(!bonus) return;
+  var streakKey = 'en_streak_bonus_'+days+'_'+new Date().getFullYear()+'-'+new Date().getMonth();
+  if(localStorage.getItem(streakKey)) return;
+  localStorage.setItem(streakKey,'1');
+  var data = getPtsData();
+  var month = getThisMonth();
+  if(data.lastMonth !== month){ data.thisMonth=0; data.lastMonth=month; }
+  data.total += bonus; data.thisMonth += bonus;
+  data.history.unshift({taskId:'streak'+days,icon:days>=30?'🚀':days>=14?'👑':days>=7?'💎':'🔥',name:'Chuỗi '+days+' ngày!',pts:bonus,date:TODAY_STR,reasons:['🔥 Thưởng chuỗi '+days+' ngày liên tiếp']});
+  savePtsData(data);
+  renderPointsCard();
+  updateHeaderPts();
+}
+
+function updateHeaderPts(){
+  var data = getPtsData();
+  var month = getThisMonth();
+  if(data.lastMonth !== month){ data.thisMonth=0; }
+  var streak = getStreak();
+  
+  var hdrPts = document.getElementById('hdr-pts');
+  var hdrMoney = document.getElementById('hdr-money');
+  var hdrStreak = document.getElementById('hdr-streak');
+  var hdrStreakWrap = document.getElementById('hdr-streak-wrap');
+  
+  if(hdrPts) hdrPts.textContent = data.thisMonth + ' điểm tháng này';
+  if(hdrMoney) hdrMoney.textContent = (data.thisMonth * PTS_TO_VND).toLocaleString('vi-VN') + 'đ';
+  if(streak > 1){
+    if(hdrStreakWrap) hdrStreakWrap.style.display='flex';
+    if(hdrStreak) hdrStreak.textContent = streak + ' ngày';
+  }
+}
+
+function renderPointsCard(){
+  var card = document.getElementById('pts-card');
+  if(!card) return;
+  
+  var data = getPtsData();
+  var month = getThisMonth();
+  if(data.lastMonth !== month){ data.thisMonth=0; }
+  
+  var money = data.thisMonth * PTS_TO_VND;
+  var streak = getStreak();
+  var d = new Date();
+  var monthNames = ['','Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
+  var monthName = monthNames[d.getMonth()+1] + ' ' + d.getFullYear();
+  
+  var html = '<div class="pts-row">';
+  html += '<div><div class="pts-title">⭐ Điểm thưởng của con</div>';
+  html += '<div class="pts-month">'+monthName+'</div></div>';
+  html += '<div style="text-align:right"><div class="pts-big">'+data.thisMonth+'<span class="pts-unit">điểm</span></div></div>';
+  html += '</div>';
+  
+  html += '<div class="pts-money">';
+  html += '<div class="pm-left">💰 Ba thưởng con cuối tháng</div>';
+  html += '<div class="pm-amt">'+money.toLocaleString('vi-VN')+'đ</div>';
+  html += '</div>';
+  
+  // Breakdown this month
+  var breakdown = [
+    {icon:'📝', label:'Bài tập', pts:0},
+    {icon:'📋', label:'Đề thi', pts:0},
+    {icon:'🔥', label:'Chuỗi ngày', pts:0},
+  ];
+  data.history.forEach(function(h){
+    if(h.date && h.date.indexOf(month)>=0 || true){
+      if(h.taskId && h.taskId.indexOf('exam')>=0) breakdown[1].pts+=h.pts;
+      else if(h.taskId && h.taskId.indexOf('streak')>=0) breakdown[2].pts+=h.pts;
+      else breakdown[0].pts+=h.pts;
+    }
+  });
+  
+  html += '<div class="pts-breakdown">';
+  breakdown.forEach(function(b){
+    html += '<div class="pb-item"><div class="pb-icon">'+b.icon+'</div>';
+    html += '<div class="pb-pts">'+b.pts+'đ</div>';
+    html += '<div class="pb-lbl">'+b.label+'</div></div>';
+  });
+  html += '</div>';
+  
+  // Recent history
+  if(data.history.length > 0){
+    html += '<div class="pts-history">';
+    html += '<div class="ph-title">Lịch sử gần đây</div>';
+    data.history.slice(0,5).forEach(function(h){
+      html += '<div class="ph-item">';
+      html += '<div class="ph-icon">'+h.icon+'</div>';
+      html += '<div class="ph-name">'+h.name+'</div>';
+      html += '<div>';
+      html += '<div class="ph-pts">+'+h.pts+' điểm</div>';
+      html += '<div class="ph-date">'+h.date+'</div>';
+      html += '</div></div>';
+    });
+    html += '</div>';
+  } else {
+    html += '<div style="text-align:center;padding:12px;font-size:12px;font-weight:700;color:rgba(255,255,255,.5)">Học bài để tích điểm nhé! 📚</div>';
+  }
+  
+  card.innerHTML = html;
+}
+
 window.addEventListener('DOMContentLoaded',function(){
   buildTestFolders();
   var s=localStorage.getItem('en_name');
@@ -717,5 +1217,19 @@ window.addEventListener('DOMContentLoaded',function(){
   document.getElementById('name-in').addEventListener('input',function(e){localStorage.setItem('en_name',e.target.value);});
 });
 </script>
+
+<!-- REWARD POPUP -->
+<div class="reward-popup" id="reward-popup">
+  <div class="reward-box">
+    <div class="rw-stars" id="rw-stars">⭐⭐⭐</div>
+    <div class="rw-emoji" id="rw-emoji">🏆</div>
+    <div class="rw-title" id="rw-title">Tuyệt vời!</div>
+    <div class="rw-sub" id="rw-sub">Con đã hoàn thành nhiệm vụ hôm nay!</div>
+    <div class="rw-badge" id="rw-badge">🎁 Phần thưởng mới!</div>
+    <button class="rw-close" onclick="closeReward()">Cảm ơn Ba! 🥰</button>
+  </div>
+</div>
+<div class="conf" id="conf"></div>
+
 </body>
 </html>

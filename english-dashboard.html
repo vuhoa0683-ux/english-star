@@ -100,7 +100,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 <div class="wrap">
   <div class="filter-row">
     <button class="filter-btn on" onclick="filterStu('all',this)">👥 Tất cả</button>
-    <button class="filter-btn" id="stu-filter" onclick="filterStu('Huy',this)">👤 Huy</button>
+    <button class="filter-btn" id="stu-filter" onclick="filterStu(STUDENT_NAME,this)" id="stu-btn">👤 <span id="stu-name">Con</span></button>
     <button class="refresh-btn" onclick="loadAll()">🔄 Tải lại</button>
   </div>
 
@@ -164,6 +164,7 @@ var SUPA_URL='https://cvwcpemkceqtqpauwqzw.supabase.co';
 var SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
 var TODAY=new Date().toISOString().slice(0,10);
 var selectedStu='all';
+var STUDENT_NAME=localStorage.getItem('en_name')||'con';
 var allResults=[];
 var allSessions=[];
 var allVideos=[];
@@ -179,13 +180,17 @@ function sbFetch(path){
 
 function filterStu(stu,btn){
   selectedStu=stu;
-  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('on');});
+  var _fbs=document.querySelectorAll('.filter-btn');for(var _i=0;_i<_fbs.length;_i++){_fbs[_i].classList.remove('on');}
   btn.classList.add('on');
   renderAll();
 }
 
 function loadAll(){
   el('assign-date').textContent=new Date().toLocaleDateString('vi-VN');
+  // Show loading state
+  el('res-body').innerHTML='<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  el('sess-body').innerHTML='<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  el('vid-body').innerHTML='<div class="loading"><span class="spin"></span>Đang tải...</div>';
 
   // Load results
   sbFetch('results?select=*&subject=eq.english&order=created_at.desc&limit=100')
@@ -391,6 +396,11 @@ function renderRewards(){
 }
 
 window.addEventListener('DOMContentLoaded',function(){
+  STUDENT_NAME=localStorage.getItem('en_name')||'con';
+  var sn=document.getElementById('stu-name');
+  if(sn)sn.textContent=STUDENT_NAME;
+  var sb=document.getElementById('stu-filter');
+  if(sb)sb.setAttribute('onclick','filterStu("'+STUDENT_NAME+'",this)');
   loadAll();
   setInterval(loadAll,60000);
 });

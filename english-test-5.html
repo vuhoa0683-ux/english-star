@@ -261,6 +261,11 @@ function submitTest(){
   el("rsub").textContent=(score>=40?"Xuất sắc!":score>=30?"Tốt lắm!":"Cố gắng thêm!");
   var sb=el("rsubmit");if(sb){sb.textContent="✅ Đã nộp";sb.disabled=true;sb.style.background="#94A3B8";}
   localStorage.setItem("exam_done_english-test-5.html","1");
+  // Save result for points system
+  var today2 = new Date().toISOString().slice(0,10);
+  localStorage.setItem("en_result_exam5_"+today2, JSON.stringify({score:score,total:50,pct:Math.round(score/50*100),time:new Date().toISOString()}));
+  // Notify parent page via localStorage event
+  localStorage.setItem("en_last_result", JSON.stringify({taskId:"exam5",score:score,total:50,time:new Date().toISOString()}));
   var ak=el("akbody");if(ak)ak.classList.add("open");
   var name=el("iname").value||localStorage.getItem("en_name")||"con";
   localStorage.setItem("en_name",name);
