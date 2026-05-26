@@ -440,15 +440,13 @@ var timerSeconds = 0;
 var timerRunning = false;
 
 var ALL_TASKS = [
-  {id:'flash',  icon:'🃏', name:'Luyện Flashcard',      sub:'15 từ vựng mới hôm nay',       url:'english-star.html'},
-  {id:'quiz',   icon:'📝', name:'Làm bài Quiz',          sub:'1 chủ đề trong English Star',  url:'english-star.html'},
-  {id:'skills', icon:'🎯', name:'Luyện 4 Kỹ Năng',      sub:'Nghe · Nói · Đọc · Ngữ pháp',url:'english-skills.html'},
-  {id:'reading',icon:'🎤', name:'Luyện đọc phát âm',    sub:'Đoạn văn · Chấm điểm',        url:'english-reading.html'},
-  {id:'exam1',  icon:'📋', name:'Làm Đề số 1',          sub:'40 điểm',                       url:'english-test-1.html'},
-  {id:'exam2',  icon:'📋', name:'Làm Đề số 2',          sub:'50 điểm',                       url:'english-test-2.html'},
-  {id:'exam3',  icon:'📋', name:'Làm Đề số 3',          sub:'50 điểm',                       url:'english-test-3.html'},
-  {id:'exam_up',icon:'📤', name:'Làm bài Ba upload',    sub:'Bài thi từ ảnh Ba chụp',       url:'english-exam-uploader.html'},
-  {id:'video',  icon:'📺', name:'Xem video hôm nay',    sub:'Làm cuối sau các bài học',     url:'english-video.html'},
+  {id:'flash',   icon:'🃏', name:'Luyện Flashcard',    sub:'15 từ vựng mới hôm nay',      url:'english-star.html'},
+  {id:'quiz',    icon:'📝', name:'Làm bài Quiz',        sub:'1 chủ đề trong English Star', url:'english-star.html'},
+  {id:'skills',  icon:'🎯', name:'Luyện 4 Kỹ Năng',   sub:'Nghe · Nói · Đọc · Ngữ pháp',url:'english-skills.html'},
+  {id:'reading', icon:'🎤', name:'Luyện đọc phát âm',  sub:'Đoạn văn · Chấm điểm',       url:'english-reading.html'},
+  {id:'ontap',   icon:'📋', name:'Đề ôn tập',          sub:'Làm đề tiếp theo chưa làm',   url:''},
+  {id:'exam_up', icon:'📤', name:'Bài Ba upload',      sub:'Bài thi từ ảnh Ba chụp',      url:'english-exam-uploader.html'},
+  {id:'video',   icon:'📺', name:'Xem video hôm nay',  sub:'Làm cuối sau các bài học',    url:'english-video.html'},
 ];
 
 var TEST_FOLDERS = [
@@ -484,6 +482,33 @@ function el(id){return document.getElementById(id);}
 document.getElementById('name-in').addEventListener('keydown',function(e){if(e.key==='Enter')startApp();});
 
 
+
+// ══ ĐỀ ÔN TẬP ══
+var EXAM_LIST = [
+  {id:'exam1',url:'english-test-1.html',name:'Đề số 1',meta:'40đ'},
+  {id:'exam2',url:'english-test-2.html',name:'Đề số 2',meta:'50đ'},
+  {id:'exam3',url:'english-test-3.html',name:'Đề số 3',meta:'50đ'},
+  {id:'exam4',url:'english-test-4.html',name:'Đề số 4',meta:'50đ'},
+  {id:'exam5',url:'english-test-5.html',name:'Đề số 5',meta:'50đ'},
+  {id:'exam6',url:'english-test-6.html',name:'Đề số 6',meta:'50đ'}
+];
+function getNextExam(){
+  for(var i=0;i<EXAM_LIST.length;i++){
+    if(!localStorage.getItem('en_exam_submitted_'+EXAM_LIST[i].id)) return EXAM_LIST[i];
+  }
+  return null;
+}
+function getExamProgress(){
+  var done=0;
+  EXAM_LIST.forEach(function(e){if(localStorage.getItem('en_exam_submitted_'+e.id))done++;});
+  return {done:done,total:EXAM_LIST.length};
+}
+function openOntap(){
+  var next=getNextExam();
+  if(!next){toast('Làm hết '+EXAM_LIST.length+' đề rồi! Giỏi lắm!');return;}
+  openTask(next.url,'📋 '+next.name,next.id);
+}
+
 /* ══ LỊCH GIAO BÀI TỰ ĐỘNG ══ */
 var AUTO_SCHEDULE = {
   1: ['flash','skills'],
@@ -491,7 +516,7 @@ var AUTO_SCHEDULE = {
   3: ['flash','quiz'],
   4: ['skills','reading'],
   5: ['flash','quiz'],
-  6: ['exam1'],
+  6: ['ontap'],
   0: ['video']
 };
 var TASK_TIME = {flash:15,quiz:10,skills:20,reading:15,video:20,exam1:25,exam2:25,exam3:25,exam_up:20};
