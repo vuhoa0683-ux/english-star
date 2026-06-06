@@ -235,6 +235,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 .ei-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;flex-shrink:0}
 .eib-done{background:var(--mint-l);color:var(--mint-d)}
 .eib-normal{background:var(--border);color:var(--muted)}
+.eib-next{background:var(--mint-l);color:var(--mint-d)}
 .folder-empty{padding:14px;text-align:center;font-size:12px;font-weight:700;color:var(--muted);font-style:italic}
 .achieve-pop{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
 .achieve-pop.show{display:flex}
@@ -309,6 +310,14 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 .ph-pts{font-size:12px;font-weight:800;color:#FFD700}
 .ph-date{font-size:10px;color:rgba(255,255,255,.4)}
 
+
+.praise-banner{background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:2px solid var(--sun);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;display:none;animation:slideDown .4s ease-out}
+.praise-banner.show{display:block}
+@keyframes slideDown{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.pb-from{font-size:11px;font-weight:800;color:var(--sun-d);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.pb-msg{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--ink);line-height:1.4}
+.pb-close{float:right;background:none;border:none;font-size:16px;cursor:pointer;color:var(--muted);margin-top:-2px}
+
 </style>
 </head>
 <body>
@@ -350,6 +359,12 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
       <span style="font-size:12px;font-weight:800;color:#FFA500" id="hdr-streak">0 ngày</span>
     </div>
   </div>
+</div>
+
+<div class="praise-banner" id="praise-banner">
+  <button class="pb-close" onclick="closePraise()">✕</button>
+  <div class="pb-from">💌 Ba gửi cho con</div>
+  <div class="pb-msg" id="praise-msg"></div>
 </div>
 
 <div id="setup">
@@ -446,7 +461,8 @@ var ALL_TASKS = [
   {id:'reading', icon:'🎤', name:'Luyện đọc phát âm',  sub:'Đoạn văn · Chấm điểm',       url:'english-reading.html'},
   {id:'ontap',   icon:'📋', name:'Đề ôn tập',          sub:'Làm đề tiếp theo chưa làm',   url:''},
   {id:'exam_up', icon:'📤', name:'Bài Ba upload',      sub:'Bài thi từ ảnh Ba chụp',      url:'english-exam-uploader.html'},
-  {id:'video',   icon:'📺', name:'Xem video hôm nay',  sub:'Làm cuối sau các bài học',    url:'english-video.html'},
+  {id:'video',      icon:'📺', name:'Xem video hôm nay',  sub:'Làm cuối sau các bài học',    url:'english-video.html'},
+  {id:'review_weak',icon:'⚠️', name:'Ôn từ hay sai',      sub:'10 từ con hay sai nhất tuần',  url:'english-star.html#review'},
 ];
 
 var TEST_FOLDERS = [
@@ -516,7 +532,7 @@ var AUTO_SCHEDULE = {
   3: ['flash','quiz'],
   4: ['skills','reading'],
   5: ['flash','quiz'],
-  6: ['ontap'],
+  6: ['review_weak','ontap'],
   0: ['video']
 };
 var TASK_TIME = {flash:15,quiz:10,skills:20,reading:15,video:20,exam1:25,exam2:25,exam3:25,exam_up:20};
@@ -598,8 +614,10 @@ function openTask(url,title,taskId){
   el('timer-popup').classList.add('show');
   timerSeconds=0;
   if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
-  window.open(url,'_blank');
-  // Auto start timer after short delay
+  // Special handling for review_weak
+  var openUrl = url;
+  if(taskId==='review_weak') openUrl='english-star.html#review';
+  window.open(openUrl,'_blank');
   setTimeout(function(){startTimer();},500);
 }
 function startTimer(){
@@ -1233,6 +1251,22 @@ function renderPointsCard(){
   }
   
   card.innerHTML = html;
+}
+
+
+function checkPraise(){
+  try{
+    var all=JSON.parse(localStorage.getItem('en_praises')||'[]');
+    var seen=localStorage.getItem('en_praise_seen')||'';
+    if(all.length>0&&all[0].time!==seen){
+      document.getElementById('praise-msg').textContent=all[0].msg;
+      document.getElementById('praise-banner').className='praise-banner show';
+      localStorage.setItem('en_praise_seen',all[0].time);
+    }
+  }catch(e){}
+}
+function closePraise(){
+  document.getElementById('praise-banner').className='praise-banner';
 }
 
 window.addEventListener('DOMContentLoaded',function(){

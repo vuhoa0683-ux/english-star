@@ -87,6 +87,48 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 @keyframes spin{to{transform:rotate(360deg)}}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;white-space:nowrap;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ══ WEEKLY PROGRESS CHART ══ */
+.chart-card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);margin-bottom:14px;overflow:hidden}
+.chart-hdr{padding:13px 16px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.chart-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink)}
+.chart-sub{font-size:12px;font-weight:700;color:var(--muted)}
+.chart-body{padding:16px}
+.chart-wrap{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:8px}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.chart-bar-bg{flex:1;width:100%;background:var(--border);border-radius:4px 4px 0 0;position:relative;display:flex;align-items:flex-end}
+.chart-bar-fill{width:100%;border-radius:4px 4px 0 0;transition:height .6s cubic-bezier(.34,1.56,.64,1);min-height:2px}
+.chart-bar-val{font-size:10px;font-weight:800;color:var(--ink2);text-align:center}
+.chart-bar-day{font-size:11px;font-weight:800;color:var(--muted)}
+.chart-bar-wrap.today .chart-bar-day{color:var(--sky-d);font-weight:900}
+.chart-bar-wrap.today .chart-bar-bg{border:1.5px solid var(--sky)}
+.chart-legend{display:flex;gap:12px;flex-wrap:wrap}
+.cl-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--ink2)}
+.cl-dot{width:10px;height:10px;border-radius:50%}
+.trend-row{display:flex;gap:10px;margin-top:10px}
+.trend-item{flex:1;background:var(--bg);border-radius:var(--rs);padding:9px 10px;text-align:center}
+.trend-num{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800}
+.trend-lbl{font-size:10px;font-weight:700;color:var(--muted);margin-top:2px}
+.trend-arrow{font-size:12px;margin-left:3px}
+
+
+/* ══ PRAISE SYSTEM ══ */
+.praise-card{background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:2px solid var(--sun);border-radius:var(--r);margin-bottom:14px;overflow:hidden}
+.praise-hdr{background:linear-gradient(135deg,var(--sun),var(--sun-d));padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.praise-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:#fff}
+.praise-body{padding:14px 16px}
+.praise-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.praise-btn{padding:12px 8px;border-radius:var(--rs);border:1.5px solid var(--sun);background:#fff;cursor:pointer;text-align:center;transition:all .15s}
+.praise-btn:hover{background:var(--sun-l);border-color:var(--sun-d)}
+.praise-btn-em{font-size:24px;display:block;margin-bottom:4px}
+.praise-btn-txt{font-size:12px;font-weight:800;color:var(--ink2)}
+.praise-custom{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;outline:none;margin-bottom:8px}
+.praise-send{width:100%;padding:11px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--sun),var(--sun-d));color:#fff;font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;cursor:pointer}
+.praise-history{margin-top:10px}
+.ph-item2{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #FEF3C7;font-size:12px;font-weight:700;color:var(--ink2)}
+.ph-item2:last-child{border-bottom:none}
+.ph-time{font-size:10px;color:var(--muted);margin-left:auto}
+
 </style>
 </head>
 <body>
@@ -104,7 +146,31 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
     <button class="refresh-btn" onclick="loadAll()">🔄 Tải lại</button>
   </div>
 
+  <!-- PRAISE -->
+  <div class="praise-card">
+    <div class="praise-hdr">
+      <div class="praise-title">💌 Gửi lời khen cho con</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.8);font-weight:700">Con nhận ngay lập tức!</div>
+    </div>
+    <div class="praise-body">
+      <div class="praise-btns" id="praise-btns"></div>
+      <input class="praise-custom" id="praise-custom" placeholder="Hoặc viết lời khen riêng của Ba...">
+      <button class="praise-send" onclick="sendPraise()">💌 Gửi lời khen ngay!</button>
+      <div class="praise-history" id="praise-history"></div>
+    </div>
+  </div>
+
   <!-- STATS -->
+  <div class="chart-card">
+    <div class="chart-hdr">
+      <div class="chart-title">📈 Tiến bộ 7 ngày qua</div>
+      <div class="chart-sub" id="chart-week-label"></div>
+    </div>
+    <div class="chart-body">
+      <div class="chart-wrap" id="week-chart"></div>
+      <div class="trend-row" id="trend-row"></div>
+    </div>
+  </div>
   <div class="stats-grid" id="stats-grid">
     <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-lbl">Bài đã làm</div></div>
     <div class="stat"><div class="stat-num" id="s-avg">0%</div><div class="stat-lbl">Điểm trung bình</div></div>
@@ -185,6 +251,101 @@ function filterStu(stu,btn){
   renderAll();
 }
 
+
+// ══ WEEKLY PROGRESS CHART ══
+function buildWeekChart(results, sessions){
+  var days=['CN','T2','T3','T4','T5','T6','T7'];
+  var today=new Date();
+  var todayDay=today.getDay();
+
+  // Get last 7 days
+  var weekData=[];
+  for(var i=6;i>=0;i--){
+    var d=new Date(today);
+    d.setDate(d.getDate()-i);
+    var dateStr=d.toISOString().slice(0,10);
+    var dayName=days[d.getDay()];
+    var isToday=(i===0);
+
+    // Count results for this day
+    var dayResults=results.filter(function(r){return r.created_at&&r.created_at.slice(0,10)===dateStr;});
+    var dayScore=0;
+    var dayCount=dayResults.length;
+    dayResults.forEach(function(r){if(r.total>0)dayScore+=Math.round(r.score/r.total*100);});
+    var avgScore=dayCount>0?Math.round(dayScore/dayCount):0;
+
+    // Count session minutes
+    var daySessions=sessions.filter(function(s){return s.started_at&&s.started_at.slice(0,10)===dateStr;});
+    var totalMin=0;
+    daySessions.forEach(function(s){if(s.duration_seconds)totalMin+=Math.round(s.duration_seconds/60);});
+
+    weekData.push({date:dateStr,day:dayName,isToday:isToday,count:dayCount,avgScore:avgScore,minutes:totalMin});
+  }
+
+  // Find max for scaling
+  var maxScore=0;
+  weekData.forEach(function(d){if(d.avgScore>maxScore)maxScore=d.avgScore;});
+  if(maxScore===0)maxScore=100;
+
+  // Build chart
+  var chartHtml='';
+  weekData.forEach(function(d){
+    var height=d.avgScore>0?Math.max(8,Math.round(d.avgScore/maxScore*100)):0;
+    var color=d.avgScore>=80?'#10B981':d.avgScore>=60?'#F59E0B':d.avgScore>0?'#0EA5E9':'#E2E8F0';
+    var wrapClass='chart-bar-wrap'+(d.isToday?' today':'');
+    chartHtml+='<div class="'+wrapClass+'">';
+    chartHtml+='<div class="chart-bar-val">'+(d.avgScore>0?d.avgScore+'%':'')+'</div>';
+    chartHtml+='<div class="chart-bar-bg">';
+    chartHtml+='<div class="chart-bar-fill" style="height:'+height+'%;background:'+color+'"></div>';
+    chartHtml+='</div>';
+    chartHtml+='<div class="chart-bar-day">'+(d.isToday?'Hôm nay':d.day)+'</div>';
+    chartHtml+='</div>';
+  });
+  var chartEl=document.getElementById('week-chart');
+  if(chartEl)chartEl.innerHTML=chartHtml;
+
+  // Trend row
+  var thisWeekCount=0;var thisWeekScore=0;var thisWeekMin=0;
+  var lastWeekCount=0;var lastWeekScore=0;
+  weekData.forEach(function(d){
+    thisWeekCount+=d.count;
+    if(d.avgScore>0)thisWeekScore+=d.avgScore;
+    thisWeekMin+=d.minutes;
+  });
+  var avgWeekScore=thisWeekCount>0?Math.round(thisWeekScore/thisWeekCount):0;
+
+  // Compare with previous week from results
+  var prevWeekResults=results.filter(function(r){
+    if(!r.created_at)return false;
+    var d=new Date(r.created_at);
+    var diff=Math.floor((today-d)/(24*3600*1000));
+    return diff>=7&&diff<14;
+  });
+  var prevAvg=0;
+  if(prevWeekResults.length>0){
+    var pScore=0;
+    prevWeekResults.forEach(function(r){if(r.total>0)pScore+=Math.round(r.score/r.total*100);});
+    prevAvg=Math.round(pScore/prevWeekResults.length);
+  }
+  var scoreDiff=avgWeekScore-prevAvg;
+  var arrow=scoreDiff>0?'↑':scoreDiff<0?'↓':'→';
+  var arrowColor=scoreDiff>0?'var(--mint-d)':scoreDiff<0?'var(--coral)':'var(--muted)';
+
+  var trendHtml='';
+  trendHtml+='<div class="trend-item"><div class="trend-num" style="color:var(--sky)">'+thisWeekCount+'</div><div class="trend-lbl">Bài đã làm</div></div>';
+  trendHtml+='<div class="trend-item"><div class="trend-num" style="color:'+(avgWeekScore>=80?'var(--mint-d)':avgWeekScore>=60?'var(--sun-d)':'var(--coral)')+'">'+avgWeekScore+'%<span class="trend-arrow" style="color:'+arrowColor+'">'+arrow+'</span></div><div class="trend-lbl">Điểm TB tuần</div></div>';
+  trendHtml+='<div class="trend-item"><div class="trend-num" style="color:var(--violet)">'+thisWeekMin+'p</div><div class="trend-lbl">Thời gian học</div></div>';
+  var trendEl=document.getElementById('trend-row');
+  if(trendEl)trendEl.innerHTML=trendHtml;
+
+  // Week label
+  var wlEl=document.getElementById('chart-week-label');
+  if(wlEl){
+    var startD=new Date(today);startD.setDate(startD.getDate()-6);
+    wlEl.textContent=startD.getDate()+'/'+(startD.getMonth()+1)+' – '+today.getDate()+'/'+(today.getMonth()+1);
+  }
+}
+
 function loadAll(){
   el('assign-date').textContent=new Date().toLocaleDateString('vi-VN');
   // Show loading state
@@ -199,6 +360,7 @@ function loadAll(){
       renderStats();
       renderResults();
       renderRewards();
+      buildWeekChart(allResults,allSessions);
     });
 
   // Load sessions
@@ -241,6 +403,7 @@ function renderAll(){
   renderSessions();
   renderVideos();
   renderRewards();
+  buildWeekChart(allResults, allSessions);
 }
 
 function renderStats(){
@@ -253,7 +416,7 @@ function renderStats(){
   // Unique days
   var days={};
   res.forEach(function(r){if(r.created_at)days[r.created_at.slice(0,10)]=1;});
-  el('s-days').textContent=Object.keys(days).length;
+  el('s-days').textContent=(function(o){var n=0;for(var k in o){if(o.hasOwnProperty(k))n++;}return n;})(days);
   // Total time
   var totalMin=0;
   sess.forEach(function(s){if(s.duration_seconds)totalMin+=Math.round(s.duration_seconds/60);});
@@ -364,7 +527,7 @@ function renderRewards(){
   var quizCount=res.length;
   var days={};
   res.forEach(function(r){if(r.created_at)days[r.created_at.slice(0,10)]=1;});
-  var dayCount=Object.keys(days).length;
+  var dayCount=(function(o){var n=0;for(var k in o){if(o.hasOwnProperty(k))n++;}return n;})(days);
   var perfectCount=res.filter(function(r){return r.score===r.total&&r.total>=5;}).length;
   var totalMin=0;
   sess.forEach(function(s){if(s.duration_seconds)totalMin+=Math.round(s.duration_seconds/60);});
@@ -393,6 +556,82 @@ function renderRewards(){
       '<div class="ri-desc">'+(isDone?'🎁 Phần thưởng: '+g.reward:'→ '+g.reward)+'</div>'+
     '</div>';
   }).join('');
+}
+
+
+// ══ PRAISE SYSTEM ══
+var PRAISE_TEMPLATES = [
+  {em:'🏆', txt:'Con học giỏi quá! Ba tự hào lắm!'},
+  {em:'⭐', txt:'Xuất sắc! Con tiến bộ rõ rồi!'},
+  {em:'🎉', txt:'Cố lên con! Ba cổ vũ con!'},
+  {em:'💪', txt:'Kiên trì lắm! Ba thương con!'},
+  {em:'🌟', txt:'Hôm nay con học chăm quá!'},
+  {em:'🍭', txt:'Làm tốt! Tối Ba thưởng con nhé!'},
+  {em:'🤩', txt:'Con là số 1 của Ba!'},
+  {em:'👑', txt:'Giỏi lắm! Con xứng đáng được thưởng!'},
+];
+
+function buildPraiseBtns(){
+  var html = '';
+  for(var i=0;i<PRAISE_TEMPLATES.length;i++){
+    var p = PRAISE_TEMPLATES[i];
+    html += '<div class="praise-btn" onclick="selectPraise('+i+')">';
+    html += '<span class="praise-btn-em">'+p.em+'</span>';
+    html += '<span class="praise-btn-txt">'+p.txt+'</span>';
+    html += '</div>';
+  }
+  var el2 = document.getElementById('praise-btns');
+  if(el2) el2.innerHTML = html;
+}
+
+function selectPraise(idx){
+  var inp = document.getElementById('praise-custom');
+  if(inp && PRAISE_TEMPLATES[idx]) inp.value = PRAISE_TEMPLATES[idx].txt;
+}
+
+function sendPraise(){
+  var inp = document.getElementById('praise-custom');
+  var msg = inp ? inp.value.trim() : '';
+  if(!msg){toast('Ba nhập lời khen vào nhé! 💌');return;}
+
+  // Save to localStorage with timestamp
+  var praise = {msg:msg, time:new Date().toISOString(), from:'Ba'};
+  var all = [];
+  try{ all = JSON.parse(localStorage.getItem('en_praises')||'[]'); }catch(e){}
+  all.unshift(praise);
+  if(all.length > 20) all = all.slice(0,20);
+  localStorage.setItem('en_praises', JSON.stringify(all));
+
+  // Also save to Supabase for cross-device sync
+  fetch('https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/english_sessions',{
+    method:'POST',
+    headers:{
+      'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc',
+      'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc',
+      'Content-Type':'application/json','Prefer':'return=representation'
+    },
+    body:JSON.stringify({student_name:'praise_msg',task_id:'praise',task_name:msg,started_at:new Date().toISOString()})
+  }).then(function(){}).catch(function(){});
+
+  if(inp) inp.value = '';
+  toast('💌 Đã gửi! Con sẽ thấy ngay khi vào học!');
+  renderPraiseHistory();
+}
+
+function renderPraiseHistory(){
+  var all = [];
+  try{ all = JSON.parse(localStorage.getItem('en_praises')||'[]'); }catch(e){}
+  var el3 = document.getElementById('praise-history');
+  if(!el3) return;
+  if(!all.length){ el3.innerHTML=''; return; }
+  var html = '<div style="font-size:11px;font-weight:900;color:var(--sun-d);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;margin-top:8px">Lời khen đã gửi</div>';
+  for(var i=0;i<Math.min(3,all.length);i++){
+    var p = all[i];
+    var d = new Date(p.time);
+    var timeStr = d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'});
+    html += '<div class="ph-item2">💌 '+p.msg+'<span class="ph-time">'+timeStr+'</span></div>';
+  }
+  el3.innerHTML = html;
 }
 
 window.addEventListener('DOMContentLoaded',function(){
