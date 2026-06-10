@@ -160,10 +160,13 @@ function el(id){return document.getElementById(id);}
 function speak(w){if(window.speechSynthesis){var u=new window.SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;window.speechSynthesis.speak(u);}}
 function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function getDoneKey(sk){return 'sk_'+sk+'_'+TODAY;}
-function saveToDB(skill,score,total){
-  fetch(SUPA_URL+'/rest/v1/results',{method:'POST',
-    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
-    body:JSON.stringify({subject:'english',level:'Kỹ năng '+skill,score:score,total:total,hints_used:0,student_name:NAME,answers:{skill:skill,date:TODAY}})
+function saveToDB(level,score,total){
+  var url='https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results';
+  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+  var name=NAME||localStorage.getItem('en_name')||'con';
+  fetch(url,{method:'POST',
+    headers:{'apikey':key,'Authorization':'Bearer '+key,'Content-Type':'application/json','Prefer':'return=representation'},
+    body:JSON.stringify({subject:'english',level:level,score:score,total:total,hints_used:0,student_name:name,answers:{date:new Date().toISOString().slice(0,10)}})
   }).then(function(){}).catch(function(){});
 }
 

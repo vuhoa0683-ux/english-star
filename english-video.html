@@ -273,6 +273,15 @@ function onTimerDone(){
   }).then(function(){}).catch(function(){});
 }
 
+function saveToDB(level,score,total){
+  var url='https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results';
+  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+  var name=NAME||localStorage.getItem('en_name')||'con';
+  fetch(url,{method:'POST',
+    headers:{'apikey':key,'Authorization':'Bearer '+key,'Content-Type':'application/json','Prefer':'return=representation'},
+    body:JSON.stringify({subject:'english',level:level,score:score,total:total,hints_used:0,student_name:name,answers:{date:new Date().toISOString().slice(0,10)}})
+  }).then(function(){}).catch(function(){});
+}
 window.addEventListener('DOMContentLoaded',function(){
   var s=localStorage.getItem('en_name');
   if(s)document.getElementById('name-in').value=s;

@@ -1255,15 +1255,27 @@ function renderPointsCard(){
 
 
 function checkPraise(){
-  try{
-    var all=JSON.parse(localStorage.getItem('en_praises')||'[]');
-    var seen=localStorage.getItem('en_praise_seen')||'';
-    if(all.length>0&&all[0].time!==seen){
-      document.getElementById('praise-msg').textContent=all[0].msg;
-      document.getElementById('praise-banner').className='praise-banner show';
-      localStorage.setItem('en_praise_seen',all[0].time);
-    }
-  }catch(e){}
+  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+  var url='https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/english_assignments?assigned_by=eq.ba_praise&order=assigned_at.desc&limit=5';
+  fetch(url,{headers:{'apikey':key,'Authorization':'Bearer '+key}})
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(!data||!data.length) return;
+      var latest=data[0];
+      var seen=localStorage.getItem('en_praise_seen')||'';
+      if(latest.assigned_at!==seen){
+        var tasks=[];
+        try{tasks=JSON.parse(latest.tasks||'[]');}catch(e){}
+        var msg=tasks.length>0?tasks[0].name:'';
+        if(msg){
+          var el2=document.getElementById('praise-msg');
+          var banner=document.getElementById('praise-banner');
+          if(el2) el2.textContent=msg;
+          if(banner) banner.className='praise-banner show';
+          localStorage.setItem('en_praise_seen',latest.assigned_at);
+        }
+      }
+    }).catch(function(){});
 }
 function closePraise(){
   document.getElementById('praise-banner').className='praise-banner';
