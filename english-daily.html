@@ -582,6 +582,7 @@ function startApp(){
   renderTodayBanner();
   updateHeaderPts();
   renderPointsCard();
+  syncPointsFromSupabase();
   // Show time estimate
   var autoIds=getAutoSchedule();var tEl=document.getElementById('today-time');if(tEl)tEl.textContent='⏱️ Khoảng '+getTotalTime(autoIds)+' phút hôm nay';
   autoAssignIfEmpty();
@@ -1150,6 +1151,63 @@ function addPoints(taskId, actualMinutes, actualScore, totalScore){
 }
 
 // Cộng điểm streak
+
+function syncPointsFromSupabase(){
+  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+  var name=NAME||localStorage.getItem('en_name')||'con';
+  var month=getThisMonth();
+  var url='https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results?student_name=eq.'+encodeURIComponent(name)+'&subject=eq.english&order=created_at.desc&limit=100';
+  fetch(url,{headers:{'apikey':key,'Authorization':'Bearer '+key}})
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(!data||!data.length) return;
+      var data2=getPtsData();
+      if(data2.lastMonth!==month){data2.thisMonth=0;data2.lastMonth=month;data2.history=[];}
+      // Recalculate from Supabase results this month
+      var monthPts=0;
+      var newHistory=[];
+      data.forEach(function(r){
+        if(!r.created_at) return;
+        var rMonth=r.created_at.slice(0,7).replace('-','-');
+        if(rMonth!==month.replace('-','-')) return;
+        // Map level to taskId
+        var taskId='flash';
+        var lv=(r.level||'').toLowerCase();
+        if(lv.indexOf('quiz')>=0) taskId='quiz';
+        else if(lv.indexOf('de so 1')>=0||lv.indexOf('đề số 1')>=0) taskId='exam1';
+        else if(lv.indexOf('de so 2')>=0||lv.indexOf('đề số 2')>=0) taskId='exam2';
+        else if(lv.indexOf('de so 3')>=0||lv.indexOf('đề số 3')>=0) taskId='exam3';
+        else if(lv.indexOf('de so 4')>=0||lv.indexOf('đề số 4')>=0) taskId='exam4';
+        else if(lv.indexOf('de so 5')>=0||lv.indexOf('đề số 5')>=0) taskId='exam5';
+        else if(lv.indexOf('de so 6')>=0||lv.indexOf('đề số 6')>=0) taskId='exam6';
+        else if(lv.indexOf('vocab')>=0||lv.indexOf('flash')>=0) taskId='flash';
+        else if(lv.indexOf('ky nang')>=0||lv.indexOf('kỹ năng')>=0) taskId='skills';
+        var rule=SCORE_RULES[taskId];
+        if(!rule) return;
+        var pct=r.total>0?Math.round(r.score/r.total*100):0;
+        var pts=0;
+        if(taskId.indexOf('exam')>=0){
+          pts=pct>=60?Math.round(rule.maxScorePts*(0.5+((pct-60)/40)*0.5)):0;
+        } else {
+          pts=Math.round(rule.maxTimePts*0.7);
+        }
+        if(pts>0){
+          monthPts+=pts;
+          newHistory.push({taskId:taskId,icon:rule.icon||'📝',name:r.level,pts:pts,date:r.created_at.slice(0,10)});
+        }
+      });
+      if(monthPts>0){
+        data2.thisMonth=monthPts;
+        data2.total=Math.max(data2.total||0,monthPts);
+        data2.history=newHistory.concat(data2.history||[]).slice(0,50);
+        savePtsData(data2);
+        renderPointsCard();
+        updateHeaderPts();
+        toast('✅ Đã cập nhật '+monthPts+' điểm tháng này!');
+      }
+    }).catch(function(){});
+}
+
 function addStreakBonus(days){
   var bonus = STREAK_BONUS[days];
   if(!bonus) return;
@@ -1209,6 +1267,7 @@ function renderPointsCard(){
   html += '<div class="pm-left">💰 Ba thưởng con cuối tháng</div>';
   html += '<div class="pm-amt">'+money.toLocaleString('vi-VN')+'đ</div>';
   html += '</div>';
+  html += '<button onclick="syncPointsFromSupabase()" style="width:100%;padding:8px;margin-top:8px;border:none;border-radius:8px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:700;cursor:pointer">🔄 Cập nhật điểm</button>';
   
   // Breakdown this month
   var breakdown = [
@@ -1256,24 +1315,21 @@ function renderPointsCard(){
 
 function checkPraise(){
   var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
-  var url='https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/english_assignments?assigned_by=eq.ba_praise&order=assigned_at.desc&limit=5';
+  // Read from results table where student_name='ba_praise' and subject='praise'
+  var url='https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results?student_name=eq.ba_praise&subject=eq.praise&order=created_at.desc&limit=1';
   fetch(url,{headers:{'apikey':key,'Authorization':'Bearer '+key}})
     .then(function(r){return r.json();})
     .then(function(data){
       if(!data||!data.length) return;
       var latest=data[0];
+      var msg=latest.level||'';
       var seen=localStorage.getItem('en_praise_seen')||'';
-      if(latest.assigned_at!==seen){
-        var tasks=[];
-        try{tasks=JSON.parse(latest.tasks||'[]');}catch(e){}
-        var msg=tasks.length>0?tasks[0].name:'';
-        if(msg){
-          var el2=document.getElementById('praise-msg');
-          var banner=document.getElementById('praise-banner');
-          if(el2) el2.textContent=msg;
-          if(banner) banner.className='praise-banner show';
-          localStorage.setItem('en_praise_seen',latest.assigned_at);
-        }
+      if(msg && latest.created_at!==seen){
+        var el2=document.getElementById('praise-msg');
+        var banner=document.getElementById('praise-banner');
+        if(el2) el2.textContent=msg;
+        if(banner) banner.className='praise-banner show';
+        localStorage.setItem('en_praise_seen',latest.created_at);
       }
     }).catch(function(){});
 }

@@ -594,14 +594,22 @@ function sendPraise(){
   var msg = inp ? inp.value.trim() : '';
   if(!msg){toast('Ba nhập lời khen vào nhé! 💌');return;}
 
-  var praise = {msg:msg, time:new Date().toISOString(), from:'Ba'};
   var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
-  // Save to Supabase english_assignments table with special key 'praise'
-  fetch('https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/english_assignments',{
+  // Save praise to results table - level='ba_praise', student_name='praise'
+  fetch('https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results',{
     method:'POST',
     headers:{'apikey':key,'Authorization':'Bearer '+key,'Content-Type':'application/json','Prefer':'return=representation'},
-    body:JSON.stringify({date:'praise_'+new Date().toISOString().slice(0,10)+'_'+Date.now(),tasks:JSON.stringify([{id:'praise',name:msg,icon:'💌'}]),assigned_by:'ba_praise',assigned_at:new Date().toISOString()})
-  }).then(function(){toast('💌 Đã gửi! Con sẽ thấy ngay khi vào học!');renderPraiseHistory();}).catch(function(){toast('Lỗi gửi! Thử lại nhé.');});
+    body:JSON.stringify({subject:'praise',level:msg,score:0,total:0,hints_used:0,student_name:'ba_praise',answers:{msg:msg,from:'Ba',time:new Date().toISOString()}})
+  }).then(function(){
+    toast('💌 Đã gửi! Con sẽ thấy ngay khi vào học!');
+    // Save to localStorage for history display
+    var all=[];
+    try{all=JSON.parse(localStorage.getItem('en_praises')||'[]');}catch(e){}
+    all.unshift({msg:msg,time:new Date().toISOString()});
+    if(all.length>20)all=all.slice(0,20);
+    localStorage.setItem('en_praises',JSON.stringify(all));
+    renderPraiseHistory();
+  }).catch(function(){toast('Lỗi gửi! Thử lại nhé.');});
 
   if(inp) inp.value = '';
   toast('💌 Đã gửi! Con sẽ thấy ngay khi vào học!');
