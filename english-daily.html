@@ -1315,19 +1315,17 @@ function renderPointsCard(){
 
 function checkPraise(){
   var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
-  // Read from results table where student_name='ba_praise' and subject='praise'
   var url='https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results?student_name=eq.ba_praise&subject=eq.english&order=created_at.desc&limit=1';
   fetch(url,{headers:{'apikey':key,'Authorization':'Bearer '+key}})
     .then(function(r){return r.json();})
     .then(function(data){
       if(!data||!data.length) return;
       var latest=data[0];
-      var rawLevel=latest.level||'';
-      var msg=rawLevel.indexOf('ba_praise: ')===0?rawLevel.replace('ba_praise: ',''):rawLevel;
-      // Also try answers.msg
-      try{if(!msg&&latest.answers&&latest.answers.msg)msg=latest.answers.msg;}catch(e){}
+      var lv=latest.level||'';
+      var msg=lv.indexOf('praise:')===0?lv.slice(7):lv;
+      if(!msg) return;
       var seen=localStorage.getItem('en_praise_seen')||'';
-      if(msg && latest.created_at!==seen){
+      if(latest.created_at!==seen){
         var el2=document.getElementById('praise-msg');
         var banner=document.getElementById('praise-banner');
         if(el2) el2.textContent=msg;
