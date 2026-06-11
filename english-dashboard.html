@@ -599,7 +599,7 @@ function sendPraise(){
   fetch('https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results',{
     method:'POST',
     headers:{'apikey':key,'Authorization':'Bearer '+key,'Content-Type':'application/json','Prefer':'return=representation'},
-    body:JSON.stringify({subject:'praise',level:msg,score:0,total:0,hints_used:0,student_name:'ba_praise',answers:{msg:msg,from:'Ba',time:new Date().toISOString()}})
+    body:JSON.stringify({subject:'english',level:'ba_praise: '+msg,score:1,total:1,hints_used:0,student_name:'ba_praise',answers:{date:new Date().toISOString().slice(0,10),msg:msg}})
   }).then(function(){
     toast('💌 Đã gửi! Con sẽ thấy ngay khi vào học!');
     // Save to localStorage for history display
