@@ -1338,6 +1338,20 @@ function closePraise(){
   document.getElementById('praise-banner').className='praise-banner';
 }
 
+
+// Keep Supabase alive - ping once per day
+function keepSupabaseAlive(){
+  var lastPing=localStorage.getItem('supa_ping')||'';
+  var today=new Date().toISOString().slice(0,10);
+  if(lastPing===today) return; // Already pinged today
+  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+  fetch('https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results?limit=1',{
+    headers:{'apikey':key,'Authorization':'Bearer '+key}
+  }).then(function(){
+    localStorage.setItem('supa_ping',today);
+  }).catch(function(){});
+}
+
 window.addEventListener('DOMContentLoaded',function(){
   buildTestFolders();
   var s=localStorage.getItem('en_name');
