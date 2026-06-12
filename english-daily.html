@@ -1155,57 +1155,50 @@ function addPoints(taskId, actualMinutes, actualScore, totalScore){
 function syncPointsFromSupabase(){
   var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
   var name=NAME||localStorage.getItem('en_name')||'con';
-  var month=getThisMonth();
-  var url='https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results?student_name=eq.'+encodeURIComponent(name)+'&subject=eq.english&order=created_at.desc&limit=100';
+  var d=new Date();
+  var thisMonth=d.getFullYear()+'-'+(d.getMonth()<9?'0':'')+(d.getMonth()+1);
+  var url='https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results?student_name=eq.'+encodeURIComponent(name)+'&subject=eq.english&order=created_at.desc&limit=200';
   fetch(url,{headers:{'apikey':key,'Authorization':'Bearer '+key}})
     .then(function(r){return r.json();})
     .then(function(data){
-      if(!data||!data.length) return;
-      var data2=getPtsData();
-      if(data2.lastMonth!==month){data2.thisMonth=0;data2.lastMonth=month;data2.history=[];}
-      // Recalculate from Supabase results this month
+      if(!data||!data.length){toast('Chưa có bài nào trong tháng này!');return;}
       var monthPts=0;
       var newHistory=[];
       data.forEach(function(r){
         if(!r.created_at) return;
-        var rMonth=r.created_at.slice(0,7).replace('-','-');
-        if(rMonth!==month.replace('-','-')) return;
-        // Map level to taskId
-        var taskId='flash';
+        var rMonth=r.created_at.slice(0,7);
+        if(rMonth!==thisMonth) return;
         var lv=(r.level||'').toLowerCase();
-        if(lv.indexOf('quiz')>=0) taskId='quiz';
-        else if(lv.indexOf('de so 1')>=0||lv.indexOf('đề số 1')>=0) taskId='exam1';
-        else if(lv.indexOf('de so 2')>=0||lv.indexOf('đề số 2')>=0) taskId='exam2';
-        else if(lv.indexOf('de so 3')>=0||lv.indexOf('đề số 3')>=0) taskId='exam3';
-        else if(lv.indexOf('de so 4')>=0||lv.indexOf('đề số 4')>=0) taskId='exam4';
-        else if(lv.indexOf('de so 5')>=0||lv.indexOf('đề số 5')>=0) taskId='exam5';
-        else if(lv.indexOf('de so 6')>=0||lv.indexOf('đề số 6')>=0) taskId='exam6';
-        else if(lv.indexOf('vocab')>=0||lv.indexOf('flash')>=0) taskId='flash';
-        else if(lv.indexOf('ky nang')>=0||lv.indexOf('kỹ năng')>=0) taskId='skills';
-        var rule=SCORE_RULES[taskId];
-        if(!rule) return;
-        var pct=r.total>0?Math.round(r.score/r.total*100):0;
         var pts=0;
-        if(taskId.indexOf('exam')>=0){
-          pts=pct>=60?Math.round(rule.maxScorePts*(0.5+((pct-60)/40)*0.5)):0;
-        } else {
-          pts=Math.round(rule.maxTimePts*0.7);
+        var icon='📝';
+        var taskName=r.level||'Bài học';
+        if(lv.indexOf('quiz')>=0){pts=8;icon='📝';}
+        else if(lv.indexOf('vocab')>=0||lv.indexOf('flash')>=0){pts=5;icon='🃏';}
+        else if(lv.indexOf('de so 1')>=0||lv.indexOf('đề số 1')>=0){
+          pts=r.total>0?Math.round(15*r.score/r.total):0;icon='📋';
         }
+        else if(lv.indexOf('de so')>=0||lv.indexOf('đề số')>=0){
+          pts=r.total>0?Math.round(20*r.score/r.total):0;icon='📋';
+        }
+        else if(lv.indexOf('ky nang')>=0||lv.indexOf('kỹ năng')>=0||lv.indexOf('skill')>=0){pts=6;icon='🎯';}
+        else if(lv.indexOf('luyen doc')>=0||lv.indexOf('luyện đọc')>=0||lv.indexOf('reading')>=0){pts=7;icon='🎤';}
+        else if(lv.indexOf('video')>=0){pts=4;icon='📺';}
+        else if(lv.indexOf('on tu')>=0||lv.indexOf('ôn từ')>=0){pts=5;icon='⚠️';}
+        else {pts=3;icon='📚';}
         if(pts>0){
           monthPts+=pts;
-          newHistory.push({taskId:taskId,icon:rule.icon||'📝',name:r.level,pts:pts,date:r.created_at.slice(0,10)});
+          newHistory.push({icon:icon,name:taskName,pts:pts,date:r.created_at.slice(0,10)});
         }
       });
-      if(monthPts>0){
-        data2.thisMonth=monthPts;
-        data2.total=Math.max(data2.total||0,monthPts);
-        data2.history=newHistory.concat(data2.history||[]).slice(0,50);
-        savePtsData(data2);
-        renderPointsCard();
-        updateHeaderPts();
-        toast('✅ Đã cập nhật '+monthPts+' điểm tháng này!');
-      }
-    }).catch(function(){});
+      var ptsData=getPtsData();
+      ptsData.thisMonth=monthPts;
+      ptsData.lastMonth=thisMonth;
+      if(newHistory.length>0) ptsData.history=newHistory.slice(0,50);
+      savePtsData(ptsData);
+      renderPointsCard();
+      updateHeaderPts();
+      toast('✅ Đã cập nhật: '+monthPts+' điểm tháng này!');
+    }).catch(function(e){toast('Lỗi: '+e.message);});
 }
 
 function addStreakBonus(days){
@@ -1322,15 +1315,19 @@ function checkPraise(){
       if(!data||!data.length) return;
       var latest=data[0];
       var lv=latest.level||'';
-      var msg=lv.indexOf('praise:')===0?lv.slice(7):lv;
+      // Extract message from level field: "praise:msg" format
+      var msg='';
+      if(lv.indexOf('praise:')===0) msg=lv.slice(7);
+      else msg=lv;
       if(!msg) return;
+      // Show if not seen yet
       var seen=localStorage.getItem('en_praise_seen')||'';
-      if(latest.created_at!==seen){
+      if(latest.id&&String(latest.id)!==seen){
         var el2=document.getElementById('praise-msg');
         var banner=document.getElementById('praise-banner');
         if(el2) el2.textContent=msg;
         if(banner) banner.className='praise-banner show';
-        localStorage.setItem('en_praise_seen',latest.created_at);
+        localStorage.setItem('en_praise_seen',String(latest.id));
       }
     }).catch(function(){});
 }
