@@ -112,8 +112,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 <script>
 var NAME = '';
 var TODAY = new Date().toISOString().slice(0,10);
-var SUPA_URL = 'https://cvwcpemkceqtqpauwqzw.supabase.co';
-var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+var SUPA_URL = 'https://dmdcccqldatgmdtakxcj.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
 var TARGET = 3;
 var skillDone = {listen:0,speak:0,read:0,gram:0};
 var currentSkill = '';
@@ -161,8 +161,8 @@ function speak(w){if(window.speechSynthesis){var u=new window.SpeechSynthesisUtt
 function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function getDoneKey(sk){return 'sk_'+sk+'_'+TODAY;}
 function saveToDB(level,score,total){
-  var url='https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results';
-  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+  var url='https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results';
+  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
   var name=NAME||localStorage.getItem('en_name')||'con';
   fetch(url,{method:'POST',
     headers:{'apikey':key,'Authorization':'Bearer '+key,'Content-Type':'application/json','Prefer':'return=representation'},

@@ -269,9 +269,9 @@ function submitTest(){
   var ak=el("akbody");if(ak)ak.classList.add("open");
   var name=el("iname").value||localStorage.getItem("en_name")||"con";
   localStorage.setItem("en_name",name);
-  fetch("https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results",{method:"POST",
-    headers:{"apikey":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc",
-    "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc",
+  fetch("https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results",{method:"POST",
+    headers:{"apikey":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4",
+    "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4",
     "Content-Type":"application/json","Prefer":"return=representation"},
     body:JSON.stringify({subject:"english",level:"De so 4",score:score,total:50,hints_used:0,student_name:name,answers:{date:new Date().toISOString().slice(0,10)}})
   }).then(function(){}).catch(function(){});

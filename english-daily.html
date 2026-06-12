@@ -8,8 +8,8 @@
 
 <script>
 // Lightweight Supabase client - no CDN needed
-var SUPA_URL = 'https://cvwcpemkceqtqpauwqzw.supabase.co';
-var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+var SUPA_URL = 'https://dmdcccqldatgmdtakxcj.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
 
 function supabase(){ return {createClient: sbCreateClient}; }
 supabase.createClient = sbCreateClient;
@@ -435,8 +435,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 <script>
 // ══ SUPABASE ══
 var SB = supabase.createClient(
-  'https://cvwcpemkceqtqpauwqzw.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc'
+  'https://dmdcccqldatgmdtakxcj.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4'
 );
 
 // ══ CONSTANTS ══
@@ -1153,10 +1153,10 @@ function addPoints(taskId, actualMinutes, actualScore, totalScore){
 // Cộng điểm streak
 
 function syncPointsFromSupabase(){
-  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
+  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
   var name=NAME||localStorage.getItem('en_name')||'con';
   var month=getThisMonth();
-  var url='https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results?student_name=eq.'+encodeURIComponent(name)+'&subject=eq.english&order=created_at.desc&limit=100';
+  var url='https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results?student_name=eq.'+encodeURIComponent(name)+'&subject=eq.english&order=created_at.desc&limit=100';
   fetch(url,{headers:{'apikey':key,'Authorization':'Bearer '+key}})
     .then(function(r){return r.json();})
     .then(function(data){
@@ -1314,8 +1314,8 @@ function renderPointsCard(){
 
 
 function checkPraise(){
-  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
-  var url='https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results?student_name=eq.ba_praise&subject=eq.english&order=created_at.desc&limit=1';
+  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
+  var url='https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results?student_name=eq.ba_praise&subject=eq.english&order=created_at.desc&limit=1';
   fetch(url,{headers:{'apikey':key,'Authorization':'Bearer '+key}})
     .then(function(r){return r.json();})
     .then(function(data){
@@ -1344,8 +1344,8 @@ function keepSupabaseAlive(){
   var lastPing=localStorage.getItem('supa_ping')||'';
   var today=new Date().toISOString().slice(0,10);
   if(lastPing===today) return; // Already pinged today
-  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2d2NwZW1rY2VxdHFwYXV3cXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzU1ODEsImV4cCI6MjA5Mjg1MTU4MX0.OIiLJ2rO5kscMgah2GEKv1OsYhQilfn-uncTqeweWIc';
-  fetch('https://cvwcpemkceqtqpauwqzw.supabase.co/rest/v1/results?limit=1',{
+  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
+  fetch('https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results?limit=1',{
     headers:{'apikey':key,'Authorization':'Bearer '+key}
   }).then(function(){
     localStorage.setItem('supa_ping',today);
