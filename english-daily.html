@@ -311,8 +311,9 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 .ph-date{font-size:10px;color:rgba(255,255,255,.4)}
 
 
-.praise-banner{background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:2px solid var(--sun);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;display:none;animation:slideDown .4s ease-out}
+.praise-banner{background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:2px solid var(--sun);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;display:none;animation:slideDown .4s ease-out;position:relative}
 .praise-banner.show{display:block}
+.praise-banner-placeholder{background:var(--card);border:1.5px dashed var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;text-align:center;color:var(--muted);font-size:12px;font-weight:700}
 @keyframes slideDown{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
 .pb-from{font-size:11px;font-weight:800;color:var(--sun-d);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
 .pb-msg{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--ink);line-height:1.4}
@@ -361,12 +362,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
   </div>
 </div>
 
-<div class="praise-banner" id="praise-banner">
-  <button class="pb-close" onclick="closePraise()">✕</button>
-  <div class="pb-from">💌 Ba gửi cho con</div>
-  <div class="pb-msg" id="praise-msg"></div>
-</div>
-
 <div id="setup">
   <div class="s-hero">🌟</div>
   <div class="s-title">Chào mừng đến<br>English Star!</div>
@@ -375,6 +370,12 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 </div>
 
 <div id="app">
+  <!-- Ba nhắn cho con -->
+  <div class="praise-banner" id="praise-banner">
+    <button onclick="closePraise()" style="float:right;background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted)">✕</button>
+    <div style="font-size:11px;font-weight:900;color:var(--sun-d);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">💬 Ba nhắn cho con</div>
+    <div id="praise-msg" style="font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--ink);line-height:1.4"></div>
+  </div>
   <div id="today-banner"></div>
   <div class="daily-progress" id="daily-progress"></div>
   <div class="pts-card" id="pts-card"></div>
@@ -592,6 +593,8 @@ function startApp(){
   checkNewContent();
   renderDailyProgress();
   buildTestFolders();
+  checkPraise();
+  setInterval(checkPraise,60000);
 }
 
 // ══ TODAY BANNER ══
@@ -730,10 +733,12 @@ function loadAssignments(){
   var saved=localStorage.getItem(ASSIGN_KEY+TODAY_STR);
   renderAssignList(saved?JSON.parse(saved):[]);
   SB.from('english_assignments').select('tasks').eq('date',TODAY_STR).single().then(function(r){
-    if(r.data&&r.data.tasks){
-      var ids=JSON.parse(r.data.tasks).map(function(t){return t.id;});
-      localStorage.setItem(ASSIGN_KEY+TODAY_STR,JSON.stringify(ids));
-      renderAssignList(ids);
+    if(r&&r.data&&r.data.tasks){
+      try{
+        var ids=JSON.parse(r.data.tasks).map(function(t){return t.id;});
+        localStorage.setItem(ASSIGN_KEY+TODAY_STR,JSON.stringify(ids));
+        renderAssignList(ids);
+      }catch(e){}
     }
   }).catch(function(){});
 }
@@ -1169,6 +1174,7 @@ function syncPointsFromSupabase(){
         var rMonth=r.created_at.slice(0,7);
         if(rMonth!==thisMonth) return;
         var lv=(r.level||'').toLowerCase();
+        if(lv.indexOf('praise:')===0) return; // Skip praise records
         var pts=0;
         var icon='📝';
         var taskName=r.level||'Bài học';
@@ -1198,7 +1204,7 @@ function syncPointsFromSupabase(){
       renderPointsCard();
       updateHeaderPts();
       toast('✅ Đã cập nhật: '+monthPts+' điểm tháng này!');
-    }).catch(function(e){toast('Lỗi: '+e.message);});
+    }).catch(function(){});
 }
 
 function addStreakBonus(days){
@@ -1315,20 +1321,19 @@ function checkPraise(){
       if(!data||!data.length) return;
       var latest=data[0];
       var lv=latest.level||'';
-      // Extract message from level field: "praise:msg" format
       var msg='';
       if(lv.indexOf('praise:')===0) msg=lv.slice(7);
       else msg=lv;
       if(!msg) return;
-      // Show if not seen yet
+      // Reset seen key to force show latest message
       var seen=localStorage.getItem('en_praise_seen')||'';
-      if(latest.id&&String(latest.id)!==seen){
-        var el2=document.getElementById('praise-msg');
-        var banner=document.getElementById('praise-banner');
-        if(el2) el2.textContent=msg;
-        if(banner) banner.className='praise-banner show';
-        localStorage.setItem('en_praise_seen',String(latest.id));
-      }
+      var latestId=String(latest.id||'');
+      var el2=document.getElementById('praise-msg');
+      var banner=document.getElementById('praise-banner');
+      if(el2) el2.textContent=msg;
+      if(banner) banner.className='praise-banner show';
+      // Only update seen if different message
+      if(latestId!==seen) localStorage.setItem('en_praise_seen',latestId);
     }).catch(function(){});
 }
 function closePraise(){
