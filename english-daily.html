@@ -236,6 +236,9 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 .eib-done{background:var(--mint-l);color:var(--mint-d)}
 .eib-normal{background:var(--border);color:var(--muted)}
 .eib-next{background:var(--mint-l);color:var(--mint-d)}
+.eib-lock{background:var(--border);color:var(--muted)}
+.folder-new{background:var(--coral);color:#fff;border-radius:10px;padding:2px 7px;font-size:10px;font-weight:900;margin-right:5px;animation:pulse2 1.5s ease-in-out infinite}
+@keyframes pulse2{0%,100%{opacity:1}50%{opacity:.7}}
 .folder-empty{padding:14px;text-align:center;font-size:12px;font-weight:700;color:var(--muted);font-style:italic}
 .achieve-pop{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
 .achieve-pop.show{display:flex}
@@ -872,17 +875,70 @@ function checkNewContent(){
 
 // ══ TEST FOLDERS ══
 function buildTestFolders(){
-  var html='';
+  var folders_html='';
   TEST_FOLDERS.forEach(function(f){
     var count=f.exams.length;
     var items='';
-    if(count===0){items='<div class="folder-empty">📭 Ba chưa thêm đề — sẽ có sớm nhé con!</div>';}
-    else{f.exams.forEach(function(e){var isDone=localStorage.getItem('exam_done_'+e.url)==='1';items+='<div class="exam-item" onclick="openTask(\''+e.url+'\',\'📋 '+e.name+'\',\''+e.url.replace('.html','')+'\');localStorage.setItem(\'exam_done_'+e.url+'\',\'1\')"><div class="ei-icon">📋</div><div class="ei-info"><div class="ei-name">'+e.name+'</div><div class="ei-meta">'+e.meta+'</div></div><span class="ei-badge '+(isDone?'eib-done':'eib-normal')+'">'+(isDone?'✅ Đã làm':'📝 Chưa làm')+'</span></div>';});}
-    html+='<div class="folder" id="folder-'+f.id+'"><div class="folder-hdr" onclick="toggleFolder(\''+f.id+'\')"><div class="folder-icon">'+f.icon+'</div><div class="folder-info"><div class="folder-name">'+f.name+'</div><div class="folder-sub">'+f.sub+'</div></div><div class="folder-right">'+(count>0?'<span class="folder-badge">'+count+' đề</span>':'')+'<span class="folder-arrow">›</span></div></div><div class="folder-body">'+items+'</div></div>';
+    var hasNew=false;
+    var doneCount=0;
+
+    if(count===0){
+      items='<div class="folder-empty">📭 Ba chưa thêm đề — sẽ có sớm nhé con!</div>';
+    } else {
+      // Use EXAM_LIST for ontap folder
+      if(f.id==='ontap'){
+        var ep=getExamProgress();
+        doneCount=ep.done;
+        // Check if there's a new unlocked exam
+        var nx=getNextExam();
+        hasNew=nx&&ep.done>0; // NEW badge if has progress + next exam available
+        EXAM_LIST.forEach(function(e,ei){
+          var isSubmitted=localStorage.getItem('en_exam_submitted_'+e.id)==='1';
+          var isLocked=ei>0&&!localStorage.getItem('en_exam_submitted_'+EXAM_LIST[ei-1].id);
+          var isNext=!isSubmitted&&!isLocked;
+          var badge='';var badgeClass='';var onclick2='';
+          if(isSubmitted){badge='✅ Đã nộp';badgeClass='eib-done';onclick2='openTask("'+e.url+'","📋 '+e.name+'","'+e.id+'")';}
+          else if(isLocked){badge='🔒 Chưa mở';badgeClass='eib-lock';onclick2='void(0)';}
+          else{badge='▶ Làm ngay';badgeClass='eib-next';onclick2='openTask("'+e.url+'","📋 '+e.name+'","'+e.id+'")';}
+          var style=isNext?'border-left:3px solid var(--mint);':'';
+          if(isLocked)style='opacity:.5;';
+          items+='<div class="exam-item" style="'+style+'" onclick="'+onclick2+'">';
+          items+='<div class="ei-icon">'+(isNext?'📍':'📋')+'</div>';
+          items+='<div class="ei-info"><div class="ei-name">'+e.name+(isNext?' ← Tiếp theo':'')+'</div>';
+          items+='<div class="ei-meta">'+e.meta+'</div></div>';
+          items+='<span class="ei-badge '+badgeClass+'">'+badge+'</span></div>';
+        });
+      } else {
+        f.exams.forEach(function(e){
+          var isDone=localStorage.getItem('exam_done_'+e.url)==='1';
+          if(!isDone) hasNew=true;
+          else doneCount++;
+          items+='<div class="exam-item" onclick="openTask(\"'+e.url+'\",\"📋 '+e.name+'\",\"'+e.id+'\")">';
+          items+='<div class="ei-icon">📋</div>';
+          items+='<div class="ei-info"><div class="ei-name">'+e.name+'</div>';
+          items+='<div class="ei-meta">'+e.meta+'</div></div>';
+          items+='<span class="ei-badge '+(isDone?'eib-done':'eib-normal')+'">'+(isDone?'✅ Đã làm':'📝 Chưa làm')+'</span></div>';
+        });
+      }
+    }
+
+    // NEW badge: show if has new exam available
+    var newBadge=hasNew?'<span class="folder-new">NEW</span>':'';
+    var countBadge=count>0?'<span class="folder-badge">'+count+' đề</span>':'';
+    folders_html+='<div class="folder" id="folder-'+f.id+'">';
+    folders_html+='<div class="folder-hdr" data-fid="'+f.id+'" onclick="toggleFolder(this.dataset.fid)">';
+    folders_html+='<div class="folder-icon">'+f.icon+'</div>';
+    folders_html+='<div class="folder-info"><div class="folder-name">'+f.name+'</div>';
+    folders_html+='<div class="folder-sub">'+f.sub+'</div></div>';
+    folders_html+='<div class="folder-right">'+newBadge+countBadge+'<span class="folder-arrow">›</span></div>';
+    folders_html+='</div>';
+    folders_html+='<div class="folder-body">'+items+'</div>';
+    folders_html+='</div>';
   });
-  el('test-folders').innerHTML=html;
-  toggleFolder('ontap');
+  el('test-folders').innerHTML=folders_html;
+  // Don't auto-open any folder - all collapsed by default
 }
+
 function toggleFolder(id){var e=el('folder-'+id);if(e)e.classList.toggle('open');}
 
 // ══ ACHIEVE ══
