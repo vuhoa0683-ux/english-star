@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Olympic Test No.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#F8FAFF;color:#0F172A;min-height:100vh}
+.cover{min-height:100vh;background:linear-gradient(160deg,#78350F,#92400E,#B45309);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center}
+.badge{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);border-radius:30px;padding:6px 18px;font-size:12px;font-weight:800;color:#FFD700;margin-bottom:16px}
+.ctitle{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:#FFD700;margin-bottom:6px}
+.csub{font-size:13px;color:rgba(255,255,255,.8);font-weight:600;margin-bottom:24px;line-height:1.7}
+.icard{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 20px;width:100%;max-width:360px;margin-bottom:20px}
+.irow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.ilbl{font-size:10px;font-weight:900;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.iline{background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,.4);color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;outline:none;padding:4px 0;width:100%}
+.iline::placeholder{color:rgba(255,255,255,.4)}
+.btnstart{background:linear-gradient(135deg,#B45309,#F59E0B);color:#fff;border:none;border-radius:10px;padding:14px 32px;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;cursor:pointer;width:100%;max-width:360px;margin-bottom:10px}
+.btnkey{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.3);border-radius:10px;padding:11px;font-size:13px;font-weight:800;cursor:pointer;color:rgba(255,255,255,.8);width:100%;max-width:360px;margin-bottom:8px}
+.backlink{color:rgba(255,255,255,.6);font-size:12px;font-weight:700;text-decoration:none}
+#tbody{display:none;max-width:640px;margin:0 auto;padding:16px 14px 80px}
+.rbar{background:#fff;border-bottom:2px solid #E2E8F0;padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.rscore{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#B45309;min-width:60px}
+.rprog{flex:1;height:7px;background:#E2E8F0;border-radius:4px;overflow:hidden}
+.rfill{height:100%;background:linear-gradient(90deg,#B45309,#F59E0B);border-radius:4px;transition:width .4s}
+.rsub{font-size:11px;font-weight:700;color:#94A3B8}
+.rsubmit{padding:8px 16px;border-radius:10px;border:none;background:#10B981;color:#fff;font-size:13px;font-weight:800;cursor:pointer}
+.part{background:#fff;border-radius:14px;border:1.5px solid #E2E8F0;margin-bottom:16px;overflow:hidden}
+.phdr{padding:13px 16px;display:flex;align-items:flex-start;gap:12px;border-bottom:1.5px solid #E2E8F0}
+.picon{width:44px;height:44px;border-radius:50%;background:#B45309;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pinfo{flex:1}
+.ptitle{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800}
+.psub{font-size:12px;color:#94A3B8;font-weight:600;margin-top:2px}
+.ppts{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#B45309}
+.pbody{padding:14px 16px}
+.mcq{margin-bottom:14px;padding:12px;background:#F8FAFF;border-radius:10px}
+.mqnum{font-size:10px;font-weight:900;color:#94A3B8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.mqq{font-size:14px;font-weight:800;color:#0F172A;line-height:1.6;margin-bottom:8px}
+.mopts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mlbl{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;border:1.5px solid #E2E8F0;cursor:pointer;background:#fff}
+.mlbl.sel{border-color:#B45309;background:#FEF3C7}
+.mltr{width:22px;height:22px;border-radius:50%;background:#E2E8F0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#94A3B8;flex-shrink:0}
+.mlbl.sel .mltr{background:#B45309;color:#fff}
+.mtxt{font-size:13px;font-weight:700;color:#0F172A}
+.fill-q{font-size:14px;font-weight:700;color:#0F172A;line-height:1.9;margin-bottom:8px}
+.fill-in{border:none;border-bottom:2px solid #E2E8F0;background:transparent;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#B45309;outline:none;padding:3px 8px;min-width:80px;text-align:center}
+.fill-wrap{margin-bottom:12px}
+.passage{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border:1.5px solid #F59E0B;border-radius:10px;padding:14px;margin-bottom:12px;font-size:14px;line-height:1.9;font-weight:600;color:#78350F}
+.olympic-note{background:#FEF9C3;border:1.5px solid #EAB308;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;font-weight:700;color:#713F12}
+.akey{background:#fff;border-radius:14px;border:2px dashed #F59E0B;margin-top:16px;overflow:hidden}
+.akhdr{background:linear-gradient(135deg,#FEF3C7,#FDE68A);padding:12px 16px;cursor:pointer}
+.aktitle{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:#92400E}
+.akbody{display:none;padding:14px 16px}
+.akbody.open{display:block}
+.akpart{margin-bottom:12px}
+.akptitle{font-size:12px;font-weight:900;color:#B45309;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.akgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.aki{background:#FEF3C7;border-radius:6px;padding:6px 4px;text-align:center}
+.akiq{font-size:10px;font-weight:700;color:#94A3B8}
+.akia{font-size:13px;font-weight:800;color:#B45309}
+</style>
+</head>
+<body>
+<div class="cover" id="cover">
+  <div class="badge">🏅 OLYMPIC TIẾNG ANH</div>
+  <div class="ctitle">Olympic English – No. 1</div>
+  <div class="csub">Luyện thi Olympic Tiếng Anh cấp trường<br>Lớp 3-4 · Nâng cao · 50 câu</div>
+  <div class="icard">
+    <div class="irow">
+      <div><div class="ilbl">TÊN CON</div><input class="iline" id="iname" placeholder="Viết tên vào đây..."></div>
+      <div><div class="ilbl">LỚP</div><input class="iline" value="3 / 4" readonly style="text-align:center"></div>
+    </div>
+    <div><div class="ilbl" style="text-align:center;margin-bottom:4px">NGÀY</div><input class="iline" id="idate" readonly style="text-align:center"></div>
+  </div>
+  <button class="btnstart" onclick="startTest()">🏅 Bắt đầu thi Olympic</button>
+  <button class="btnkey" onclick="toggleAK()">🔑 Đáp án (Ba/Mẹ nhấn để xem) ▼</button>
+  <a href="english-daily.html" class="backlink">← Về trang chính</a>
+</div>
+<div id="tbody">
+  <div class="rbar">
+    <div class="rscore" id="rscore">—đ</div>
+    <div class="rprog"><div class="rfill" id="rfill" style="width:0%"></div></div>
+    <div class="rsub" id="rsub">Làm bài rồi nộp</div>
+    <button class="rsubmit" id="rsubmit" onclick="submitTest()">Nộp bài ✓</button>
+  </div>
+  <div class="part"><div class="phdr"><div class="picon">🔤</div><div class="pinfo"><div class="ptitle">Phần 1 – Từ vựng nâng cao</div><div class="psub">Chọn đáp án đúng (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pabody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">✏️</div><div class="pinfo"><div class="ptitle">Phần 2 – Điền từ nâng cao</div><div class="psub">Điền từ thích hợp (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pbbody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">📖</div><div class="pinfo"><div class="ptitle">Phần 3 – Đọc hiểu</div><div class="psub">Đọc và trả lời (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pcbody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">📝</div><div class="pinfo"><div class="ptitle">Phần 4 – Ngữ pháp nâng cao</div><div class="psub">Chọn đáp án đúng (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pdbody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">🔍</div><div class="pinfo"><div class="ptitle">Phần 5 – Viết lại câu</div><div class="psub">Chọn câu có nghĩa tương đương (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pebody"></div></div>
+  <div class="akey" id="akey"><div class="akhdr" onclick="toggleAK()"><div class="aktitle">🔑 Đáp án (Ba/Mẹ nhấn để xem) ▼</div></div><div class="akbody" id="akbody"></div></div>
+</div>
+<script>
+var PA=[
+  ["Which word means to feel very happy and excited?",["sad","thrilled","bored","tired"],1],
+  ["What is the opposite of generous?",["kind","selfish","friendly","brave"],1],
+  ["Which word describes a person who never gives up?",["lazy","careless","determined","shy"],2],
+  ["What does ancient mean?",["new","modern","very old","beautiful"],2],
+  ["Which word means to look at something carefully?",["ignore","observe","forget","avoid"],1],
+  ["What is the synonym of intelligent?",["clever","silly","lazy","weak"],0],
+  ["Which word means a person who moves to another country?",["tourist","immigrant","citizen","refugee"],1],
+  ["What does the word fragile mean?",["strong","heavy","easily broken","very large"],2],
+  ["Which word is the opposite of polluted?",["dirty","clean","busy","loud"],1],
+  ["What does cooperate mean?",["compete","work together","argue","separate"],1]
+];
+var PB=[
+  ["Although it was raining, we ___ to the park.","went"],
+  ["She has been studying English ___ she was five.","since"],
+  ["The movie was so boring that I ___ asleep.","fell"],
+  ["If I ___ a million dollars, I would travel the world.","had"],
+  ["The book ___ by a famous author last year.","was written"],
+  ["He is not only smart ___ also hardworking.","but"],
+  ["By the time we arrived, the show ___ already started.","had"],
+  ["She suggested ___ to the new restaurant.","going"],
+  ["The more you practice, the ___ you become.","better"],
+  ["Despite ___ tired, she continued working.","being"]
+];
+var PCTXT="Scientists have discovered that children who read regularly develop stronger brains. Reading helps children build a larger vocabulary, improve concentration, and develop empathy. When children read stories about different characters, they learn to understand other people's feelings. Research shows that children who read at least 20 minutes a day perform better at school. Parents can encourage reading by making it a fun activity and visiting libraries together. In today's digital world, reading remains one of the most important skills a child can develop.";
+var PC=[
+  ["What have scientists discovered?",["Reading is boring","Reading builds stronger brains","Children hate reading","Books are expensive"],1],
+  ["How many benefits of reading are mentioned?",["2","3","4","5"],1],
+  ["What does reading help children develop?",["Only vocabulary","Only concentration","Vocabulary, concentration and empathy","Only empathy"],2],
+  ["What does reading stories help children understand?",["Science and maths","Other people's feelings","History and geography","Art and music"],1],
+  ["How many minutes a day should children read?",["10 minutes","15 minutes","20 minutes","30 minutes"],2],
+  ["What happens to children who read 20 minutes a day?",["They get tired","They perform better at school","They become lazy","They stop watching TV"],1],
+  ["How can parents encourage reading?",["Buy expensive books","Make it fun and visit libraries","Force children to read","Give them tablets"],1],
+  ["What type of world is mentioned in the passage?",["Rural world","Ancient world","Digital world","Perfect world"],2],
+  ["What is reading described as?",["Old-fashioned","Not important","One of the most important skills","Only for smart children"],2],
+  ["What is the main message of the passage?",["Children should watch more TV","Reading is very beneficial for children","Libraries are closing down","Scientists are wrong"],1]
+];
+var PD=[
+  ["If I ___ harder, I would have passed the exam.",["studied","had studied","study","would study"],1],
+  ["She ___ to the doctor twice this month.",["goes","went","has gone","had gone"],2],
+  ["The cake ___ by my mother for the party.",["make","made","was made","is making"],2],
+  ["Not only he ___ smart but also creative.",["is","was","are","be"],0],
+  ["I wish I ___ speak Chinese fluently.",["can","could","would","should"],1],
+  ["___ she finishes her homework, she can watch TV.",["While","Until","Although","Once"],3],
+  ["The children ___ playing football when it started raining.",["are","were","have been","had been"],1],
+  ["It is important ___ enough sleep every night.",["get","getting","to get","got"],2],
+  ["She is used to ___ early in the morning.",["wake","wakes","woke","waking"],3],
+  ["The problem ___ be solved if we work together.",["can","could","might","should"],0]
+];
+var PE=[
+  ["I started learning English 3 years ago.",["I have been learning English for 3 years.","I learned English 3 years.","I will learn English for 3 years.","I had learned English for 3 years."],0],
+  ["It is too cold for the children to swim.",["The children swim because it is cold.","The children cannot swim because it is too cold.","The children can swim although it is cold.","Cold children cannot swim."],1],
+  ["She said: I am very tired.",["She said she is very tired.","She said that she was very tired.","She said she will be very tired.","She told she was tired."],1],
+  ["Although he was sick, he went to school.",["He went to school because he was sick.","Despite being sick, he went to school.","He was sick so he went to school.","He went to school until he was sick."],1],
+  ["Nobody is stronger than Tom in the class.",["Tom is the strongest in the class.","Tom is stronger than everyone.","Tom is as strong as nobody.","Nobody is as strong as Tom."],0],
+  ["They built this bridge in 1990.",["This bridge was built in 1990.","This bridge is built in 1990.","This bridge built in 1990.","This bridge had built in 1990."],0],
+  ["It takes me 30 minutes to get to school.",["I spend 30 minutes to school.","I get to school in 30 minutes.","School takes me 30 minutes.","30 minutes I take to school."],1],
+  ["The film was so interesting that I watched it twice.",["The film was interesting enough to watch twice.","I watched the film twice because of its interest.","Such an interesting film that I watched twice.","It was such an interesting film that I watched it twice."],3],
+  ["He is the best student in his class.",["No student is as good as him in his class.","He is better than all student.","He is good than other students.","Other students are as good as him."],0],
+  ["She has not eaten anything since morning.",["She did not eat since morning.","She has eaten nothing since morning.","She will not eat since morning.","She had not eaten anything."],1]
+];
+var SEL={a:{},c:{},d:{},e:{}};
+var submitted=false;
+var L=["A","B","C","D"];
+function el(id){return document.getElementById(id);}
+function buildMCQ(container,data,part){
+  var html="";
+  data.forEach(function(q,i){
+    html+='<div class="mcq"><div class="mqnum">Câu '+(i+1)+'</div><div class="mqq">'+(i+1)+". "+q[0]+'</div><div class="mopts">';
+    q[1].forEach(function(o,oi){
+      html+='<div class="mlbl" id="'+part+i+"_"+oi+'" onclick="sel(\''+part+'\','+i+','+oi+')"><span class="mltr">'+L[oi]+'</span><span class="mtxt">'+o+'</span></div>';
+    });
+    html+="</div></div>";
+  });
+  el(container).innerHTML=html;
+}
+function buildFill(){
+  var html='<div class="olympic-note">🏅 Olympic tip: Điền đúng dạng từ (thì, dạng bị động, mệnh đề...)</div>';
+  PB.forEach(function(q,i){
+    var parts=q[0].split("___");
+    html+='<div class="fill-wrap"><div class="fill-q">'+(i+1)+". "+parts[0]+'<input class="fill-in" id="pb'+i+'" placeholder="...">'+parts[1]+'</div></div>';
+  });
+  el("pbbody").innerHTML=html;
+}
+function buildRead(){
+  var html='<div class="olympic-note">📖 Đọc kỹ đoạn văn rồi trả lời câu hỏi</div>';
+  html+='<div class="passage">'+PCTXT+"</div>";
+  PC.forEach(function(q,i){
+    html+='<div class="mcq"><div class="mqnum">Câu '+(i+1)+'</div><div class="mqq">'+(i+1)+". "+q[0]+'</div><div class="mopts">';
+    q[1].forEach(function(o,oi){
+      html+='<div class="mlbl" id="c'+i+"_"+oi+'" onclick="sel(\'c\','+i+','+oi+')"><span class="mltr">'+L[oi]+'</span><span class="mtxt">'+o+'</span></div>';
+    });
+    html+="</div></div>";
+  });
+  el("pcbody").innerHTML=html;
+}
+function buildRewrite(){
+  var html='<div class="olympic-note">✍️ Chọn câu có nghĩa TƯƠNG ĐƯƠNG với câu đã cho</div>';
+  PE.forEach(function(q,i){
+    html+='<div class="mcq"><div class="mqnum">Câu '+(i+1)+'</div>';
+    html+='<div class="mqq" style="background:#FEF3C7;border-radius:8px;padding:8px;margin-bottom:8px">'+(i+1)+". "+q[0]+'</div>';
+    html+='<div class="mopts">';
+    q[1].forEach(function(o,oi){
+      html+='<div class="mlbl" id="e'+i+"_"+oi+'" onclick="sel(\'e\','+i+','+oi+')"><span class="mltr">'+L[oi]+'</span><span class="mtxt">'+o+'</span></div>';
+    });
+    html+="</div></div>";
+  });
+  el("pebody").innerHTML=html;
+}
+function buildAK(){
+  var html="";
+  html+='<div class="akpart"><div class="akptitle">Phần 1</div><div class="akgrid">';
+  PA.forEach(function(q,i){html+='<div class="aki"><div class="akiq">C'+(i+1)+'</div><div class="akia">'+L[q[2]]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Phần 2</div><div class="akgrid">';
+  PB.forEach(function(q,i){html+='<div class="aki"><div class="akiq">C'+(i+1)+'</div><div class="akia" style="font-size:9px">'+q[1]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Phần 3</div><div class="akgrid">';
+  PC.forEach(function(q,i){html+='<div class="aki"><div class="akiq">C'+(i+1)+'</div><div class="akia">'+L[q[2]]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Phần 4</div><div class="akgrid">';
+  PD.forEach(function(q,i){html+='<div class="aki"><div class="akiq">C'+(i+1)+'</div><div class="akia">'+L[q[2]]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Phần 5</div><div class="akgrid">';
+  PE.forEach(function(q,i){html+='<div class="aki"><div class="akiq">C'+(i+1)+'</div><div class="akia">'+L[q[2]]+'</div></div>';});
+  html+="</div></div>";
+  el("akbody").innerHTML=html;
+}
+function sel(part,qi,oi){
+  if(submitted)return;
+  var prev=SEL[part][qi];
+  if(prev!==undefined){var pe=el(part+qi+"_"+prev);if(pe)pe.classList.remove("sel");}
+  SEL[part][qi]=oi;
+  var ne=el(part+qi+"_"+oi);if(ne)ne.classList.add("sel");
+  updateProg();
+}
+function updateProg(){
+  var done=0;
+  ["a","c","d","e"].forEach(function(p){done+=Object.keys(SEL[p]).length;});
+  for(var i=0;i<PB.length;i++){var inp=el("pb"+i);if(inp&&inp.value.trim())done++;}
+  el("rfill").style.width=Math.round(done/50*100)+"%";
+  el("rsub").textContent=done+"/50 câu";
+}
+function submitTest(){
+  if(submitted)return;
+  submitted=true;
+  var score=0;
+  PA.forEach(function(q,i){if(SEL.a[i]===q[2])score++;});
+  PB.forEach(function(q,i){var v=el("pb"+i);if(v&&v.value.trim().toLowerCase()===q[1].toLowerCase())score++;});
+  PC.forEach(function(q,i){if(SEL.c[i]===q[2])score++;});
+  PD.forEach(function(q,i){if(SEL.d[i]===q[2])score++;});
+  PE.forEach(function(q,i){if(SEL.e[i]===q[2])score++;});
+  el("rscore").textContent=score+"đ";
+  el("rsub").textContent=(score>=40?"🥇 Xuất sắc! Sẵn sàng thi Olympic!":score>=30?"🥈 Tốt lắm! Luyện thêm nhé!":"🥉 Cố gắng thêm!");
+  var sb=el("rsubmit");if(sb){sb.textContent="✅ Đã nộp";sb.disabled=true;sb.style.background="#94A3B8";}
+  localStorage.setItem("exam_done_english-olympic-1.html","1");
+  var name=el("iname").value||localStorage.getItem("en_name")||"con";
+  localStorage.setItem("en_name",name);
+  var key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4";
+  fetch("https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results",{method:"POST",
+    headers:{"apikey":key,"Authorization":"Bearer "+key,"Content-Type":"application/json","Prefer":"return=representation"},
+    body:JSON.stringify({subject:"english",level:"Olympic so 1",score:score,total:50,hints_used:0,student_name:name,answers:{date:new Date().toISOString().slice(0,10)}})
+  }).then(function(){}).catch(function(){});
+  var ak=el("akbody");if(ak)ak.classList.add("open");
+  setTimeout(function(){var a=el("akey");if(a)a.scrollIntoView({behavior:"smooth"});},600);
+}
+function toggleAK(){var b=el("akbody");if(b)b.classList.toggle("open");}
+function startTest(){
+  el("cover").style.display="none";
+  el("tbody").style.display="block";
+  buildMCQ("pabody",PA,"a");
+  buildFill();
+  buildRead();
+  buildMCQ("pdbody",PD,"d");
+  buildRewrite();
+  buildAK();
+  window.scrollTo({top:0});
+}
+window.addEventListener("DOMContentLoaded",function(){
+  el("idate").value=new Date().toLocaleDateString("vi-VN");
+  var n=localStorage.getItem("en_name");if(n)el("iname").value=n;
+  buildAK();
+});
+</script>
+</body>
+</html>

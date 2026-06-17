@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Practice Test No.7</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#F8FAFF;color:#0F172A;min-height:100vh}
+.cover{min-height:100vh;background:linear-gradient(160deg,#1E1B4B,#312E81,#4C1D95);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center}
+.badge{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);border-radius:30px;padding:6px 18px;font-size:12px;font-weight:800;color:#fff;margin-bottom:16px}
+.ctitle{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:#fff;margin-bottom:6px}
+.csub{font-size:13px;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:24px;line-height:1.7}
+.icard{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 20px;width:100%;max-width:360px;margin-bottom:20px}
+.irow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.ilbl{font-size:10px;font-weight:900;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.iline{background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,.4);color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;outline:none;padding:4px 0;width:100%}
+.iline::placeholder{color:rgba(255,255,255,.4)}
+.btnstart{background:linear-gradient(135deg,#6D28D9,#4F46E5);color:#fff;border:none;border-radius:10px;padding:14px 32px;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;cursor:pointer;width:100%;max-width:360px;margin-bottom:10px}
+.btnkey{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.3);border-radius:10px;padding:11px;font-size:13px;font-weight:800;cursor:pointer;color:rgba(255,255,255,.8);width:100%;max-width:360px;margin-bottom:8px}
+.backlink{color:rgba(255,255,255,.6);font-size:12px;font-weight:700;text-decoration:none}
+#tbody{display:none;max-width:640px;margin:0 auto;padding:16px 14px 80px}
+.rbar{background:#fff;border-bottom:2px solid #E2E8F0;padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.rscore{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#7C3AED;min-width:60px}
+.rprog{flex:1;height:7px;background:#E2E8F0;border-radius:4px;overflow:hidden}
+.rfill{height:100%;background:linear-gradient(90deg,#7C3AED,#0EA5E9);border-radius:4px;transition:width .4s}
+.rsub{font-size:11px;font-weight:700;color:#94A3B8}
+.rsubmit{padding:8px 16px;border-radius:10px;border:none;background:#10B981;color:#fff;font-size:13px;font-weight:800;cursor:pointer}
+.part{background:#fff;border-radius:14px;border:1.5px solid #E2E8F0;margin-bottom:16px;overflow:hidden}
+.phdr{padding:13px 16px;display:flex;align-items:flex-start;gap:12px;border-bottom:1.5px solid #E2E8F0}
+.picon{width:44px;height:44px;border-radius:50%;background:#7C3AED;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pinfo{flex:1}
+.ptitle{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800}
+.psub{font-size:12px;color:#94A3B8;font-weight:600;margin-top:2px}
+.ppts{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#7C3AED}
+.pbody{padding:14px 16px}
+.mcq{margin-bottom:14px;padding:12px;background:#F8FAFF;border-radius:10px}
+.mqnum{font-size:10px;font-weight:900;color:#94A3B8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.mqq{font-size:14px;font-weight:800;color:#0F172A;line-height:1.6;margin-bottom:8px}
+.mopts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mlbl{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;border:1.5px solid #E2E8F0;cursor:pointer;background:#fff}
+.mlbl.sel{border-color:#7C3AED;background:#EDE9FE}
+.mltr{width:22px;height:22px;border-radius:50%;background:#E2E8F0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#94A3B8;flex-shrink:0}
+.mlbl.sel .mltr{background:#7C3AED;color:#fff}
+.mtxt{font-size:13px;font-weight:700;color:#0F172A}
+.fill-q{font-size:14px;font-weight:700;color:#0F172A;line-height:1.9;margin-bottom:8px}
+.fill-in{border:none;border-bottom:2px solid #E2E8F0;background:transparent;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#7C3AED;outline:none;padding:3px 8px;min-width:80px;text-align:center}
+.fill-wrap{margin-bottom:12px}
+.passage{background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border:1.5px solid #DDD6FE;border-radius:10px;padding:14px;margin-bottom:12px;font-size:14px;line-height:1.9;font-weight:600;color:#475569}
+.akey{background:#fff;border-radius:14px;border:2px dashed #F59E0B;margin-top:16px;overflow:hidden}
+.akhdr{background:linear-gradient(135deg,#FEF3C7,#FDE68A);padding:12px 16px;cursor:pointer}
+.aktitle{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:#92400E}
+.akbody{display:none;padding:14px 16px}
+.akbody.open{display:block}
+.akpart{margin-bottom:12px}
+.akptitle{font-size:12px;font-weight:900;color:#7C3AED;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.akgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.aki{background:#ECFDF5;border-radius:6px;padding:6px 4px;text-align:center}
+.akiq{font-size:10px;font-weight:700;color:#94A3B8}
+.akia{font-size:13px;font-weight:800;color:#059669}
+</style>
+</head>
+<body>
+<div class="cover" id="cover">
+  <div class="badge">⭐ ENGLISH STAR – ĐỀ ÔN TẬP</div>
+  <div class="ctitle">Practice Test – No. 7</div>
+  <div class="csub">School Life · Daily Routines · Grammar<br>Lớp 3-4 · 50 điểm</div>
+  <div class="icard">
+    <div class="irow">
+      <div><div class="ilbl">TÊN CON</div><input class="iline" id="iname" placeholder="Viết tên vào đây..."></div>
+      <div><div class="ilbl">LỚP</div><input class="iline" value="3 / 4" readonly style="text-align:center"></div>
+    </div>
+    <div><div class="ilbl" style="text-align:center;margin-bottom:4px">NGÀY</div><input class="iline" id="idate" readonly style="text-align:center"></div>
+  </div>
+  <button class="btnstart" id="btnstart" onclick="startTest()">▶ Bắt đầu làm bài · Đề số 7</button>
+  <button class="btnkey" onclick="toggleAK()">🔑 Đáp án (Ba/Mẹ nhấn để xem) ▼</button>
+  <a href="english-daily.html" class="backlink">← Về trang chính</a>
+</div>
+<div id="tbody">
+  <div class="rbar">
+    <div class="rscore" id="rscore">—đ</div>
+    <div class="rprog"><div class="rfill" id="rfill" style="width:0%"></div></div>
+    <div class="rsub" id="rsub">Làm bài rồi nộp</div>
+    <button class="rsubmit" id="rsubmit" onclick="submitTest()">Nộp bài ✓</button>
+  </div>
+  <div class="part"><div class="phdr"><div class="picon">📚</div><div class="pinfo"><div class="ptitle">Part A – School Life</div><div class="psub">Chọn đáp án đúng (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pabody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">✏️</div><div class="pinfo"><div class="ptitle">Part B – Fill in the blank</div><div class="psub">Điền từ thích hợp (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pbbody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">📖</div><div class="pinfo"><div class="ptitle">Part C – Reading</div><div class="psub">Đọc và trả lời (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pcbody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">🔤</div><div class="pinfo"><div class="ptitle">Part D – Word Meaning</div><div class="psub">Chọn nghĩa đúng (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pdbody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">🔍</div><div class="pinfo"><div class="ptitle">Part E – Error Correction</div><div class="psub">Tìm từ đúng (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pebody"></div></div>
+  <div class="akey" id="akey"><div class="akhdr" onclick="toggleAK()"><div class="aktitle">🔑 Đáp án (Ba/Mẹ nhấn để xem) ▼</div></div><div class="akbody" id="akbody"></div></div>
+</div>
+<script>
+var PA=[
+  ["What subject do you study numbers and sums?",["English","Science","Maths","Art"],2],
+  ["Where do students read and borrow books?",["Classroom","Library","Canteen","Gym"],1],
+  ["What do you use to rub out pencil marks?",["Ruler","Pencil","Eraser","Sharpener"],2],
+  ["Which word means the person who teaches you?",["Student","Teacher","Principal","Parent"],1],
+  ["What time do most schools in Vietnam start?",["6:00 am","7:30 am","9:00 am","10:00 am"],1],
+  ["Which of these is NOT a school subject?",["Maths","Cooking","Science","English"],1],
+  ["What do you wear to school in Vietnam?",["Casual clothes","Uniform","Sports kit","Pyjamas"],1],
+  ["How many days are in a school week?",["4 days","5 days","6 days","7 days"],1],
+  ["What is the room where you eat lunch called?",["Library","Gym","Canteen","Classroom"],2],
+  ["Which subject helps you learn about plants and animals?",["Art","Music","PE","Science"],3]
+];
+var PB=[
+  ["I go to school ___ Monday to Friday.","from"],
+  ["We have ___ break at 10 o'clock.","a"],
+  ["She is very good ___ English.","at"],
+  ["The library ___ many interesting books.","has"],
+  ["___ you finish your homework yet?","Have"],
+  ["We learn about the body in ___ class.","Science"],
+  ["I walk ___ school every morning.","to"],
+  ["The teacher writes on the ___.","board"],
+  ["Please open your ___ to page ten.","book"],
+  ["He always ___ his hand to answer.","raises"]
+];
+var PCTXT="My name is Minh. I am a student in Grade 3. I go to school five days a week. My school starts at seven thirty in the morning. I have six lessons every day. My favourite subject is Science because I love learning about animals and plants. After school, I always do my homework before having dinner. I think studying is very important for my future.";
+var PC=[
+  ["What grade is Minh in?",["Grade 2","Grade 3","Grade 4","Grade 5"],1],
+  ["How many days a week does Minh go to school?",["4 days","5 days","6 days","7 days"],1],
+  ["What time does school start?",["7:00","7:30","8:00","8:30"],1],
+  ["How many lessons does Minh have each day?",["4","5","6","7"],2],
+  ["What is his favourite subject?",["Maths","English","Science","Art"],2],
+  ["Why does he like Science?",["It is easy","He loves animals and plants","Teacher is kind","Books are nice"],1],
+  ["What does Minh do after school?",["Plays games","Watches TV","Does homework","Sleeps"],2],
+  ["When does he have dinner?",["Before homework","After homework","During break","At school"],1],
+  ["What does Minh think about studying?",["It is boring","It is too hard","It is very important","It is not needed"],2],
+  ["What subject do you think helps Minh understand plants?",["Maths","English","PE","Science"],3]
+];
+var PD=[
+  ["lesson",["bài học","kỳ thi","điểm số","bài tập"],0],
+  ["uniform",["đồng phục","dụng cụ","sân trường","lịch học"],0],
+  ["canteen",["căn tin","thư viện","lớp học","phòng thí nghiệm"],0],
+  ["principal",["giáo viên","hiệu trưởng","học sinh","phụ huynh"],1],
+  ["timetable",["bài tập","thời khóa biểu","điểm danh","học phí"],1],
+  ["library",["phòng học","sân chơi","thư viện","căn tin"],2],
+  ["eraser",["bút chì","thước kẻ","cục tẩy","compa"],2],
+  ["recess",["giờ học","giờ ra chơi","buổi tối","giờ thể dục"],1],
+  ["subject",["môn học","bài tập","điểm số","lịch thi"],0],
+  ["homework",["bài kiểm tra","bài tập về nhà","sách giáo khoa","thời khóa biểu"],1]
+];
+var PE=[
+  ["She go to school every day.","go","goes"],
+  ["We has six lessons today.","has","have"],
+  ["He don't like Maths.","don't","doesn't"],
+  ["I am good in English.","in","at"],
+  ["The children plays in the yard.","plays","play"],
+  ["She always does her homeworks.","homeworks","homework"],
+  ["We study on Monday to Friday.","on","from"],
+  ["He raise his hand to answer.","raise","raises"],
+  ["I borrows books from the library.","borrows","borrow"],
+  ["They was happy at school.","was","were"]
+];
+var SEL={a:{},c:{},d:{},e:{}};
+var submitted=false;
+var L=["A","B","C","D"];
+function el(id){return document.getElementById(id);}
+function showToast(m){var d=document.createElement("div");d.textContent=m;d.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0F172A;color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;z-index:9999;";document.body.appendChild(d);setTimeout(function(){document.body.removeChild(d);},2500);}
+function buildMCQ(container,data,part){
+  var html="";
+  data.forEach(function(q,i){
+    html+='<div class="mcq"><div class="mqnum">Question '+(i+1)+'</div><div class="mqq">'+(i+1)+". "+q[0]+'</div><div class="mopts">';
+    q[1].forEach(function(o,oi){
+      html+='<div class="mlbl" id="'+part+i+"_"+oi+'" onclick="sel(\''+part+'\','+i+','+oi+')"><span class="mltr">'+L[oi]+'</span><span class="mtxt">'+o+'</span></div>';
+    });
+    html+="</div></div>";
+  });
+  el(container).innerHTML=html;
+}
+function buildFill(){
+  var html="";
+  PB.forEach(function(q,i){
+    var parts=q[0].split("___");
+    html+='<div class="fill-wrap"><div class="fill-q">'+(i+1)+". "+parts[0]+'<input class="fill-in" id="pb'+i+'" placeholder="...">'+parts[1]+'</div></div>';
+  });
+  el("pbbody").innerHTML=html;
+}
+function buildRead(){
+  var html='<div class="passage">'+PCTXT+"</div>";
+  PC.forEach(function(q,i){
+    html+='<div class="mcq"><div class="mqnum">Question '+(i+1)+'</div><div class="mqq">'+(i+1)+". "+q[0]+'</div><div class="mopts">';
+    q[1].forEach(function(o,oi){
+      html+='<div class="mlbl" id="c'+i+"_"+oi+'" onclick="sel(\'c\','+i+','+oi+')"><span class="mltr">'+L[oi]+'</span><span class="mtxt">'+o+'</span></div>';
+    });
+    html+="</div></div>";
+  });
+  el("pcbody").innerHTML=html;
+}
+function buildError(){
+  var html='<div style="background:#EDE9FE;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:12px;font-weight:700;color:#5B21B6">Chọn từ ĐÚNG để thay cho từ gạch chân</div>';
+  PE.forEach(function(q,i){
+    var sentence=q[0].replace(q[1],'<span style="color:#F43F5E;font-weight:900;text-decoration:underline">'+q[1]+"</span>");
+    var opts=[q[2],q[1],q[1]+"ed","not "+q[1]];
+    html+='<div class="mcq"><div class="mqnum">Question '+(i+1)+'</div><div class="mqq">'+(i+1)+". "+sentence+'</div><div class="mopts">';
+    opts.forEach(function(o,oi){
+      html+='<div class="mlbl" id="e'+i+"_"+oi+'" onclick="sel(\'e\','+i+','+oi+')"><span class="mltr">'+L[oi]+'</span><span class="mtxt">'+o+'</span></div>';
+    });
+    html+="</div></div>";
+  });
+  el("pebody").innerHTML=html;
+}
+function buildAK(){
+  var html="";
+  html+='<div class="akpart"><div class="akptitle">Part A</div><div class="akgrid">';
+  PA.forEach(function(q,i){html+='<div class="aki"><div class="akiq">Q'+(i+1)+'</div><div class="akia">'+L[q[2]]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Part B</div><div class="akgrid">';
+  PB.forEach(function(q,i){html+='<div class="aki"><div class="akiq">Q'+(i+1)+'</div><div class="akia" style="font-size:10px">'+q[1]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Part C</div><div class="akgrid">';
+  PC.forEach(function(q,i){html+='<div class="aki"><div class="akiq">Q'+(i+1)+'</div><div class="akia">'+L[q[2]]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Part D</div><div class="akgrid">';
+  PD.forEach(function(q,i){html+='<div class="aki"><div class="akiq">Q'+(i+1)+'</div><div class="akia">'+L[q[2]]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Part E</div><div class="akgrid">';
+  PE.forEach(function(q,i){html+='<div class="aki"><div class="akiq">Q'+(i+1)+'</div><div class="akia" style="font-size:10px">'+q[2]+'</div></div>';});
+  html+="</div></div>";
+  el("akbody").innerHTML=html;
+}
+function sel(part,qi,oi){
+  if(submitted)return;
+  var prev=SEL[part][qi];
+  if(prev!==undefined){var pe=el(part+qi+"_"+prev);if(pe){pe.classList.remove("sel");}}
+  SEL[part][qi]=oi;
+  var ne=el(part+qi+"_"+oi);if(ne)ne.classList.add("sel");
+  updateProg();
+}
+function updateProg(){
+  var done=0;
+  ["a","c","d","e"].forEach(function(p){done+=Object.keys(SEL[p]).length;});
+  for(var i=0;i<PB.length;i++){var inp=el("pb"+i);if(inp&&inp.value.trim())done++;}
+  el("rfill").style.width=Math.round(done/50*100)+"%";
+  el("rsub").textContent=done+"/50 câu";
+}
+function submitTest(){
+  if(submitted)return;
+  submitted=true;
+  var score=0;
+  PA.forEach(function(q,i){if(SEL.a[i]===q[2])score++;});
+  PB.forEach(function(q,i){var v=el("pb"+i);if(v&&v.value.trim().toLowerCase()===q[1].toLowerCase())score++;});
+  PC.forEach(function(q,i){if(SEL.c[i]===q[2])score++;});
+  PD.forEach(function(q,i){if(SEL.d[i]===q[2])score++;});
+  PE.forEach(function(q,i){if(SEL.e[i]===0)score++;});
+  el("rscore").textContent=score+"đ";
+  el("rsub").textContent=(score>=40?"Xuất sắc!":score>=30?"Tốt lắm!":"Cố gắng thêm!");
+  var sb=el("rsubmit");if(sb){sb.textContent="✅ Đã nộp";sb.disabled=true;sb.style.background="#94A3B8";}
+  localStorage.setItem("exam_done_english-test-7.html","1");
+  localStorage.setItem("en_exam_submitted_exam7","1");
+  var name=el("iname").value||localStorage.getItem("en_name")||"con";
+  localStorage.setItem("en_name",name);
+  var key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4";
+  fetch("https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results",{method:"POST",
+    headers:{"apikey":key,"Authorization":"Bearer "+key,"Content-Type":"application/json","Prefer":"return=representation"},
+    body:JSON.stringify({subject:"english",level:"De so 7",score:score,total:50,hints_used:0,student_name:name,answers:{date:new Date().toISOString().slice(0,10)}})
+  }).then(function(){}).catch(function(){});
+  var ak=el("akbody");if(ak)ak.classList.add("open");
+  setTimeout(function(){var a=el("akey");if(a)a.scrollIntoView({behavior:"smooth"});},600);
+}
+function toggleAK(){var b=el("akbody");if(b)b.classList.toggle("open");}
+function startTest(){
+  el("cover").style.display="none";
+  el("tbody").style.display="block";
+  buildMCQ("pabody",PA,"a");
+  buildFill();
+  buildRead();
+  buildMCQ("pdbody",PD,"d");
+  buildError();
+  buildAK();
+  window.scrollTo({top:0});
+}
+window.addEventListener("DOMContentLoaded",function(){
+  el("idate").value=new Date().toLocaleDateString("vi-VN");
+  var n=localStorage.getItem("en_name");if(n)el("iname").value=n;
+  buildAK();
+  var d6=localStorage.getItem("en_exam_submitted_exam6");
+  if(!d6){
+    el("btnstart").textContent="Hoàn thành Đề 6 để mở khóa";
+    el("btnstart").style.background="#94A3B8";
+    el("btnstart").onclick=function(){showToast("Con cần làm xong Đề 6 trước nhé!");};
+  }
+});
+</script>
+</body>
+</html>

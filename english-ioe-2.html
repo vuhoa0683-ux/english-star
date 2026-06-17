@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>IOE Test No.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#F8FAFF;color:#0F172A;min-height:100vh}
+.cover{min-height:100vh;background:linear-gradient(160deg,#0C4A6E,#075985,#0369A1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center}
+.badge{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);border-radius:30px;padding:6px 18px;font-size:12px;font-weight:800;color:#fff;margin-bottom:16px}
+.ctitle{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:#fff;margin-bottom:6px}
+.csub{font-size:13px;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:24px;line-height:1.7}
+.icard{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 20px;width:100%;max-width:360px;margin-bottom:20px}
+.irow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.ilbl{font-size:10px;font-weight:900;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.iline{background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,.4);color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;outline:none;padding:4px 0;width:100%}
+.iline::placeholder{color:rgba(255,255,255,.4)}
+.btnstart{background:linear-gradient(135deg,#0369A1,#0EA5E9);color:#fff;border:none;border-radius:10px;padding:14px 32px;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;cursor:pointer;width:100%;max-width:360px;margin-bottom:10px}
+.btnkey{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.3);border-radius:10px;padding:11px;font-size:13px;font-weight:800;cursor:pointer;color:rgba(255,255,255,.8);width:100%;max-width:360px;margin-bottom:8px}
+.backlink{color:rgba(255,255,255,.6);font-size:12px;font-weight:700;text-decoration:none}
+#tbody{display:none;max-width:640px;margin:0 auto;padding:16px 14px 80px}
+.rbar{background:#fff;border-bottom:2px solid #E2E8F0;padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.rscore{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#0369A1;min-width:60px}
+.rprog{flex:1;height:7px;background:#E2E8F0;border-radius:4px;overflow:hidden}
+.rfill{height:100%;background:linear-gradient(90deg,#0369A1,#0EA5E9);border-radius:4px;transition:width .4s}
+.rsub{font-size:11px;font-weight:700;color:#94A3B8}
+.rsubmit{padding:8px 16px;border-radius:10px;border:none;background:#10B981;color:#fff;font-size:13px;font-weight:800;cursor:pointer}
+.part{background:#fff;border-radius:14px;border:1.5px solid #E2E8F0;margin-bottom:16px;overflow:hidden}
+.phdr{padding:13px 16px;display:flex;align-items:flex-start;gap:12px;border-bottom:1.5px solid #E2E8F0}
+.picon{width:44px;height:44px;border-radius:50%;background:#0369A1;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pinfo{flex:1}
+.ptitle{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800}
+.psub{font-size:12px;color:#94A3B8;font-weight:600;margin-top:2px}
+.ppts{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#0369A1}
+.pbody{padding:14px 16px}
+.mcq{margin-bottom:14px;padding:12px;background:#F8FAFF;border-radius:10px}
+.mqnum{font-size:10px;font-weight:900;color:#94A3B8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.mqq{font-size:14px;font-weight:800;color:#0F172A;line-height:1.6;margin-bottom:8px}
+.mopts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mlbl{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;border:1.5px solid #E2E8F0;cursor:pointer;background:#fff}
+.mlbl.sel{border-color:#0369A1;background:#E0F2FE}
+.mltr{width:22px;height:22px;border-radius:50%;background:#E2E8F0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#94A3B8;flex-shrink:0}
+.mlbl.sel .mltr{background:#0369A1;color:#fff}
+.mtxt{font-size:13px;font-weight:700;color:#0F172A}
+.fill-q{font-size:14px;font-weight:700;color:#0F172A;line-height:1.9;margin-bottom:8px}
+.fill-in{border:none;border-bottom:2px solid #E2E8F0;background:transparent;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#0369A1;outline:none;padding:3px 8px;min-width:80px;text-align:center}
+.fill-wrap{margin-bottom:12px}
+.passage{background:linear-gradient(135deg,#E0F2FE,#BAE6FD);border:1.5px solid #7DD3FC;border-radius:10px;padding:14px;margin-bottom:12px;font-size:14px;line-height:1.9;font-weight:600;color:#0C4A6E}
+.ioe-note{background:#FEF3C7;border:1.5px solid #F59E0B;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;font-weight:700;color:#92400E}
+.akey{background:#fff;border-radius:14px;border:2px dashed #F59E0B;margin-top:16px;overflow:hidden}
+.akhdr{background:linear-gradient(135deg,#FEF3C7,#FDE68A);padding:12px 16px;cursor:pointer}
+.aktitle{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:#92400E}
+.akbody{display:none;padding:14px 16px}
+.akbody.open{display:block}
+.akpart{margin-bottom:12px}
+.akptitle{font-size:12px;font-weight:900;color:#0369A1;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.akgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.aki{background:#E0F2FE;border-radius:6px;padding:6px 4px;text-align:center}
+.akiq{font-size:10px;font-weight:700;color:#94A3B8}
+.akia{font-size:13px;font-weight:800;color:#0369A1}
+</style>
+</head>
+<body>
+<div class="cover" id="cover">
+  <div class="badge">🌐 IOE – OLYMPIC TIẾNG ANH</div>
+  <div class="ctitle">IOE Practice – No. 2</div>
+  <div class="csub">Luyện thi IOE cấp trường<br>Lớp 3-4 · Vocabulary &amp; Grammar · 50 câu</div>
+  <div class="icard">
+    <div class="irow">
+      <div><div class="ilbl">TÊN CON</div><input class="iline" id="iname" placeholder="Viết tên vào đây..."></div>
+      <div><div class="ilbl">LỚP</div><input class="iline" value="3 / 4" readonly style="text-align:center"></div>
+    </div>
+    <div><div class="ilbl" style="text-align:center;margin-bottom:4px">NGÀY</div><input class="iline" id="idate" readonly style="text-align:center"></div>
+  </div>
+  <button class="btnstart" id="btnstart" onclick="startTest()">▶ Bắt đầu IOE số 2</button>
+  <button class="btnkey" onclick="toggleAK()">🔑 Đáp án (Ba/Mẹ nhấn để xem) ▼</button>
+  <a href="english-daily.html" class="backlink">← Về trang chính</a>
+</div>
+<div id="tbody">
+  <div class="rbar">
+    <div class="rscore" id="rscore">—đ</div>
+    <div class="rprog"><div class="rfill" id="rfill" style="width:0%"></div></div>
+    <div class="rsub" id="rsub">Làm bài rồi nộp</div>
+    <button class="rsubmit" id="rsubmit" onclick="submitTest()">Nộp bài ✓</button>
+  </div>
+  <div class="part"><div class="phdr"><div class="picon">🔤</div><div class="pinfo"><div class="ptitle">Phần 1 – Chọn từ đúng (Odd one out)</div><div class="psub">Chọn từ KHÁC loại (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pabody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">✏️</div><div class="pinfo"><div class="ptitle">Phần 2 – Điền từ vào chỗ trống</div><div class="psub">Điền từ thích hợp (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pbbody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">🔀</div><div class="pinfo"><div class="ptitle">Phần 3 – Sắp xếp câu đúng</div><div class="psub">Chọn thứ tự đúng (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pcbody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">📝</div><div class="pinfo"><div class="ptitle">Phần 4 – Ngữ pháp</div><div class="psub">Chọn đáp án đúng (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pdbody"></div></div>
+  <div class="part"><div class="phdr"><div class="picon">🔍</div><div class="pinfo"><div class="ptitle">Phần 5 – Tìm lỗi sai</div><div class="psub">Chọn từ đúng (10 câu)</div></div><div class="ppts">10đ</div></div><div class="pbody" id="pebody"></div></div>
+  <div class="akey" id="akey"><div class="akhdr" onclick="toggleAK()"><div class="aktitle">🔑 Đáp án (Ba/Mẹ nhấn để xem) ▼</div></div><div class="akbody" id="akbody"></div></div>
+</div>
+<script>
+// Phần 1: Odd one out - chọn từ khác loại
+var PA=[
+  ["Chọn từ KHÁC loại:",["lion","tiger","flower","elephant"],2],
+  ["Chọn từ KHÁC loại:",["spring","summer","autumn","weather"],3],
+  ["Chọn từ KHÁC loại:",["kitchen","bedroom","garden","hospital"],3],
+  ["Chọn từ KHÁC loại:",["pizza","burger","cola","sandwich"],2],
+  ["Chọn từ KHÁC loại:",["piano","guitar","violin","microphone"],3],
+  ["Chọn từ KHÁC loại:",["January","March","April","Tuesday"],3],
+  ["Chọn từ KHÁC loại:",["beautiful","quickly","ugly","pretty"],1],
+  ["Chọn từ KHÁC loại:",["uncle","aunt","cousin","neighbour"],3],
+  ["Chọn từ KHÁC loại:",["fly","swim","run","tall"],3],
+  ["Chọn từ KHÁC loại:",["cloudy","rainy","windy","weather"],3]
+];
+// Phần 2: Fill in
+var PB=[
+  ["My father ___ to work by car every day.","drives"],
+  ["___ there a supermarket near your house?","Is"],
+  ["She is ___ than her sister.","younger"],
+  ["We ___ to the beach last summer.","went"],
+  ["How ___ brothers and sisters do you have?","many"],
+  ["The weather ___ very nice today.","is"],
+  ["I will ___ my homework after dinner.","do"],
+  ["They have been friends ___ primary school.","since"],
+  ["He speaks English very ___.","well"],
+  ["___ do you live? I live in Hanoi.","Where"]
+];
+// Phần 3: Sentence ordering - choose correct sentence
+var PC=[
+  ["Câu đúng là:",["My father drives car to work.","My father to work drives car.","My father drives to work by car.","Drives my father to work by car."],2],
+  ["Câu đúng là:",["She younger is than her sister.","She is younger than her sister.","Than her sister she is younger.","Younger she is than her sister."],1],
+  ["Câu đúng là:",["We last summer to the beach went.","We went last summer beach the to.","Last summer we to the beach went.","We went to the beach last summer."],3],
+  ["Câu đúng là:",["How many do you brothers have?","How many brothers do you have?","Brothers how many do you have?","Do you how many brothers have?"],1],
+  ["Câu đúng là:",["Is there near your house a supermarket?","Near your house is there a supermarket?","There is a supermarket near your house?","Is there a supermarket near your house?"],3],
+  ["Câu đúng là:",["He speaks very English well.","He very speaks English well.","He speaks English very well.","Very well he speaks English."],2],
+  ["Câu đúng là:",["Where do you live?","Where you do live?","You do live where?","Do you live where?"],0],
+  ["Câu đúng là:",["I will dinner after do my homework.","After dinner I will do my homework.","I will do after dinner my homework.","My homework I will do after dinner."],1],
+  ["Câu đúng là:",["They since primary school friends have been.","They have been friends since primary school.","Friends they have been since primary school.","Since primary school they friends have been."],1],
+  ["Câu đúng là:",["The weather is today very nice.","Very nice the weather is today.","The weather very is nice today.","The weather is very nice today."],3]
+];
+// Phần 4: Grammar MCQ
+var PD=[
+  ["It is raining. You should take an ___.",["coat","umbrella","hat","gloves"],1],
+  ["She ___ piano for two hours every day.",["play","plays","playing","played"],1],
+  ["Which season comes after summer?",["Spring","Winter","Autumn","Monsoon"],2],
+  ["We use this to tell the time.",["Calendar","Clock","Ruler","Scale"],1],
+  ["___ is the weather like today? It is sunny.",["How","What","Which","Where"],1],
+  ["My house ___ two floors.",["have","has","is","are"],1],
+  ["She is ___ at drawing than her brother.",["good","better","best","more good"],1],
+  ["They arrived ___ the airport at noon.",["in","on","at","to"],2],
+  ["___ does your father do? He is a pilot.",["What","Where","When","How"],0],
+  ["The children ___ been to the zoo before.",["have","has","had","having"],0]
+];
+// Phần 5: Error correction
+var PE=[
+  ["My father drive to work every day.","drive","drives"],
+  ["She play piano for two hours.","play","plays"],
+  ["The children has been to the zoo.","has","have"],
+  ["We goed to the beach last summer.","goed","went"],
+  ["She is more young than her sister.","more young","younger"],
+  ["How many time do you study English?","time","times"],
+  ["He speak English very well.","speak","speaks"],
+  ["I will did my homework tonight.","did","do"],
+  ["There is many books on the shelf.","is","are"],
+  ["She sings more beautiful than me.","beautiful","beautifully"]
+];
+var SEL={a:{},c:{},d:{},e:{}};
+var submitted=false;
+var L=["A","B","C","D"];
+function el(id){return document.getElementById(id);}
+function buildMCQ(container,data,part){
+  var html="";
+  data.forEach(function(q,i){
+    html+='<div class="mcq"><div class="mqnum">Câu '+(i+1)+'</div><div class="mqq">'+(i+1)+". "+q[0]+'</div><div class="mopts">';
+    q[1].forEach(function(o,oi){
+      html+='<div class="mlbl" id="'+part+i+"_"+oi+'" onclick="sel(\''+part+'\','+i+','+oi+')"><span class="mltr">'+L[oi]+'</span><span class="mtxt">'+o+'</span></div>';
+    });
+    html+="</div></div>";
+  });
+  el(container).innerHTML=html;
+}
+function buildFill(){
+  var html='<div class="ioe-note">💡 IOE tip: Điền đúng từ vào chỗ trống, chú ý chia động từ!</div>';
+  PB.forEach(function(q,i){
+    var parts=q[0].split("___");
+    html+='<div class="fill-wrap"><div class="fill-q">'+(i+1)+". "+parts[0]+'<input class="fill-in" id="pb'+i+'" placeholder="...">'+parts[1]+'</div></div>';
+  });
+  el("pbbody").innerHTML=html;
+}
+function buildError(){
+  var html='<div class="ioe-note">⚡ Tìm từ SAI (gạch chân đỏ) và chọn từ ĐÚNG thay thế!</div>';
+  PE.forEach(function(q,i){
+    var sentence=q[0].replace(q[1],'<span style="color:#F43F5E;font-weight:900;text-decoration:underline">'+q[1]+"</span>");
+    var opts=[q[2],q[1],q[1]+"s","not "+q[1]];
+    html+='<div class="mcq"><div class="mqnum">Câu '+(i+1)+'</div><div class="mqq">'+(i+1)+". "+sentence+'</div><div class="mopts">';
+    opts.forEach(function(o,oi){
+      html+='<div class="mlbl" id="e'+i+"_"+oi+'" onclick="sel(\'e\','+i+','+oi+')"><span class="mltr">'+L[oi]+'</span><span class="mtxt">'+o+'</span></div>';
+    });
+    html+="</div></div>";
+  });
+  el("pebody").innerHTML=html;
+}
+function buildAK(){
+  var html="";
+  html+='<div class="akpart"><div class="akptitle">Phần 1 - Odd one out</div><div class="akgrid">';
+  PA.forEach(function(q,i){html+='<div class="aki"><div class="akiq">C'+(i+1)+'</div><div class="akia">'+L[q[2]]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Phần 2 - Điền từ</div><div class="akgrid">';
+  PB.forEach(function(q,i){html+='<div class="aki"><div class="akiq">C'+(i+1)+'</div><div class="akia" style="font-size:9px">'+q[1]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Phần 3 - Sắp xếp câu</div><div class="akgrid">';
+  PC.forEach(function(q,i){html+='<div class="aki"><div class="akiq">C'+(i+1)+'</div><div class="akia">'+L[q[2]]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Phần 4 - Ngữ pháp</div><div class="akgrid">';
+  PD.forEach(function(q,i){html+='<div class="aki"><div class="akiq">C'+(i+1)+'</div><div class="akia">'+L[q[2]]+'</div></div>';});
+  html+="</div></div>";
+  html+='<div class="akpart"><div class="akptitle">Phần 5 - Lỗi sai</div><div class="akgrid">';
+  PE.forEach(function(q,i){html+='<div class="aki"><div class="akiq">C'+(i+1)+'</div><div class="akia" style="font-size:9px">'+q[2]+'</div></div>';});
+  html+="</div></div>";
+  el("akbody").innerHTML=html;
+}
+function sel(part,qi,oi){
+  if(submitted)return;
+  var prev=SEL[part][qi];
+  if(prev!==undefined){var pe=el(part+qi+"_"+prev);if(pe)pe.classList.remove("sel");}
+  SEL[part][qi]=oi;
+  var ne=el(part+qi+"_"+oi);if(ne)ne.classList.add("sel");
+  updateProg();
+}
+function updateProg(){
+  var done=0;
+  ["a","c","d","e"].forEach(function(p){done+=Object.keys(SEL[p]).length;});
+  for(var i=0;i<PB.length;i++){var inp=el("pb"+i);if(inp&&inp.value.trim())done++;}
+  el("rfill").style.width=Math.round(done/50*100)+"%";
+  el("rsub").textContent=done+"/50 câu";
+}
+function submitTest(){
+  if(submitted)return;
+  submitted=true;
+  var score=0;
+  PA.forEach(function(q,i){if(SEL.a[i]===q[2])score++;});
+  PB.forEach(function(q,i){var v=el("pb"+i);if(v&&v.value.trim().toLowerCase()===q[1].toLowerCase())score++;});
+  PC.forEach(function(q,i){if(SEL.c[i]===q[2])score++;});
+  PD.forEach(function(q,i){if(SEL.d[i]===q[2])score++;});
+  PE.forEach(function(q,i){if(SEL.e[i]===0)score++;});
+  el("rscore").textContent=score+"đ";
+  el("rsub").textContent=(score>=40?"Xuất sắc! Sẵn sàng thi IOE!":score>=30?"Tốt lắm!":"Luyện thêm nhé!");
+  var sb=el("rsubmit");if(sb){sb.textContent="✅ Đã nộp";sb.disabled=true;sb.style.background="#94A3B8";}
+  localStorage.setItem("exam_done_english-ioe-2.html","1");
+  var name=el("iname").value||localStorage.getItem("en_name")||"con";
+  localStorage.setItem("en_name",name);
+  var key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4";
+  fetch("https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results",{method:"POST",
+    headers:{"apikey":key,"Authorization":"Bearer "+key,"Content-Type":"application/json","Prefer":"return=representation"},
+    body:JSON.stringify({subject:"english",level:"IOE so 2",score:score,total:50,hints_used:0,student_name:name,answers:{date:new Date().toISOString().slice(0,10)}})
+  }).then(function(){}).catch(function(){});
+  var ak=el("akbody");if(ak)ak.classList.add("open");
+  setTimeout(function(){var a=el("akey");if(a)a.scrollIntoView({behavior:"smooth"});},600);
+}
+function toggleAK(){var b=el("akbody");if(b)b.classList.toggle("open");}
+function startTest(){
+  el("cover").style.display="none";
+  el("tbody").style.display="block";
+  buildMCQ("pabody",PA,"a");
+  buildFill();
+  buildMCQ("pcbody",PC,"c");
+  buildMCQ("pdbody",PD,"d");
+  buildError();
+  buildAK();
+  window.scrollTo({top:0});
+}
+window.addEventListener("DOMContentLoaded",function(){
+  el("idate").value=new Date().toLocaleDateString("vi-VN");
+  var n=localStorage.getItem("en_name");if(n)el("iname").value=n;
+  buildAK();
+});
+</script>
+</body>
+</html>

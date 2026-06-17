@@ -470,10 +470,27 @@ var ALL_TASKS = [
 ];
 
 var TEST_FOLDERS = [
-  {id:'ontap', icon:'📚', name:'Đề ôn tập',  sub:'Bài ôn luyện hàng tuần',
-   exams:[{name:'Đề số 1',meta:'Trái cây · Đồ ăn · 40đ',url:'english-test-1.html',lock:false},{name:'Đề số 2',meta:'Hobbies · Grammar · 50đ',url:'english-test-2.html',lock:false},{name:'Đề số 3',meta:'Error correction · 50đ',url:'english-test-3.html',lock:false},{name:'Đề số 4',meta:'Animals · Nature · 50đ',url:'english-test-4.html',lock:true,unlock:'exam_done_english-test-3.html'},{name:'Đề số 5',meta:'Emotions · Transport · 50đ',url:'english-test-5.html',lock:true,unlock:'exam_done_english-test-4.html'},{name:'Đề số 6',meta:'Mixed Review · 50đ',url:'english-test-6.html',lock:true,unlock:'exam_done_english-test-5.html'}]},
-  {id:'ioe',   icon:'🌐', name:'Đề IOE',     sub:'Luyện thi IOE cấp trường & tỉnh', exams:[]},
-  {id:'olympic',icon:'🏅',name:'Đề Olympic', sub:'Luyện thi Olympic Tiếng Anh',     exams:[]},
+  {id:'ontap', icon:'📚', name:'Đề ôn tập', sub:'Bài ôn luyện hàng tuần',
+   exams:[
+     {id:'exam1',name:'Đề số 1',meta:'Trái cây · Đồ ăn · 40đ',url:'english-test-1.html'},
+     {id:'exam2',name:'Đề số 2',meta:'Hobbies · Grammar · 50đ',url:'english-test-2.html'},
+     {id:'exam3',name:'Đề số 3',meta:'Error correction · 50đ',url:'english-test-3.html'},
+     {id:'exam4',name:'Đề số 4',meta:'Animals · Nature · 50đ',url:'english-test-4.html'},
+     {id:'exam5',name:'Đề số 5',meta:'Emotions · Transport · 50đ',url:'english-test-5.html'},
+     {id:'exam6',name:'Đề số 6',meta:'Mixed Review · 50đ',url:'english-test-6.html'},
+     {id:'exam7',name:'Đề số 7',meta:'School Life · 50đ',url:'english-test-7.html'},
+     {id:'exam8',name:'Đề số 8',meta:'Family · Community · 50đ',url:'english-test-8.html'}
+   ]},
+  {id:'ioe', icon:'🌐', name:'Đề IOE', sub:'Luyện thi IOE cấp trường & tỉnh',
+   exams:[
+     {id:'ioe1',name:'IOE số 1',meta:'Vocabulary · Grammar · 50đ',url:'english-ioe-1.html'},
+     {id:'ioe2',name:'IOE số 2',meta:'Advanced Grammar · 50đ',url:'english-ioe-2.html'}
+   ]},
+  {id:'olympic', icon:'🏅', name:'Đề Olympic', sub:'Luyện thi Olympic Tiếng Anh',
+   exams:[
+     {id:'olympic1',name:'Olympic số 1',meta:'Nâng cao · Reading · 50đ',url:'english-olympic-1.html'},
+     {id:'olympic2',name:'Olympic số 2',meta:'Nâng cao · Climate · 50đ',url:'english-olympic-2.html'}
+   ]}
 ];
 
 var WEEKLY_TOPICS = [
@@ -510,7 +527,9 @@ var EXAM_LIST = [
   {id:'exam3',url:'english-test-3.html',name:'Đề số 3',meta:'50đ'},
   {id:'exam4',url:'english-test-4.html',name:'Đề số 4',meta:'50đ'},
   {id:'exam5',url:'english-test-5.html',name:'Đề số 5',meta:'50đ'},
-  {id:'exam6',url:'english-test-6.html',name:'Đề số 6',meta:'50đ'}
+  {id:'exam6',url:'english-test-6.html',name:'Đề số 6',meta:'50đ'},
+  {id:'exam7',url:'english-test-7.html',name:'Đề số 7',meta:'50đ'},
+  {id:'exam8',url:'english-test-8.html',name:'Đề số 8',meta:'50đ'}
 ];
 function getNextExam(){
   for(var i=0;i<EXAM_LIST.length;i++){
