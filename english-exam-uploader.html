@@ -3,389 +3,559 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>📝 Bài Luyện Thi</title>
+<title>📤 Bài Luyện Thi</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--sky:#0EA5E9;--sky-l:#E0F2FE;--sky-d:#0284C7;--mint:#10B981;--mint-l:#ECFDF5;--mint-d:#059669;--sun:#F59E0B;--sun-l:#FEF3C7;--sun-d:#D97706;--violet:#8B5CF6;--violet-l:#EDE9FE;--coral:#F43F5E;--coral-l:#FFF1F2;--amber:#F59E0B;--amber-l:#FEF3C7;--amber-d:#D97706;--ink:#0F172A;--ink2:#475569;--muted:#94A3B8;--bg:#F0F9FF;--card:#FFF;--border:#E2E8F0;--r:16px;--rs:10px}
+:root{--sky:#0EA5E9;--sky-l:#E0F2FE;--sky-d:#0284C7;--mint:#10B981;--mint-l:#ECFDF5;--mint-d:#059669;--sun:#F59E0B;--sun-l:#FEF3C7;--violet:#8B5CF6;--violet-l:#EDE9FE;--coral:#F43F5E;--coral-l:#FFF1F2;--ink:#0F172A;--ink2:#475569;--muted:#94A3B8;--bg:#F0F9FF;--card:#FFF;--border:#E2E8F0;--r:14px;--rs:10px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
-.hdr{background:linear-gradient(135deg,#D97706,#92400E);padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.hdr{background:linear-gradient(135deg,#1E40AF,var(--violet));padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
 .back{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.4);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none;flex-shrink:0}
-.logo{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;color:#fff;flex:1}
-.tab-btns{display:flex;gap:8px;padding:12px 16px;background:var(--card);border-bottom:1.5px solid var(--border)}
-.tab-btn{flex:1;padding:10px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--card);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;color:var(--muted);text-align:center}
-.tab-btn.on{background:linear-gradient(135deg,var(--amber),var(--amber-d));color:#fff;border-color:transparent}
-#app{max-width:480px;margin:0 auto;padding:14px 14px 60px}
-/* UPLOAD */
-.upload-area{border:2px dashed var(--amber);border-radius:var(--r);padding:30px 20px;text-align:center;background:var(--amber-l);cursor:pointer;margin-bottom:14px;position:relative}
-.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.up-icon{font-size:48px;margin-bottom:10px}
-.up-title{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--amber-d);margin-bottom:6px}
-.up-sub{font-size:13px;font-weight:600;color:var(--muted);line-height:1.6}
-.btn-row{display:flex;gap:8px;margin-bottom:14px}
-.btn-cam{flex:1;padding:12px;border-radius:var(--rs);border:1.5px solid var(--amber);background:var(--amber-l);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--amber-d);cursor:pointer;text-align:center}
-.btn-gallery{flex:1;padding:12px;border-radius:var(--rs);border:1.5px solid var(--sky);background:var(--sky-l);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--sky-d);cursor:pointer;text-align:center}
-.btn-file{flex:1;padding:12px;border-radius:var(--rs);border:1.5px solid var(--mint);background:var(--mint-l);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--mint-d);cursor:pointer;text-align:center}
-/* PREVIEW */
-.preview-card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:14px;margin-bottom:14px;display:none}
-.preview-card.show{display:block}
-.preview-img{width:100%;border-radius:var(--rs);margin-bottom:10px;max-height:300px;object-fit:contain}
-.btn-analyze{width:100%;padding:13px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--violet),var(--sky));color:#fff;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;cursor:pointer;margin-bottom:8px}
-/* QUIZ AREA */
-.quiz-card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:16px;margin-bottom:12px;display:none}
-.quiz-card.show{display:block}
-.qc-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:12px}
-.mcq-item{margin-bottom:12px;padding:10px;background:var(--bg);border-radius:var(--rs)}
-.mcq-q{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:8px}
-.mcq-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.mcq-opt{padding:9px 8px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--card);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-align:center;color:var(--ink)}
-.mcq-opt.sel{border-color:var(--sky);background:var(--sky-l);color:var(--sky-d)}
-.mcq-opt.correct{border-color:var(--mint);background:var(--mint-l);color:var(--mint-d)}
-.mcq-opt.wrong{border-color:var(--coral);background:var(--coral-l);color:var(--coral)}
-.btn-submit{width:100%;padding:12px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--mint),var(--mint-d));color:#fff;font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:8px}
-/* EXAMS LIST */
-.exam-item{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:14px;margin-bottom:10px}
-.ei-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.ei-icon{font-size:24px}
-.ei-title{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:var(--ink);flex:1}
-.ei-del{padding:5px 12px;border-radius:20px;border:1.5px solid var(--coral);background:var(--coral-l);color:var(--coral);font-size:12px;font-weight:800;cursor:pointer}
-.ei-do{padding:5px 12px;border-radius:20px;border:none;background:var(--sky);color:#fff;font-size:12px;font-weight:800;cursor:pointer}
-.empty-state{text-align:center;padding:30px 20px;color:var(--muted)}
-.empty-state .ei{font-size:48px;margin-bottom:10px}
-.empty-state p{font-size:13px;font-weight:700}
-/* LOADING */
-.loading-card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:24px;text-align:center;margin-bottom:12px;display:none}
-.loading-card.show{display:block}
-.spin{display:inline-block;width:36px;height:36px;border:4px solid var(--border);border-top-color:var(--violet);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:10px}
+.logo{font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;color:#fff;flex:1}
+.wrap{max-width:480px;margin:0 auto;padding:14px 14px 80px}
+/* TABS */
+.main-tabs{display:flex;gap:6px;margin-bottom:14px;background:var(--card);border-radius:var(--r);padding:4px;border:1.5px solid var(--border)}
+.main-tab{flex:1;padding:9px 4px;border-radius:10px;border:none;background:transparent;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;color:var(--muted);text-align:center}
+.main-tab.on{background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff}
+/* UPLOAD SECTION */
+.card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:14px;margin-bottom:12px}
+.card-title{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+/* Image grid */
+.img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.img-slot{aspect-ratio:1;border-radius:8px;border:2px dashed var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer}
+.img-slot img{width:100%;height:100%;object-fit:cover;border-radius:6px}
+.img-slot .add-icon{font-size:24px;color:var(--muted)}
+.img-slot .del-btn{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:var(--coral);color:#fff;border:none;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.img-count{font-size:12px;font-weight:700;color:var(--muted);text-align:center;margin-bottom:8px}
+/* Upload buttons */
+.upload-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.upload-btn{padding:10px 4px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--card);font-size:11px;font-weight:800;cursor:pointer;text-align:center;color:var(--ink2);display:flex;flex-direction:column;align-items:center;gap:3px}
+.upload-btn span{font-size:18px}
+.upload-btn:hover{border-color:var(--sky);background:var(--sky-l)}
+/* Settings */
+.settings-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.setting-item label{font-size:11px;font-weight:800;color:var(--muted);display:block;margin-bottom:4px}
+.setting-item select{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;outline:none;background:var(--card);color:var(--ink)}
+.setting-item input[type=text]{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;outline:none}
+/* Generate button */
+.gen-btn{width:100%;padding:13px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff;font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:8px}
+.gen-btn:disabled{background:#94A3B8;cursor:not-allowed}
+/* Loading */
+.loading-wrap{display:none;text-align:center;padding:20px}
+.loading-wrap.show{display:block}
+.spin{display:inline-block;width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--sky);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:10px}
 @keyframes spin{to{transform:rotate(360deg)}}
+/* SAVED EXAMS */
+.exam-folder{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);margin-bottom:10px;overflow:hidden}
+.ef-hdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.ef-icon{font-size:20px}
+.ef-info{flex:1}
+.ef-name{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:var(--ink)}
+.ef-meta{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
+.ef-right{display:flex;align-items:center;gap:6px}
+.ef-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px}
+.ef-new{background:var(--coral);color:#fff;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.ef-arrow{color:var(--muted);font-size:14px;transition:transform .25s}
+.ef-body{display:none;border-top:1.5px solid var(--border);padding:10px 14px}
+.ef-open .ef-arrow{transform:rotate(90deg)}
+.ef-open .ef-body{display:block}
+/* Exam item in folder */
+.ei{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.ei:last-child{border-bottom:none}
+.ei-img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--bg);flex-shrink:0}
+.ei-info{flex:1}
+.ei-title{font-size:13px;font-weight:800;color:var(--ink)}
+.ei-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.ei-btns{display:flex;gap:5px;flex-shrink:0}
+.ei-do{padding:6px 10px;border:none;border-radius:8px;background:var(--mint);color:#fff;font-size:11px;font-weight:800;cursor:pointer}
+.ei-del{padding:6px 8px;border:none;border-radius:8px;background:var(--coral-l);color:var(--coral);font-size:11px;font-weight:800;cursor:pointer}
+/* Quiz display */
+.quiz-wrap{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);margin-bottom:12px;overflow:hidden}
+.qw-hdr{background:linear-gradient(135deg,var(--sky-l),var(--violet-l));padding:12px 14px;border-bottom:1.5px solid var(--border)}
+.qw-title{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:var(--ink)}
+.qw-body{padding:12px 14px}
+.q-item{margin-bottom:12px;padding:10px;background:var(--bg);border-radius:var(--rs)}
+.q-text{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:7px}
+.q-opts{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.q-opt{padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);font-size:12px;font-weight:700;cursor:pointer;text-align:center}
+.q-opt.sel{border-color:var(--sky);background:var(--sky-l)}
+.q-opt.correct{border-color:var(--mint);background:var(--mint-l);color:var(--mint-d)}
+.q-opt.wrong{border-color:var(--coral);background:var(--coral-l);color:var(--coral)}
+.quiz-actions{display:flex;gap:8px;margin-top:10px}
+.quiz-submit{flex:1;padding:11px;border:none;border-radius:var(--rs);background:var(--mint);color:#fff;font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;cursor:pointer}
+.quiz-save{flex:1;padding:11px;border:none;border-radius:var(--rs);background:var(--violet-l);color:var(--violet);font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;cursor:pointer}
+/* Toast */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;white-space:nowrap;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
+/* Hidden inputs */
+.hidden{display:none}
 </style>
 </head>
 <body>
 <div class="hdr">
   <a href="english-daily.html" class="back">←</a>
-  <div class="logo">📝 Bài Luyện Thi</div>
+  <div class="logo">📤 Bài Luyện Thi</div>
 </div>
-<div class="tab-btns">
-  <button class="tab-btn on" id="tab-parent" onclick="showTab('parent',this)">👨‍👩‍👧 Phụ huynh</button>
-  <button class="tab-btn" id="tab-child" onclick="showTab('child',this)">👧 Con làm bài</button>
-</div>
-<div id="app">
-  <!-- PARENT TAB -->
-  <div id="view-parent">
-    <div style="font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:10px">📸 Upload bài → AI tạo đề cho con</div>
-    <div class="upload-area" id="upload-area">
-      <input type="file" id="main-input" accept="image/*,.pdf,.doc,.docx,.html" onchange="handleFile(this)">
-      <div class="up-icon">📷</div>
-      <div class="up-title">Chụp hoặc chọn ảnh bài</div>
-      <div class="up-sub">Bài tập, bài kiểm tra, sách giáo khoa...<br>Anh chụp rõ, AI đọc chính xác hơn!</div>
-    </div>
-    <div class="btn-row">
-      <button class="btn-cam" onclick="el('cam-input').click()">📷 Chụp ảnh</button>
-      <button class="btn-gallery" onclick="el('gallery-input').click()">🖼️ Chọn ảnh</button>
-      <button class="btn-file" onclick="el('file-input').click()">📄 Chọn file</button>
-    </div>
-    <input type="file" id="cam-input" accept="image/*" capture="environment" style="display:none" onchange="handleFile(this)">
-    <input type="file" id="gallery-input" accept="image/*" style="display:none" onchange="handleFile(this)">
-    <input type="file" id="file-input" accept=".html,.htm,.pdf,.doc,.docx" style="display:none" onchange="handleFile(this)">
 
-    <div class="preview-card" id="preview-card">
-      <img id="preview-img" class="preview-img" src="" alt="Preview">
-      <div id="file-name" style="font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:700"></div>
-      <button class="btn-analyze" onclick="analyzeImage()">🤖 AI tạo đề từ ảnh này</button>
-      <button style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--card);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted)" onclick="clearFile()">✕ Xóa ảnh</button>
+<div class="wrap">
+  <!-- Main Tabs -->
+  <div class="main-tabs">
+    <button class="main-tab on" onclick="switchTab('upload',this)">📸 Tạo bài mới</button>
+    <button class="main-tab" onclick="switchTab('saved',this)">📁 Bài đã tạo</button>
+  </div>
+
+  <!-- UPLOAD TAB -->
+  <div id="tab-upload">
+    <div class="card">
+      <div class="card-title">
+        📸 Chọn ảnh bài thi (tối đa 10 ảnh)
+        <span style="font-size:11px;color:var(--muted);font-weight:700" id="img-counter">0/10 ảnh</span>
+      </div>
+
+      <!-- Image Grid -->
+      <div class="img-grid" id="img-grid"></div>
+
+      <!-- Upload Buttons -->
+      <div class="upload-btns">
+        <button class="upload-btn" onclick="document.getElementById('cam-input').click()">
+          <span>📷</span>Chụp ảnh
+        </button>
+        <button class="upload-btn" onclick="document.getElementById('gallery-input').click()">
+          <span>🖼️</span>Thư viện
+        </button>
+        <button class="upload-btn" onclick="document.getElementById('file-input').click()">
+          <span>📄</span>Chọn file
+        </button>
+      </div>
+
+      <!-- Hidden Inputs - all support multiple -->
+      <input type="file" id="cam-input" accept="image/*" capture="environment" multiple class="hidden" onchange="addFiles(this)">
+      <input type="file" id="gallery-input" accept="image/*" multiple class="hidden" onchange="addFiles(this)">
+      <input type="file" id="file-input" accept="image/*,.pdf,.doc,.docx" multiple class="hidden" onchange="addFiles(this)">
     </div>
 
-    <div class="loading-card" id="loading-card">
+    <!-- Settings -->
+    <div class="card">
+      <div class="card-title">⚙️ Cài đặt bài thi</div>
+      <div class="settings-row">
+        <div class="setting-item">
+          <label>Số câu hỏi</label>
+          <select id="num-questions">
+            <option value="5">5 câu</option>
+            <option value="10" selected>10 câu</option>
+            <option value="15">15 câu</option>
+            <option value="20">20 câu</option>
+          </select>
+        </div>
+        <div class="setting-item">
+          <label>Dạng bài</label>
+          <select id="exam-type">
+            <option value="mixed">Tổng hợp</option>
+            <option value="mcq">Trắc nghiệm</option>
+            <option value="fill">Điền từ</option>
+            <option value="vocab">Từ vựng</option>
+          </select>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="setting-item">
+          <label>Trình độ</label>
+          <select id="level">
+            <option value="easy">Dễ (Lớp 2-3)</option>
+            <option value="medium" selected>TB (Lớp 3-4)</option>
+            <option value="hard">Khó (Lớp 4-5)</option>
+          </select>
+        </div>
+        <div class="setting-item">
+          <label>Tên bài (tùy chọn)</label>
+          <input type="text" id="exam-name" placeholder="VD: Bài kiểm tra...">
+        </div>
+      </div>
+    </div>
+
+    <!-- Generate Button -->
+    <button class="gen-btn" id="gen-btn" onclick="generateExam()">🤖 AI Tạo Bài Từ Ảnh</button>
+
+    <!-- Loading -->
+    <div class="loading-wrap" id="loading-wrap">
       <div class="spin"></div>
-      <div style="font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;color:var(--ink);margin-bottom:6px">AI đang phân tích...</div>
-      <div style="font-size:13px;color:var(--muted);font-weight:700">Đang tạo câu hỏi từ bài tập của con</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;color:var(--ink)">AI đang phân tích ảnh...</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px" id="loading-sub">Đang đọc nội dung bài thi</div>
     </div>
 
-    <div style="font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:10px">📋 Đề đã tạo</div>
-    <div id="exams-list"><div class="empty-state"><div class="ei">📬</div><p>Chưa có đề nào. Upload ảnh bài để tạo nhé!</p></div></div>
+    <!-- Quiz Display -->
+    <div id="quiz-wrap-area"></div>
   </div>
 
-  <!-- CHILD TAB -->
-  <div id="view-child" style="display:none">
-    <div id="quiz-list-child"><div class="empty-state"><div class="ei">📚</div><p>Ba/Mẹ chưa tạo đề nào. Chờ Ba upload ảnh nhé!</p></div></div>
+  <!-- SAVED TAB -->
+  <div id="tab-saved" style="display:none">
+    <div id="saved-list"></div>
+    <div id="saved-empty" style="text-align:center;padding:40px 20px;display:none">
+      <div style="font-size:48px;margin-bottom:10px">📭</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;color:var(--muted)">Chưa có bài nào</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">Chụp ảnh bài thi rồi nhờ AI tạo bài nhé!</div>
+    </div>
   </div>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-var SUPA_URL = 'https://dmdcccqldatgmdtakxcj.supabase.co';
-var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
-var CLAUDE_KEY = '';  // Set via Anthropic API
-var currentFile = null;
-var currentBase64 = '';
-var currentMime = '';
-var exams = [];
-var activeExam = null;
-var userAnswers = {};
+var NAME = localStorage.getItem('en_name') || 'con';
+var uploadedImages = []; // [{base64, mime, name, preview}]
+var currentQuiz = null;
+var activeTab = 'upload';
 
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.className='toast show';setTimeout(function(){t.className='toast';},2800);}
 function el(id){return document.getElementById(id);}
-function show(id){el(id).style.display='block';}
-function hide(id){el(id).style.display='none';}
+function toast(m){var t=el('toast');t.textContent=m;t.className='toast show';setTimeout(function(){t.className='toast';},2600);}
 
-function showTab(tab, btn){
-  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('on');});
+// ══ TABS ══
+function switchTab(tab, btn){
+  activeTab = tab;
+  el('tab-upload').style.display = tab==='upload'?'block':'none';
+  el('tab-saved').style.display = tab==='saved'?'block':'none';
+  var btns = document.querySelectorAll('.main-tab');
+  for(var i=0;i<btns.length;i++) btns[i].classList.remove('on');
   btn.classList.add('on');
-  el('view-parent').style.display = tab==='parent'?'block':'none';
-  el('view-child').style.display = tab==='child'?'block':'none';
-  if(tab==='child') renderChildQuizList();
+  if(tab==='saved') renderSaved();
 }
 
-function handleFile(input){
-  var file = input.files[0];
-  if(!file) return;
-  currentFile = file;
-  var reader = new FileReader();
-  reader.onload = function(e){
-    var result = e.target.result;
-    currentBase64 = result.split(',')[1];
-    currentMime = file.type || 'image/jpeg';
-    if(file.type.indexOf('image') >= 0){
-      el('preview-img').src = result;
-      el('preview-img').style.display = 'block';
-    } else {
-      el('preview-img').style.display = 'none';
-    }
-    el('file-name').textContent = '📎 ' + file.name;
-    el('preview-card').className = 'preview-card show';
-    toast('✅ Đã chọn file: ' + file.name);
-  };
-  reader.readAsDataURL(file);
+// ══ IMAGE MANAGEMENT ══
+function renderGrid(){
+  var grid = el('img-grid');
+  var html = '';
+  // Show uploaded images
+  for(var i=0;i<uploadedImages.length;i++){
+    var img = uploadedImages[i];
+    html += '<div class="img-slot" data-idx="'+i+'">';
+    html += '<img src="'+img.preview+'" alt="Ảnh '+(i+1)+'">';
+    html += '<button class="del-btn" onclick="removeImg('+i+')">✕</button>';
+    html += '</div>';
+  }
+  // Add slot if < 10
+  if(uploadedImages.length < 10){
+    html += '<div class="img-slot" onclick="document.getElementById(\'gallery-input\').click()">';
+    html += '<span class="add-icon">＋</span>';
+    html += '</div>';
+  }
+  grid.innerHTML = html;
+  el('img-counter').textContent = uploadedImages.length+'/10 ảnh';
 }
 
-function clearFile(){
-  currentFile = null; currentBase64 = ''; currentMime = '';
-  el('preview-card').className = 'preview-card';
-  el('main-input').value = '';
-  el('cam-input').value = '';
-  el('gallery-input').value = '';
-  el('file-input').value = '';
-}
+function addFiles(input){
+  var files = input.files;
+  var remaining = 10 - uploadedImages.length;
+  var added = 0;
+  var toProcess = Math.min(files.length, remaining);
 
-function analyzeImage(){
-  if(!currentBase64){toast('Chọn ảnh trước nhé!');return;}
-  el('preview-card').className = 'preview-card';
-  el('loading-card').className = 'loading-card show';
+  if(toProcess === 0){
+    toast('Đã đủ 10 ảnh rồi!');
+    return;
+  }
 
-  // Call Claude API
-  var messages = [{
-    role: 'user',
-    content: [{
-      type: 'image',
-      source: {type: 'base64', media_type: currentMime, data: currentBase64}
-    },{
-      type: 'text',
-      text: 'Đây là bài tập tiếng Anh lớp 2-3. Hãy tạo 5 câu hỏi trắc nghiệm (MCQ) dựa trên nội dung bài tập này. Trả lời theo định dạng JSON sau (chỉ JSON, không có gì khác):\n{"title":"Tên bài tập","questions":[{"q":"Câu hỏi 1","opts":["A","B","C","D"],"ans":0},...]}'
-    }]
-  }];
-
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': CLAUDE_KEY,
-      'anthropic-version': '2023-06-01'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: messages
-    })
-  }).then(function(r){return r.json();})
-  .then(function(data){
-    el('loading-card').className = 'loading-card';
-    if(data.error || !data.content){
-      toast('Lỗi API: ' + (data.error ? data.error.message : 'Không có nội dung'));
-      el('preview-card').className = 'preview-card show';
+  function processFile(idx){
+    if(idx >= toProcess) {
+      renderGrid();
+      toast('✅ Đã thêm '+added+' ảnh ('+uploadedImages.length+'/10)');
+      input.value = '';
       return;
     }
-    var text = data.content[0].text;
-    try{
-      var jsonStr = text; while(jsonStr.indexOf('\u0060\u0060\u0060json')>=0){jsonStr=jsonStr.replace('\u0060\u0060\u0060json','');} while(jsonStr.indexOf('\u0060\u0060\u0060')>=0){jsonStr=jsonStr.replace('\u0060\u0060\u0060','');} jsonStr=jsonStr.trim();
-      var quiz = JSON.parse(jsonStr);
-      quiz.id = Date.now();
-      quiz.created = new Date().toLocaleDateString('vi-VN');
-      quiz.imgData = 'data:'+currentMime+';base64,'+currentBase64;
-      exams.unshift(quiz);
-      saveExams();
-      renderExamsList();
-      clearFile();
-      toast('✅ Đã tạo ' + quiz.questions.length + ' câu hỏi!');
-    }catch(e){
-      // Fallback: create simple quiz
-      var fallback = {
-        id: Date.now(),
-        title: 'Bài luyện tập',
-        created: new Date().toLocaleDateString('vi-VN'),
-        imgData: 'data:'+currentMime+';base64,'+currentBase64,
-        questions:[
-          {q:'Bài này có nội dung về chủ đề gì?',opts:['Từ vựng','Ngữ pháp','Đọc hiểu','Viết'],ans:0},
-          {q:'Con đã đọc kỹ bài này chưa?',opts:['Rồi, đọc xong','Đọc một nửa','Chưa đọc','Đang đọc'],ans:0},
-        ]
-      };
-      exams.unshift(fallback);
-      saveExams();
-      renderExamsList();
-      clearFile();
-      toast('⚠️ AI không phân tích được, đã tạo đề mẫu');
+    var file = files[idx];
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var result = e.target.result;
+      uploadedImages.push({
+        base64: result.split(',')[1],
+        mime: file.type || 'image/jpeg',
+        name: file.name,
+        preview: result
+      });
+      added++;
+      processFile(idx+1);
+    };
+    reader.readAsDataURL(file);
+  }
+  processFile(0);
+}
+
+function removeImg(idx){
+  uploadedImages.splice(idx,1);
+  renderGrid();
+  toast('Đã xóa ảnh');
+}
+
+// ══ GENERATE EXAM ══
+function generateExam(){
+  if(uploadedImages.length === 0){
+    toast('Vui lòng chọn ít nhất 1 ảnh nhé!');
+    return;
+  }
+  var numQ = el('num-questions').value;
+  var examType = el('exam-type').value;
+  var level = el('level').value;
+  var levelTxt = level==='easy'?'Lớp 2-3 (dễ)':level==='hard'?'Lớp 4-5 (khó)':'Lớp 3-4 (trung bình)';
+  var typeTxt = examType==='mcq'?'trắc nghiệm 4 lựa chọn':examType==='fill'?'điền từ':examType==='vocab'?'từ vựng':'tổng hợp';
+
+  el('gen-btn').disabled = true;
+  el('loading-wrap').className = 'loading-wrap show';
+  el('quiz-wrap-area').innerHTML = '';
+
+  // Build messages with all images
+  var imageContents = [];
+  for(var i=0;i<uploadedImages.length;i++){
+    imageContents.push({
+      type:'image',
+      source:{type:'base64',media_type:uploadedImages[i].mime,data:uploadedImages[i].base64}
+    });
+  }
+  imageContents.push({
+    type:'text',
+    text:'Đây là '+uploadedImages.length+' ảnh bài thi/bài học tiếng Anh của học sinh '+levelTxt+'. Hãy phân tích toàn bộ nội dung các ảnh và tạo '+numQ+' câu hỏi dạng '+typeTxt+' để luyện tập. Trả lời ĐÚNG định dạng JSON sau (không có text ngoài JSON):\n{"title":"Tên bài thi","questions":[{"q":"Câu hỏi","opts":["A","B","C","D"],"ans":0,"explain":"Giải thích ngắn"},...]}\nans là index (0-3) của đáp án đúng trong mảng opts.'
+  });
+
+  var loadingMsgs = ['Đang đọc nội dung...','Đang tạo câu hỏi...','Đang kiểm tra đáp án...','Sắp xong rồi...'];
+  var msgIdx = 0;
+  var loadInterval = setInterval(function(){
+    if(msgIdx < loadingMsgs.length) el('loading-sub').textContent = loadingMsgs[msgIdx++];
+  }, 2000);
+
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:2000,
+      messages:[{role:'user',content:imageContents}]
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    clearInterval(loadInterval);
+    el('loading-wrap').className = 'loading-wrap';
+    el('gen-btn').disabled = false;
+    if(!data.content||!data.content[0]){
+      toast('Lỗi! Thử lại nhé.');
+      return;
     }
+    var raw = data.content[0].text||'';
+    // Extract JSON
+    var jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if(!jsonMatch){toast('AI không tạo được bài. Thử ảnh khác nhé!');return;}
+    var quiz;
+    try{quiz = JSON.parse(jsonMatch[0]);}
+    catch(e){toast('Lỗi định dạng! Thử lại nhé.');return;}
+    currentQuiz = quiz;
+    renderQuiz(quiz);
   })
   .catch(function(e){
-    el('loading-card').className = 'loading-card';
-    el('preview-card').className = 'preview-card show';
-    // Create demo quiz when API not available
-    var demo = {
-      id: Date.now(),
-      title: currentFile ? currentFile.name.replace(/\.[^.]+$/,'') : 'Bài luyện tập',
-      created: new Date().toLocaleDateString('vi-VN'),
-      imgData: 'data:'+currentMime+';base64,'+currentBase64,
-      questions:[
-        {q:'What is the main topic of this exercise?',opts:['Vocabulary','Grammar','Reading','Writing'],ans:0},
-        {q:'How many questions are in this exercise?',opts:['5','10','15','20'],ans:1},
-        {q:'What level is this exercise for?',opts:['Grade 1','Grade 2-3','Grade 4-5','Grade 6'],ans:1},
-      ]
-    };
-    exams.unshift(demo);
-    saveExams();
-    renderExamsList();
-    clearFile();
-    toast('📝 Đã tạo đề thủ công (cần cấu hình API key)');
+    clearInterval(loadInterval);
+    el('loading-wrap').className = 'loading-wrap';
+    el('gen-btn').disabled = false;
+    toast('Lỗi kết nối: '+e.message);
   });
 }
 
-function saveExams(){
-  try{localStorage.setItem('en_exams', JSON.stringify(exams.map(function(e){return {id:e.id,title:e.title,created:e.created,questions:e.questions};})));}catch(e){}
-}
+// ══ RENDER QUIZ ══
+var quizAnswers = {};
+var quizSubmitted = false;
 
-function loadExams(){
-  try{
-    var saved = JSON.parse(localStorage.getItem('en_exams')||'[]');
-    exams = saved;
-  }catch(e){exams=[];}
-}
-
-function renderExamsList(){
-  if(!exams.length){
-    el('exams-list').innerHTML = '<div class="empty-state"><div class="ei">📬</div><p>Chưa có đề nào. Upload ảnh bài để tạo nhé!</p></div>';
-    return;
-  }
-  var html = '';
-  exams.forEach(function(exam,i){
-    html += '<div class="exam-item">'+
-      '<div class="ei-header">'+
-        '<div class="ei-icon">📋</div>'+
-        '<div class="ei-title">'+exam.title+'</div>'+
-        '<button class="ei-del" onclick="deleteExam('+i+')">🗑️</button>'+
-      '</div>'+
-      '<div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:8px">📅 '+exam.created+' · '+exam.questions.length+' câu</div>'+
-      '<button class="ei-do" onclick="startQuiz('+i+')">▶ Cho con làm bài</button>'+
-    '</div>';
-  });
-  el('exams-list').innerHTML = html;
-}
-
-function deleteExam(i){
-  if(confirm('Xóa đề này?')){
-    exams.splice(i,1);
-    saveExams();
-    renderExamsList();
-    toast('🗑️ Đã xóa');
-  }
-}
-
-function startQuiz(i){
-  activeExam = exams[i];
-  userAnswers = {};
-  showTab('child', el('tab-child'));
-  renderChildQuiz();
-}
-
-function renderChildQuizList(){
-  if(!activeExam){
-    el('quiz-list-child').innerHTML = '<div class="empty-state"><div class="ei">📚</div><p>Ba/Mẹ chưa tạo đề nào. Chờ Ba upload ảnh nhé!</p></div>';
-    return;
-  }
-  renderChildQuiz();
-}
-
-function renderChildQuiz(){
-  if(!activeExam){return;}
-  var q = activeExam;
-  var html = '<div class="quiz-card show">'+
-    '<div class="qc-title">📋 '+q.title+'</div>';
-  q.questions.forEach(function(item, qi){
-    html += '<div class="mcq-item">'+
-      '<div class="mcq-q">'+(qi+1)+'. '+item.q+'</div>'+
-      '<div class="mcq-opts">';
-    item.opts.forEach(function(opt, oi){
-      var sel = userAnswers[qi]===oi ? 'sel' : '';
-      html += '<button class="mcq-opt '+sel+'" onclick="selectAnswer('+qi+','+oi+')">'+opt+'</button>';
-    });
+function renderQuiz(quiz){
+  quizAnswers = {};
+  quizSubmitted = false;
+  var html = '<div class="quiz-wrap">';
+  html += '<div class="qw-hdr"><div class="qw-title">📝 '+(quiz.title||'Bài thi từ ảnh')+'</div>';
+  html += '<div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:3px">'+quiz.questions.length+' câu · AI tạo từ '+uploadedImages.length+' ảnh</div></div>';
+  html += '<div class="qw-body">';
+  quiz.questions.forEach(function(q,i){
+    html += '<div class="q-item">';
+    html += '<div class="q-text">'+(i+1)+'. '+q.q+'</div>';
+    html += '<div class="q-opts">';
+    if(q.opts && q.opts.length){
+      q.opts.forEach(function(o,oi){
+        html += '<button class="q-opt" id="qo-'+i+'-'+oi+'" onclick="selectOpt('+i+','+oi+')">'+o+'</button>';
+      });
+    } else {
+      html += '<input style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;outline:none" id="fill-'+i+'" placeholder="Điền từ vào đây...">';
+    }
     html += '</div></div>';
   });
-  html += '<button class="btn-submit" onclick="submitQuiz()">✅ Nộp bài</button></div>';
-  el('quiz-list-child').innerHTML = html;
+  html += '</div>';
+  html += '<div class="quiz-actions">';
+  html += '<button class="quiz-submit" onclick="submitQuiz()">✅ Nộp bài</button>';
+  html += '<button class="quiz-save" onclick="saveQuiz()">💾 Lưu bài</button>';
+  html += '</div></div>';
+  el('quiz-wrap-area').innerHTML = html;
 }
 
-function selectAnswer(qi, oi){
-  userAnswers[qi] = oi;
-  renderChildQuiz();
+function selectOpt(qi,oi){
+  if(quizSubmitted) return;
+  var prev = quizAnswers[qi];
+  if(prev !== undefined){
+    var pe = el('qo-'+qi+'-'+prev);
+    if(pe) pe.classList.remove('sel');
+  }
+  quizAnswers[qi] = oi;
+  var ne = el('qo-'+qi+'-'+oi);
+  if(ne) ne.classList.add('sel');
 }
 
 function submitQuiz(){
-  if(!activeExam) return;
+  if(quizSubmitted) return;
+  if(!currentQuiz) return;
+  quizSubmitted = true;
   var score = 0;
-  var total = activeExam.questions.length;
-  activeExam.questions.forEach(function(item,qi){
-    if(userAnswers[qi] === item.ans) score++;
+  currentQuiz.questions.forEach(function(q,i){
+    if(q.opts && q.opts.length){
+      var ans = quizAnswers[i];
+      if(ans === q.ans){
+        score++;
+        var btn = el('qo-'+i+'-'+ans);
+        if(btn) btn.className = 'q-opt correct';
+      } else {
+        if(ans !== undefined){
+          var wrongBtn = el('qo-'+i+'-'+ans);
+          if(wrongBtn) wrongBtn.className = 'q-opt wrong';
+        }
+        var rightBtn = el('qo-'+i+'-'+q.ans);
+        if(rightBtn) rightBtn.className = 'q-opt correct';
+      }
+    }
   });
-  var pct = Math.round(score/total*100);
-  var html = '<div class="quiz-card show" style="text-align:center">'+
-    '<div style="font-size:48px;margin-bottom:8px">'+(pct>=80?'🏆':pct>=60?'👍':'📖')+'</div>'+
-    '<div style="font-family:\'Baloo 2\',cursive;font-size:28px;font-weight:800;color:var(--ink);margin-bottom:6px">'+score+'/'+total+'</div>'+
-    '<div style="font-size:14px;font-weight:700;color:var(--muted);margin-bottom:16px">'+pct+'% · '+(pct>=80?'Xuất sắc!':pct>=60?'Tốt lắm!':'Cố gắng thêm nhé!')+'</div>'+
-    '<button onclick="reviewQuiz()" style="width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--sky-l);color:var(--sky-d);font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer;margin-bottom:8px">🔍 Xem đáp án</button>'+
-    '<button onclick="renderChildQuiz()" style="width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--violet-l);color:var(--violet);font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer">🔄 Làm lại</button>'+
-    '</div>';
-  el('quiz-list-child').innerHTML = html;
-  // Save result
-  var name = localStorage.getItem('en_name') || 'con';
-  fetch(SUPA_URL+'/rest/v1/results', {
-    method: 'POST',
-    headers: {'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
-    body: JSON.stringify({subject:'english',level:'Bai luyen thi AI',score:score,total:total,hints_used:0,student_name:name,answers:{date:new Date().toISOString().slice(0,10)}})
+  var pct = Math.round(score/currentQuiz.questions.length*100);
+  var em2=pct>=80?'🏆':pct>=60?'👍':'💪';
+  toast(em2+' '+score+'/'+currentQuiz.questions.length+' đúng ('+pct+'%)');
+  // Save result to Supabase
+  var key='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
+  fetch('https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results',{method:'POST',
+    headers:{'apikey':key,'Authorization':'Bearer '+key,'Content-Type':'application/json','Prefer':'return=representation'},
+    body:JSON.stringify({subject:'english',level:'Bai luyen thi: '+(currentQuiz.title||'AI'),score:score,total:currentQuiz.questions.length,hints_used:0,student_name:NAME,answers:{date:new Date().toISOString().slice(0,10)}})
   }).then(function(){}).catch(function(){});
 }
 
-function reviewQuiz(){
-  if(!activeExam) return;
-  var html = '<div class="quiz-card show"><div class="qc-title">🔍 Đáp án</div>';
-  activeExam.questions.forEach(function(item,qi){
-    html += '<div class="mcq-item">'+
-      '<div class="mcq-q">'+(qi+1)+'. '+item.q+'</div>'+
-      '<div class="mcq-opts">';
-    item.opts.forEach(function(opt,oi){
-      var cls = '';
-      if(oi === item.ans) cls = 'correct';
-      else if(userAnswers[qi]===oi) cls = 'wrong';
-      html += '<div class="mcq-opt '+cls+'" style="cursor:default">'+opt+'</div>';
-    });
-    html += '</div></div>';
-  });
-  html += '<button onclick="renderChildQuiz()" style="width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--sky);color:#fff;font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer;margin-top:8px">🔄 Làm lại</button></div>';
-  el('quiz-list-child').innerHTML = html;
+function saveQuiz(){
+  if(!currentQuiz) return;
+  var saved = [];
+  try{saved = JSON.parse(localStorage.getItem('en_ai_exams')||'[]');}catch(e){}
+  var examName = el('exam-name').value.trim() || currentQuiz.title || ('Bài '+new Date().toLocaleDateString('vi-VN'));
+  var entry = {
+    id: Date.now(),
+    title: examName,
+    quiz: currentQuiz,
+    images: uploadedImages.length,
+    date: new Date().toISOString(),
+    dateStr: new Date().toLocaleDateString('vi-VN'),
+    numQ: currentQuiz.questions.length,
+    isNew: true
+  };
+  saved.unshift(entry);
+  if(saved.length > 50) saved = saved.slice(0,50);
+  localStorage.setItem('en_ai_exams', JSON.stringify(saved));
+  toast('✅ Đã lưu bài "'+examName+'" vào thư mục!');
+  // Switch to saved tab
+  setTimeout(function(){
+    var tabs = document.querySelectorAll('.main-tab');
+    switchTab('saved', tabs[1]);
+  }, 1000);
 }
 
-window.addEventListener('DOMContentLoaded', function(){
-  loadExams();
-  renderExamsList();
+// ══ SAVED EXAMS ══
+function renderSaved(){
+  var saved = [];
+  try{saved = JSON.parse(localStorage.getItem('en_ai_exams')||'[]');}catch(e){}
+
+  if(!saved.length){
+    el('saved-list').innerHTML = '';
+    el('saved-empty').style.display = 'block';
+    return;
+  }
+  el('saved-empty').style.display = 'none';
+
+  var html = '';
+  // Group by date
+  var groups = {};
+  saved.forEach(function(e){
+    var d = e.dateStr || 'Không rõ ngày';
+    if(!groups[d]) groups[d] = [];
+    groups[d].push(e);
+  });
+
+  for(var date in groups){
+    var exams = groups[date];
+    var hasNew = exams.some(function(e){return e.isNew;});
+    html += '<div class="exam-folder" id="folder-'+date.replace(/\//g,'-')+'">';
+    html += '<div class="ef-hdr" onclick="toggleFolder(this)">';
+    html += '<div class="ef-icon">📁</div>';
+    html += '<div class="ef-info">';
+    html += '<div class="ef-name">'+date+'</div>';
+    html += '<div class="ef-meta">'+exams.length+' bài · AI tạo từ ảnh</div>';
+    html += '</div>';
+    html += '<div class="ef-right">';
+    if(hasNew) html += '<span class="ef-badge ef-new">NEW</span>';
+    html += '<span class="ef-arrow">›</span>';
+    html += '</div></div>';
+    html += '<div class="ef-body">';
+    exams.forEach(function(exam){
+      html += '<div class="ei" id="ei-'+exam.id+'">';
+      html += '<div class="ei-img" style="background:var(--violet-l);display:flex;align-items:center;justify-content:center;font-size:24px">📝</div>';
+      html += '<div class="ei-info">';
+      html += '<div class="ei-title">'+exam.title+'</div>';
+      html += '<div class="ei-meta">'+exam.numQ+' câu · '+exam.images+' ảnh</div>';
+      html += '</div>';
+      html += '<div class="ei-btns">';
+      html += '<button class="ei-do" onclick="doExam('+exam.id+')">Làm bài</button>';
+      html += '<button class="ei-del" onclick="deleteExam('+exam.id+')">🗑️</button>';
+      html += '</div></div>';
+    });
+    html += '</div></div>';
+  }
+  el('saved-list').innerHTML = html;
+}
+
+function toggleFolder(hdr){
+  var folder = hdr.parentElement;
+  folder.classList.toggle('ef-open');
+}
+
+function doExam(id){
+  var saved = [];
+  try{saved = JSON.parse(localStorage.getItem('en_ai_exams')||'[]');}catch(e){}
+  var exam = null;
+  for(var i=0;i<saved.length;i++){
+    if(saved[i].id===id){
+      exam = saved[i];
+      // Mark as not new
+      saved[i].isNew = false;
+      break;
+    }
+  }
+  localStorage.setItem('en_ai_exams', JSON.stringify(saved));
+  if(!exam) return;
+  currentQuiz = exam.quiz;
+  // Switch to upload tab to show quiz
+  var tabs = document.querySelectorAll('.main-tab');
+  switchTab('upload', tabs[0]);
+  renderQuiz(exam.quiz);
+  setTimeout(function(){
+    var qw = el('quiz-wrap-area');
+    if(qw) qw.scrollIntoView({behavior:'smooth'});
+  }, 300);
+}
+
+function deleteExam(id){
+  if(!confirm('Xóa bài này?')) return;
+  var saved = [];
+  try{saved = JSON.parse(localStorage.getItem('en_ai_exams')||'[]');}catch(e){}
+  saved = saved.filter(function(e){return e.id !== id;});
+  localStorage.setItem('en_ai_exams', JSON.stringify(saved));
+  toast('Đã xóa bài');
+  renderSaved();
+}
+
+// ══ INIT ══
+window.addEventListener('DOMContentLoaded',function(){
+  NAME = localStorage.getItem('en_name')||'con';
+  renderGrid();
 });
 </script>
 </body>
