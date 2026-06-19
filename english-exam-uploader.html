@@ -329,7 +329,6 @@ function generateExam(){
       messages:[{role:'user',content:imageContents}]
     })
   })
-  .then(function(r){return r.json();})
   .then(function(data){
     clearInterval(loadInterval);
     el('loading-wrap').className = 'loading-wrap';
@@ -457,6 +456,59 @@ function saveQuiz(){
     var tabs = document.querySelectorAll('.main-tab');
     switchTab('saved', tabs[1]);
   }, 1000);
+}
+
+
+// Fallback: Manual quiz creation when API unavailable
+function showManualMode(){
+  el('loading-wrap').className = 'loading-wrap';
+  el('gen-btn').disabled = false;
+  var html2 = '<div class="quiz-wrap">';
+  html2 += '<div class="qw-hdr"><div class="qw-title">⚠️ Không kết nối được AI</div>';
+  html2 += '<div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:3px">Ảnh đã chọn: '+uploadedImages.length+' ảnh</div></div>';
+  html2 += '<div class="qw-body">';
+  html2 += '<div style="background:var(--sun-l);border:1.5px solid var(--sun);border-radius:var(--rs);padding:12px;margin-bottom:10px;font-size:12px;font-weight:700;color:var(--sun-d)">';
+  html2 += '💡 API AI cần cấu hình. Anh/Ba có thể:<br>';
+  html2 += '1. Dùng ChatGPT/Gemini để tạo câu hỏi từ ảnh<br>';
+  html2 += '2. Nhập tay câu hỏi bên dưới<br>';
+  html2 += '3. Copy đề vào form và lưu lại';
+  html2 += '</div>';
+  // Manual question entry
+  html2 += '<div id="manual-questions">';
+  for(var mi=0;mi<5;mi++){
+    html2 += '<div style="background:var(--bg);border-radius:var(--rs);padding:10px;margin-bottom:8px">';
+    html2 += '<div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:5px">Câu '+(mi+1)+'</div>';
+    html2 += '<input style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:Nunito,sans-serif;font-size:13px;margin-bottom:5px;outline:none" placeholder="Nhập câu hỏi..." id="mq-'+mi+'">';
+    html2 += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">';
+    html2 += '<input style="padding:7px 10px;border:1.5px solid var(--mint);border-radius:8px;font-family:Nunito,sans-serif;font-size:12px;outline:none" placeholder="✅ Đáp án đúng" id="ma-'+mi+'">';
+    html2 += '<input style="padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:Nunito,sans-serif;font-size:12px;outline:none" placeholder="❌ Đáp án sai" id="mb-'+mi+'">';
+    html2 += '</div></div>';
+  }
+  html2 += '</div>';
+  html2 += '</div>';
+  html2 += '<div class="quiz-actions">';
+  html2 += '<button class="quiz-save" onclick="saveManual()">💾 Lưu bài thủ công</button>';
+  html2 += '</div></div>';
+  el('quiz-wrap-area').innerHTML = html2;
+}
+
+function saveManual(){
+  var questions = [];
+  for(var i=0;i<5;i++){
+    var q = el('mq-'+i);
+    var a = el('ma-'+i);
+    var b = el('mb-'+i);
+    if(q&&q.value.trim()){
+      questions.push({
+        q:q.value.trim(),
+        opts:[a?a.value.trim():'',b?b.value.trim():'','',''],
+        ans:0
+      });
+    }
+  }
+  if(!questions.length){toast('Nhập ít nhất 1 câu hỏi nhé!');return;}
+  currentQuiz = {title:el('exam-name').value||'Bài nhập tay', questions:questions};
+  saveQuiz();
 }
 
 // ══ SAVED EXAMS ══

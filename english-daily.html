@@ -459,14 +459,16 @@ var timerSeconds = 0;
 var timerRunning = false;
 
 var ALL_TASKS = [
-  {id:'flash',   icon:'🃏', name:'Luyện Flashcard',    sub:'15 từ vựng mới hôm nay',      url:'english-star.html'},
-  {id:'quiz',    icon:'📝', name:'Làm bài Quiz',        sub:'1 chủ đề trong English Star', url:'english-star.html'},
-  {id:'skills',  icon:'🎯', name:'Luyện 4 Kỹ Năng',   sub:'Nghe · Nói · Đọc · Ngữ pháp',url:'english-skills.html'},
-  {id:'reading', icon:'🎤', name:'Luyện đọc phát âm',  sub:'Đoạn văn · Chấm điểm',       url:'english-reading.html'},
-  {id:'ontap',   icon:'📋', name:'Đề ôn tập',          sub:'Làm đề tiếp theo chưa làm',   url:''},
-  {id:'exam_up', icon:'📤', name:'Bài Ba upload',      sub:'Bài thi từ ảnh Ba chụp',      url:'english-exam-uploader.html'},
-  {id:'video',      icon:'📺', name:'Xem video hôm nay',  sub:'Làm cuối sau các bài học',    url:'english-video.html'},
-  {id:'review_weak',icon:'⚠️', name:'Ôn từ hay sai',      sub:'10 từ con hay sai nhất tuần',  url:'english-star.html#review'},
+  {id:'flash',      icon:'🃏', name:'Luyện Flashcard',    sub:'15 từ vựng mới hôm nay',      url:'english-star.html'},
+  {id:'quiz',       icon:'📝', name:'Làm bài Quiz',        sub:'1 chủ đề trong English Star', url:'english-star.html'},
+  {id:'skills',     icon:'🎯', name:'Luyện 4 Kỹ Năng',    sub:'Nghe · Nói · Đọc · Ngữ pháp',url:'english-skills.html'},
+  {id:'reading',    icon:'🎤', name:'Luyện đọc phát âm',   sub:'Đoạn văn · Chấm điểm',       url:'english-reading.html'},
+  {id:'ontap',      icon:'📋', name:'Đề ôn tập',           sub:'Làm đề tiếp theo chưa làm',   url:''},
+  {id:'ioe',        icon:'🌐', name:'Đề IOE',               sub:'Luyện thi IOE cấp trường',    url:'english-ioe-1.html'},
+  {id:'olympic',    icon:'🏅', name:'Đề Olympic',           sub:'Luyện thi Olympic Tiếng Anh', url:'english-olympic-1.html'},
+  {id:'exam_up',    icon:'📤', name:'Bài Ba upload',        sub:'Bài thi từ ảnh Ba chụp',      url:'english-exam-uploader.html'},
+  {id:'video',      icon:'📺', name:'Xem video hôm nay',   sub:'Làm cuối sau các bài học',    url:'english-video.html'},
+  {id:'review_weak',icon:'⚠️', name:'Ôn từ hay sai',       sub:'10 từ con hay sai nhất tuần', url:'english-star.html#review'},
 ];
 
 var TEST_FOLDERS = [
@@ -556,7 +558,7 @@ var AUTO_SCHEDULE = {
   4: ['skills','reading'],
   5: ['flash','quiz'],
   6: ['review_weak','ontap'],
-  0: ['video']
+  0: ['video','ioe']
 };
 var TASK_TIME = {flash:15,quiz:10,skills:20,reading:15,video:20,exam1:25,exam2:25,exam3:25,exam_up:20};
 
@@ -633,6 +635,12 @@ function getCurrentWeek(){
 }
 
 // ══ TASK OPEN + TIMER ══
+function openTaskFromData(el2){
+  var url=el2.getAttribute('data-url');
+  var title=el2.getAttribute('data-name');
+  var id=el2.getAttribute('data-id');
+  openTask(url,title,id);
+}
 function openTask(url,title,taskId){
   currentTaskId=taskId;
   el('tp-title').textContent=title;
@@ -932,7 +940,7 @@ function buildTestFolders(){
           var isDone=localStorage.getItem('exam_done_'+e.url)==='1';
           if(!isDone) hasNew=true;
           else doneCount++;
-          items+='<div class="exam-item" onclick="openTask(\"'+e.url+'\",\"📋 '+e.name+'\",\"'+e.id+'\")">';
+          items+='<div class="exam-item" data-url="'+e.url+'" data-name="📋 '+e.name+'" data-id="'+e.id+'" onclick="openTaskFromData(this)">';
           items+='<div class="ei-icon">📋</div>';
           items+='<div class="ei-info"><div class="ei-name">'+e.name+'</div>';
           items+='<div class="ei-meta">'+e.meta+'</div></div>';
