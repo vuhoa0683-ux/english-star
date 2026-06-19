@@ -96,6 +96,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);min-h
 <div class="hdr">
   <a href="english-daily.html" class="back">←</a>
   <div class="logo">📤 Bài Luyện Thi</div>
+  <button onclick="showApiKeyInput();switchTab('upload',document.querySelectorAll('.main-tab')[0])" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:4px 10px;color:#fff;font-size:11px;font-weight:700;cursor:pointer">🔑 API Key</button>
 </div>
 
 <div class="wrap">
@@ -320,38 +321,55 @@ function generateExam(){
     if(msgIdx < loadingMsgs.length) el('loading-sub').textContent = loadingMsgs[msgIdx++];
   }, 2000);
 
-  fetch('https://api.anthropic.com/v1/messages',{
+  var GEMINI_KEY=localStorage.getItem('gemini_key')||'';
+  if(!GEMINI_KEY){
+    clearInterval(loadInterval);
+    el('loading-wrap').className='loading-wrap';
+    el('gen-btn').disabled=false;
+    showApiKeyInput();
+    return;
+  }
+  // Build Gemini request parts
+  var gparts=[];
+  for(var gi=0;gi<uploadedImages.length;gi++){
+    gparts.push({inline_data:{mime_type:uploadedImages[gi].mime,data:uploadedImages[gi].base64}});
+  }
+  gparts.push({text:'Đây là '+uploadedImages.length+' ảnh bài thi tiếng Anh '+levelTxt+'. Tạo '+numQ+' câu hỏi dạng '+typeTxt+'. Trả lời CHỈ bằng JSON: {"title":"Tên bài","questions":[{"q":"Câu hỏi","opts":["A","B","C","D"],"ans":0}]}'});
+
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+GEMINI_KEY,{
     method:'POST',
-    headers:{'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-6',
-      max_tokens:2000,
-      messages:[{role:'user',content:imageContents}]
-    })
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{parts:gparts}],generationConfig:{temperature:0.3,maxOutputTokens:2000}})
+  })
+  .then(function(r){
+    if(!r.ok) return r.text().then(function(t){throw new Error('Lỗi '+r.status+': '+t.slice(0,80));});
+    return r.json();
   })
   .then(function(data){
     clearInterval(loadInterval);
-    el('loading-wrap').className = 'loading-wrap';
-    el('gen-btn').disabled = false;
-    if(!data.content||!data.content[0]){
-      toast('Lỗi! Thử lại nhé.');
-      return;
-    }
-    var raw = data.content[0].text||'';
-    // Extract JSON
-    var jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if(!jsonMatch){toast('AI không tạo được bài. Thử ảnh khác nhé!');return;}
+    el('loading-wrap').className='loading-wrap';
+    el('gen-btn').disabled=false;
+    if(!data.candidates||!data.candidates[0]){toast('Gemini không trả kết quả. Thử lại!');return;}
+    var raw=data.candidates[0].content.parts[0].text||'';
+    var jsonMatch=raw.match(/\{[\s\S]*\}/);
+    if(!jsonMatch){toast('AI không tạo được bài. Thử ảnh khác!');return;}
     var quiz;
-    try{quiz = JSON.parse(jsonMatch[0]);}
+    try{quiz=JSON.parse(jsonMatch[0]);}
     catch(e){toast('Lỗi định dạng! Thử lại nhé.');return;}
-    currentQuiz = quiz;
+    currentQuiz=quiz;
     renderQuiz(quiz);
   })
   .catch(function(e){
     clearInterval(loadInterval);
-    el('loading-wrap').className = 'loading-wrap';
-    el('gen-btn').disabled = false;
-    toast('Lỗi kết nối: '+e.message);
+    el('loading-wrap').className='loading-wrap';
+    el('gen-btn').disabled=false;
+    if(e.message.indexOf('400')>=0||e.message.indexOf('401')>=0||e.message.indexOf('403')>=0){
+      localStorage.removeItem('gemini_key');
+      showApiKeyInput();
+      toast('API key sai! Nhập lại nhé.');
+    } else {
+      toast('Lỗi: '+e.message.slice(0,50));
+    }
   });
 }
 
@@ -509,6 +527,24 @@ function saveManual(){
   if(!questions.length){toast('Nhập ít nhất 1 câu hỏi nhé!');return;}
   currentQuiz = {title:el('exam-name').value||'Bài nhập tay', questions:questions};
   saveQuiz();
+}
+
+
+function showApiKeyInput(){
+  el('quiz-wrap-area').innerHTML='<div class="quiz-wrap"><div class="qw-hdr"><div class="qw-title">🔑 Nhập Gemini API Key</div></div><div class="qw-body">'+
+    '<div style="background:var(--sky-l);border:1.5px solid var(--sky);border-radius:var(--rs);padding:12px;margin-bottom:12px;font-size:12px;font-weight:700;color:var(--sky-d)">'+
+    '💡 Lấy API key miễn phí tại <strong>aistudio.google.com</strong><br>→ Get API key → Create API key</div>'+
+    '<input id="gemini-key-input" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:Nunito,sans-serif;font-size:13px;font-weight:700;outline:none;margin-bottom:10px" placeholder="AIza... (dán key vào đây)">'+
+    '<button onclick="saveGeminiKey()" style="width:100%;padding:12px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff;font-family:Baloo 2,cursive;font-size:14px;font-weight:800;cursor:pointer">✅ Lưu & Tạo Bài</button>'+
+    '</div></div>';
+}
+function saveGeminiKey(){
+  var key=document.getElementById('gemini-key-input').value.trim();
+  if(!key||key.length<20){toast('Key không đúng, thử lại nhé!');return;}
+  localStorage.setItem('gemini_key',key);
+  toast('✅ Đã lưu key! Đang tạo bài...');
+  el('quiz-wrap-area').innerHTML='';
+  generateExam();
 }
 
 // ══ SAVED EXAMS ══

@@ -547,7 +547,16 @@ function getExamProgress(){
 function openOntap(){
   var next=getNextExam();
   if(!next){toast('Làm hết '+EXAM_LIST.length+' đề rồi! Giỏi lắm!');return;}
-  openTask(next.url,'📋 '+next.name,next.id);
+  currentTaskId=next.id;
+  el('tp-title').textContent='📋 '+next.name;
+  el('tp-time').textContent='00:00';
+  el('timer-popup').classList.add('show');
+  timerSeconds=0;
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+  setTimeout(function(){
+    startTimer();
+    window.location.href=next.url;
+  },300);
 }
 
 /* ══ LỊCH GIAO BÀI TỰ ĐỘNG ══ */
@@ -643,16 +652,24 @@ function openTaskFromData(el2){
 }
 function openTask(url,title,taskId){
   currentTaskId=taskId;
+  // Special handling
+  var openUrl=url;
+  if(taskId==='review_weak') openUrl='english-star.html#review';
+  if(!openUrl){
+    if(taskId==='ontap'){openOntap();return;}
+    toast('Đang cập nhật bài học...');return;
+  }
+  // Show timer popup
   el('tp-title').textContent=title;
   el('tp-time').textContent='00:00';
   el('timer-popup').classList.add('show');
   timerSeconds=0;
   if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
-  // Special handling for review_weak
-  var openUrl = url;
-  if(taskId==='review_weak') openUrl='english-star.html#review';
-  window.open(openUrl,'_blank');
-  setTimeout(function(){startTimer();},500);
+  // Use location.href - Safari friendly (no popup block)
+  setTimeout(function(){
+    startTimer();
+    window.location.href=openUrl;
+  },300);
 }
 function startTimer(){
   if(timerRunning)return;
@@ -1437,6 +1454,12 @@ function keepSupabaseAlive(){
   }).catch(function(){});
 }
 
+window.addEventListener('pageshow',function(e){
+  // When coming back from exam page (via back button)
+  if(timerRunning){
+    stopTimer();
+  }
+});
 window.addEventListener('DOMContentLoaded',function(){
   buildTestFolders();
   var s=localStorage.getItem('en_name');
