@@ -532,19 +532,43 @@ function saveManual(){
 
 function showApiKeyInput(){
   el('quiz-wrap-area').innerHTML='<div class="quiz-wrap"><div class="qw-hdr"><div class="qw-title">🔑 Nhập Gemini API Key</div></div><div class="qw-body">'+
-    '<div style="background:var(--sky-l);border:1.5px solid var(--sky);border-radius:var(--rs);padding:12px;margin-bottom:12px;font-size:12px;font-weight:700;color:var(--sky-d)">'+
-    '💡 Lấy API key miễn phí tại <strong>aistudio.google.com</strong><br>→ Get API key → Create API key</div>'+
-    '<input id="gemini-key-input" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:Nunito,sans-serif;font-size:13px;font-weight:700;outline:none;margin-bottom:10px" placeholder="AIza... (dán key vào đây)">'+
-    '<button onclick="saveGeminiKey()" style="width:100%;padding:12px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff;font-family:Baloo 2,cursive;font-size:14px;font-weight:800;cursor:pointer">✅ Lưu & Tạo Bài</button>'+
+    '<div style="background:var(--sky-l);border:1.5px solid var(--sky);border-radius:var(--rs);padding:12px;margin-bottom:10px;font-size:12px;font-weight:700;color:var(--sky-d);line-height:1.8">'+
+    '📋 <strong>Cách lấy Gemini API key:</strong><br>'+
+    '1. Vào <strong>aistudio.google.com</strong><br>'+
+    '2. Đăng nhập Google → <strong>Get API key</strong><br>'+
+    '3. Bấm <strong>Create API key</strong><br>'+
+    '4. Copy toàn bộ key rồi dán vào ô dưới</div>'+
+    '<input id="gemini-key-input" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:Nunito,sans-serif;font-size:13px;font-weight:700;outline:none;margin-bottom:8px" placeholder="Dán Gemini API key vào đây...">'+
+    
+    '<button onclick="saveGeminiKey()" style="width:100%;padding:12px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff;font-family:Baloo 2,cursive;font-size:14px;font-weight:800;cursor:pointer">✅ Kiểm tra & Lưu Key</button>'+
     '</div></div>';
 }
 function saveGeminiKey(){
   var key=document.getElementById('gemini-key-input').value.trim();
-  if(!key||key.length<20){toast('Key không đúng, thử lại nhé!');return;}
-  localStorage.setItem('gemini_key',key);
-  toast('✅ Đã lưu key! Đang tạo bài...');
-  el('quiz-wrap-area').innerHTML='';
-  generateExam();
+  if(!key||key.length<10){toast('Key quá ngắn, thử lại nhé!');return;}
+  toast('⏳ Đang kiểm tra key...');
+  // Try both API formats
+  testGeminiKey(key,function(ok,err){
+    if(ok){
+      localStorage.setItem('gemini_key',key);
+      toast('✅ Key hợp lệ! Đang tạo bài...');
+      el('quiz-wrap-area').innerHTML='';
+      generateExam();
+    } else {
+      toast('Key lỗi: '+err.slice(0,60));
+    }
+  });
+}
+
+function testGeminiKey(key,cb){
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+key,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{parts:[{text:'Reply with: OK'}]}]})
+  }).then(function(r){
+    if(r.ok){cb(true,'');}
+    else{r.text().then(function(t){cb(false,t);});}
+  }).catch(function(e){cb(false,e.message);});
 }
 
 // ══ SAVED EXAMS ══
