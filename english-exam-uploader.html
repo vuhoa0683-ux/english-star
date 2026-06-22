@@ -336,7 +336,8 @@ function generateExam(){
   }
   gparts.push({text:'Đây là '+uploadedImages.length+' ảnh bài thi tiếng Anh '+levelTxt+'. Tạo '+numQ+' câu hỏi dạng '+typeTxt+'. Trả lời CHỈ bằng JSON: {"title":"Tên bài","questions":[{"q":"Câu hỏi","opts":["A","B","C","D"],"ans":0}]}'});
 
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+GEMINI_KEY,{
+  var GEMINI_MODEL=localStorage.getItem('gemini_model')||'gemini-2.0-flash';
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/'+GEMINI_MODEL+':generateContent?key='+GEMINI_KEY,{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({contents:[{parts:gparts}],generationConfig:{temperature:0.3,maxOutputTokens:2000}})
@@ -561,14 +562,24 @@ function saveGeminiKey(){
 }
 
 function testGeminiKey(key,cb){
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+key,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({contents:[{parts:[{text:'Reply with: OK'}]}]})
-  }).then(function(r){
-    if(r.ok){cb(true,'');}
-    else{r.text().then(function(t){cb(false,t);});}
-  }).catch(function(e){cb(false,e.message);});
+  // Try gemini-2.0-flash first, then fallback models
+  var models=['gemini-2.0-flash','gemini-1.5-flash','gemini-pro'];
+  function tryModel(idx){
+    if(idx>=models.length){cb(false,'Không thể kết nối Gemini');return;}
+    fetch('https://generativelanguage.googleapis.com/v1beta/models/'+models[idx]+':generateContent?key='+key,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[{text:'Say: OK'}]}]})
+    }).then(function(r){
+      if(r.ok){
+        localStorage.setItem('gemini_model',models[idx]);
+        cb(true,'');
+      } else {
+        tryModel(idx+1);
+      }
+    }).catch(function(){tryModel(idx+1);});
+  }
+  tryModel(0);
 }
 
 // ══ SAVED EXAMS ══
