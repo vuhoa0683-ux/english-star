@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Tao De Thi</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#0EA5E9;--mint:#10B981;--violet:#8B5CF6;--coral:#F43F5E;--ink:#0F172A;--muted:#94A3B8;--bg:#F0F9FF;--card:#FFF;--border:#E2E8F0;--r:14px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--ink)}
+.hdr{background:linear-gradient(135deg,#1E40AF,var(--violet));padding:12px 16px;display:flex;align-items:center;gap:10px}
+.back{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.4);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none}
+.logo{font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;color:#fff;flex:1}
+.wrap{max-width:480px;margin:0 auto;padding:14px 14px 80px}
+.card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:14px;margin-bottom:12px}
+.card-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;margin-bottom:10px}
+.hint{background:#EDE9FE;border:1.5px solid #DDD6FE;border-radius:var(--rs);padding:10px 12px;font-size:12px;font-weight:700;color:#5B21B6;margin-bottom:10px;line-height:1.8}
+.inp{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:Nunito,sans-serif;font-size:13px;font-weight:700;outline:none;margin-bottom:8px}
+textarea.inp{resize:vertical;min-height:100px;line-height:1.7}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+lbl{font-size:11px;font-weight:900;color:var(--muted);display:block;margin-bottom:3px}
+select.inp{background:var(--card)}
+.q-block{background:#F8FAFF;border-radius:var(--rs);border:1.5px solid var(--border);padding:12px;margin-bottom:10px;position:relative}
+.q-num{font-size:11px;font-weight:900;color:var(--muted);margin-bottom:5px}
+.q-opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:5px}
+.q-opts-grid input{padding:7px 9px;border:1.5px solid var(--border);border-radius:8px;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;outline:none;width:100%}
+.ans-row{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px}
+.ans-btn{padding:6px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-size:12px;font-weight:800;cursor:pointer}
+.ans-btn.sel{background:var(--mint);color:#fff;border-color:var(--mint)}
+.del-q{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:var(--coral);color:#fff;border:none;font-size:12px;cursor:pointer}
+.add-q{width:100%;padding:10px;border:2px dashed var(--border);border-radius:var(--rs);background:transparent;font-family:Nunito,sans-serif;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;margin-bottom:10px}
+.paste-area{width:100%;padding:10px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:Nunito,sans-serif;font-size:12px;outline:none;resize:vertical;min-height:120px;line-height:1.7}
+.paste-btn{width:100%;padding:10px;border:none;border-radius:var(--rs);background:var(--violet);color:#fff;font-family:'Baloo 2',cursive;font-size:13px;font-weight:800;cursor:pointer;margin-top:6px}
+.dl-btn{width:100%;padding:13px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--sky),var(--violet));color:#fff;font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;cursor:pointer}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <a href="english-daily.html" class="back">&#8592;</a>
+  <div class="logo">&#128736;&#65039; Tao De Thi</div>
+</div>
+<div class="wrap">
+  <div class="card">
+    <div class="card-title">Thong tin de thi</div>
+    <div><lbl>Ten de</lbl><input class="inp" id="ex-title" placeholder="VD: De Animals Lop 3"></div>
+    <div class="row2">
+      <div><lbl>Chu de</lbl><input class="inp" id="ex-topic" placeholder="Animals, Food..."></div>
+      <div><lbl>Trinh do</lbl><select class="inp" id="ex-level"><option>Lop 2-3</option><option selected>Lop 3-4</option><option>Lop 4-5</option></select></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Dan de tu ChatGPT hoac Gemini</div>
+    <div class="hint">
+      Copy prompt nay vao ChatGPT / Gemini (co the xin 40-50 cau luon):<br>
+      <strong>"Tao 50 cau trac nghiem tieng Anh lop 3-4, chia 5 phan (Vocabulary, Grammar, Reading, Fill in blank, Error correction), moi phan 10 cau. Moi cau co 4 lua chon A B C D. Ghi ro dap an. Dinh dang: 1. Cau hoi A. ... B. ... C. ... D. ... Dap an: A"</strong><br>
+      <span style="font-size:11px;color:#7C3AED">Meo: neu AI cat ngang vi qua dai, xin tung phan 10 cau roi dan lan luot - so cau se tu cong don!</span>
+    </div>
+    <textarea class="paste-area" id="ai-text" placeholder="Dan ket qua tu ChatGPT/Gemini vao day..."></textarea>
+    <button class="paste-btn" onclick="parseText()">Auto nhan dang cau hoi</button>
+  </div>
+  <div class="card">
+    <div class="card-title">Danh sach cau hoi <span id="qcount" style="font-size:12px;color:var(--muted);font-weight:700">(0 cau)</span></div>
+  <div style="background:#FEF3C7;border:1.5px solid #F59E0B;border-radius:var(--rs);padding:8px 12px;margin-bottom:10px;font-size:11px;font-weight:700;color:#92400E">
+    Goi y: De day du nhu de chinh thuc nen co 40-50 cau (5 phan x 8-10 cau)
+  </div>
+    <div id="qlist"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+    <button class="add-q" onclick="addQ()">+ Them 1 cau</button>
+    <button class="add-q" onclick="addMultiple(10)" style="background:#EDE9FE;border-color:#8B5CF6;color:#8B5CF6">+ Them 10 cau</button>
+  </div>
+  <button class="add-q" onclick="clearAll()" style="border-color:#F43F5E;color:#F43F5E;margin-bottom:10px">Xoa tat ca</button>
+  </div>
+  <button class="dl-btn" onclick="doGenerate()">Tao file HTML va Tai ve</button>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var QQ = [];
+var LL = ['A','B','C','D'];
+
+function ge(id){ return document.getElementById(id); }
+function toast(m){ var t=ge('toast'); t.textContent=m; t.className='toast show'; setTimeout(function(){ t.className='toast'; }, 2500); }
+
+function addQ(){
+  QQ.push({q:'', opts:['','','',''], ans:0});
+  render();
+}
+
+function addMultiple(n){
+  for(var i=0;i<n;i++){
+    QQ.push({q:'', opts:['','','',''], ans:0});
+  }
+  render();
+  toast('Da them '+n+' cau! Tong: '+QQ.length+' cau');
+  // Scroll to last added question
+  setTimeout(function(){
+    var blocks=document.querySelectorAll('.q-block');
+    if(blocks.length) blocks[blocks.length-n].scrollIntoView({behavior:'smooth',block:'center'});
+  },100);
+}
+
+function clearAll(){
+  if(!QQ.length){return;}
+  if(!confirm('Xoa tat ca '+QQ.length+' cau hoi?')) return;
+  QQ=[];
+  render();
+  toast('Da xoa tat ca!');
+}
+
+function delQ(i){
+  QQ.splice(i,1);
+  render();
+}
+
+function setAns(i,a){
+  QQ[i].ans = a;
+  render();
+}
+
+function render(){
+  var c = ge('qlist');
+  c.innerHTML = '';
+  for(var i=0;i<QQ.length;i++){
+    var q = QQ[i];
+    var b = document.createElement('div');
+    b.className = 'q-block';
+
+    var db = document.createElement('button');
+    db.className = 'del-q'; db.textContent = 'x';
+    db.onclick = (function(idx){ return function(){ delQ(idx); }; })(i);
+    b.appendChild(db);
+
+    var nm = document.createElement('div');
+    nm.className = 'q-num'; nm.textContent = 'Cau ' + (i+1);
+    b.appendChild(nm);
+
+    var qi = document.createElement('input');
+    qi.className = 'inp'; qi.value = q.q; qi.placeholder = 'Noi dung cau hoi...';
+    qi.onchange = (function(idx){ return function(){ QQ[idx].q = this.value; }; })(i);
+    b.appendChild(qi);
+
+    var og = document.createElement('div');
+    og.className = 'q-opts-grid';
+    for(var oi=0;oi<4;oi++){
+      var inp = document.createElement('input');
+      inp.value = q.opts[oi]||''; inp.placeholder = LL[oi]+'...';
+      inp.onchange = (function(idx,o){ return function(){ QQ[idx].opts[o] = this.value; }; })(i,oi);
+      og.appendChild(inp);
+    }
+    b.appendChild(og);
+
+    var al = document.createElement('div');
+    al.style.cssText = 'font-size:11px;font-weight:800;color:#94A3B8;margin-top:6px;margin-bottom:4px';
+    al.textContent = 'Dap an dung:';
+    b.appendChild(al);
+
+    var ar = document.createElement('div');
+    ar.className = 'ans-row';
+    for(var ai=0;ai<4;ai++){
+      var ab = document.createElement('button');
+      ab.className = 'ans-btn' + (q.ans===ai?' sel':'');
+      ab.textContent = LL[ai];
+      ab.onclick = (function(idx,a){ return function(){ setAns(idx,a); }; })(i,ai);
+      ar.appendChild(ab);
+    }
+    b.appendChild(ar);
+    c.appendChild(b);
+  }
+  ge('qcount').textContent = '(' + QQ.length + ' cau)';
+}
+
+function parseText(){
+  var raw = ge('ai-text').value.trim();
+  if(!raw){ toast('Dan noi dung vao truoc!'); return; }
+  var lines = raw.split(/\r?\n/);
+  var out = []; var cur = null;
+  for(var i=0;i<lines.length;i++){
+    var ln = lines[i].trim();
+    if(!ln) continue;
+    var qm = ln.match(/^(\d+)[.):]\s*(.+)/);
+    if(qm){ if(cur&&cur.q) out.push(cur); cur={q:qm[2],opts:['','','',''],ans:0}; continue; }
+    if(!cur) continue;
+    var om = ln.match(/^([A-Da-d])[.):]\s*(.+)/);
+    if(om){ var idx='ABCD'.indexOf(om[1].toUpperCase()); if(idx>=0) cur.opts[idx]=om[2].trim(); continue; }
+    var am = ln.match(/[Dd][aA][Pp]\s*[aA][Nn][:\s]+([A-Da-d])/)||ln.match(/[Aa]nswer[:\s]+([A-Da-d])/);
+    if(am&&cur){ cur.ans='ABCD'.indexOf(am[1].toUpperCase()); }
+  }
+  if(cur&&cur.q) out.push(cur);
+  if(!out.length){ toast('Khong nhan dang duoc! Kiem tra dinh dang.'); return; }
+  // Append to existing questions instead of replacing (so anh can paste multiple batches)
+  var emptyCount = 0;
+  for(var ei=0;ei<QQ.length;ei++){ if(!QQ[ei].q.trim()) emptyCount++; }
+  if(emptyCount===QQ.length){
+    // All empty - replace
+    QQ = out;
+  } else {
+    // Has content - append
+    QQ = QQ.concat(out);
+  }
+  render();
+  ge('ai-text').value='';
+  toast('Da them ' + out.length + ' cau! Tong: ' + QQ.length + ' cau');
+  setTimeout(function(){
+    var blocks=document.querySelectorAll('.q-block');
+    if(blocks.length) blocks[blocks.length-out.length].scrollIntoView({behavior:'smooth',block:'center'});
+  },100);
+}
+
+function doGenerate(){
+  var title = ge('ex-title').value.trim() || 'De on tap';
+  var topic = ge('ex-topic').value.trim() || 'English';
+  var level = ge('ex-level').value;
+  var valid = QQ.filter(function(q){ return q.q.trim() && q.opts[0].trim(); });
+  if(!valid.length){ toast('Can it nhat 1 cau hoi co noi dung!'); return; }
+
+  var sk = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
+  var su = 'https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results';
+  var t2 = title.replace(/[<>"&]/g,'');
+  var qj = JSON.stringify(valid);
+
+  var css = [
+    '*{box-sizing:border-box;margin:0;padding:0}',
+    "body{font-family:Nunito,sans-serif;background:#F0F9FF;color:#0F172A}",
+    ".cover{min-height:100vh;background:linear-gradient(160deg,#1E1B4B,#312E81,#4C1D95);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center}",
+    ".ctitle{font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;color:#fff;margin-bottom:6px}",
+    ".csub{font-size:13px;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:24px}",
+    ".iline{background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,.4);color:#fff;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;padding:4px 0;width:100%;max-width:300px;margin-bottom:16px;text-align:center}",
+    ".iline::placeholder{color:rgba(255,255,255,.4)}",
+    ".btnstart{background:linear-gradient(135deg,#6D28D9,#4F46E5);color:#fff;border:none;border-radius:10px;padding:14px 32px;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;cursor:pointer;width:100%;max-width:300px;margin-bottom:10px}",
+    ".backlink{color:rgba(255,255,255,.6);font-size:12px;font-weight:700;text-decoration:none}",
+    "#tbody{display:none;max-width:640px;margin:0 auto;padding:16px 14px 80px}",
+    ".rbar{background:#fff;border-bottom:2px solid #E2E8F0;padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}",
+    ".rscore{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#7C3AED;min-width:60px}",
+    ".rprog{flex:1;height:7px;background:#E2E8F0;border-radius:4px;overflow:hidden}",
+    ".rfill{height:100%;background:linear-gradient(90deg,#7C3AED,#0EA5E9);border-radius:4px;transition:width .4s}",
+    ".rsub{font-size:11px;font-weight:700;color:#94A3B8}",
+    ".rsubmit{padding:8px 16px;border-radius:10px;border:none;background:#10B981;color:#fff;font-size:13px;font-weight:800;cursor:pointer}",
+    ".mcq{margin-bottom:14px;padding:12px;background:#fff;border-radius:10px;border:1.5px solid #E2E8F0}",
+    ".mqq{font-size:14px;font-weight:800;margin-bottom:8px;line-height:1.6}",
+    ".mopts{display:grid;grid-template-columns:1fr 1fr;gap:6px}",
+    ".mopt{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;border:1.5px solid #E2E8F0;cursor:pointer;background:#fff}",
+    ".mopt.sel{border-color:#7C3AED;background:#EDE9FE}",
+    ".mopt.correct{border-color:#10B981;background:#ECFDF5}",
+    ".mopt.wrong{border-color:#F43F5E;background:#FFF1F2}",
+    ".mltr{width:22px;height:22px;border-radius:50%;background:#E2E8F0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#94A3B8;flex-shrink:0}",
+    ".mopt.sel .mltr{background:#7C3AED;color:#fff}",
+    ".akey{background:#fff;border-radius:14px;border:2px dashed #F59E0B;margin-top:16px;overflow:hidden}",
+    ".akhdr{background:linear-gradient(135deg,#FEF3C7,#FDE68A);padding:12px 16px;cursor:pointer}",
+    ".aktitle{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:#92400E}",
+    ".akbody{display:none;padding:14px 16px}",
+    ".akbody.open{display:block}",
+    ".akgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}",
+    ".aki{background:#ECFDF5;border-radius:6px;padding:6px 4px;text-align:center}",
+    ".akiq{font-size:10px;font-weight:700;color:#94A3B8}",
+    ".akia{font-size:13px;font-weight:800;color:#059669}",
+    ".toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:#0F172A;color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;pointer-events:none}",
+    ".toast.show{transform:translateX(-50%) translateY(0)}"
+  ].join('\n');
+
+  var jscode = [
+    'var QS=' + qj + ';',
+    'var SL={};var done=false;var LA=["A","B","C","D"];',
+    'function ge(id){return document.getElementById(id);}',
+    'function cnt(o){var n=0;for(var k in o){if(o.hasOwnProperty(k))n++;}return n;}',
+    'function toggleAK(){var b=ge("akb");if(b)b.classList.toggle("open");}',
+    'function startTest(){',
+    '  var n=ge("iname").value.trim();if(!n){return;}',
+    '  localStorage.setItem("en_name",n);',
+    '  ge("cover").style.display="none";ge("tbody").style.display="block";',
+    '  buildQ();buildAK();window.scrollTo({top:0});',
+    '}',
+    'function buildQ(){',
+    '  var c=ge("qa");c.innerHTML="";',
+    '  for(var i=0;i<QS.length;i++){',
+    '    var q=QS[i];',
+    '    var d=document.createElement("div");d.className="mcq";',
+    '    var qt=document.createElement("div");qt.className="mqq";qt.textContent=(i+1)+". "+q.q;d.appendChild(qt);',
+    '    var mo=document.createElement("div");mo.className="mopts";',
+    '    for(var oi=0;oi<q.opts.length;oi++){',
+    '      if(!q.opts[oi])continue;',
+    '      var op=document.createElement("div");op.className="mopt";op.id="o"+i+"_"+oi;',
+    '      op.onclick=(function(a,b){return function(){sel(a,b);};})(i,oi);',
+    '      var sp=document.createElement("span");sp.className="mltr";sp.textContent=LA[oi];',
+    '      var st=document.createElement("span");st.textContent=q.opts[oi];',
+    '      op.appendChild(sp);op.appendChild(st);mo.appendChild(op);',
+    '    }',
+    '    d.appendChild(mo);c.appendChild(d);',
+    '  }',
+    '}',
+    'function sel(qi,oi){',
+    '  if(done)return;',
+    '  var p=SL[qi];',
+    '  if(p!==undefined){var pe=ge("o"+qi+"_"+p);if(pe)pe.classList.remove("sel");}',
+    '  SL[qi]=oi;',
+    '  var ne=ge("o"+qi+"_"+oi);if(ne)ne.classList.add("sel");',
+    '  ge("rf").style.width=Math.round(cnt(SL)/QS.length*100)+"%";',
+    '  ge("rsb").textContent=cnt(SL)+"/"+QS.length+" cau";',
+    '}',
+    'function submitQ(){',
+    '  if(done)return;done=true;',
+    '  var sc=0;',
+    '  for(var i=0;i<QS.length;i++){',
+    '    var s=SL[i];',
+    '    if(s===QS[i].ans){sc++;var c=ge("o"+i+"_"+s);if(c)c.className="mopt correct";}',
+    '    else{if(s!==undefined){var w=ge("o"+i+"_"+s);if(w)w.className="mopt wrong";}var r=ge("o"+i+"_"+QS[i].ans);if(r)r.className="mopt correct";}',
+    '  }',
+    '  ge("rs").textContent=sc+"d";',
+    '  ge("rsb").textContent=(sc>=QS.length*.8?"Xuat sac!":sc>=QS.length*.6?"Tot lam!":"Co gang!");',
+    '  var sb=ge("rsbtn");if(sb){sb.textContent="Da nop";sb.disabled=true;sb.style.background="#94A3B8";}',
+    '  localStorage.setItem("exam_done_custom","1");',
+    '  var key="' + sk + '";',
+    '  var name=localStorage.getItem("en_name")||"con";',
+    '  fetch("' + su + '",{method:"POST",headers:{apikey:key,"Authorization":"Bearer "+key,"Content-Type":"application/json","Prefer":"return=representation"},body:JSON.stringify({subject:"english",level:"Custom ' + t2 + '",score:sc,total:QS.length,hints_used:0,student_name:name,answers:{date:new Date().toISOString().slice(0,10)}})}).then(function(){}).catch(function(){});',
+    '  ge("akb").classList.add("open");',
+    '  setTimeout(function(){var a=ge("akey");if(a)a.scrollIntoView({behavior:"smooth"});},600);',
+    '}',
+    'function buildAK(){',
+    '  var g=ge("akg");g.innerHTML="";',
+    '  for(var i=0;i<QS.length;i++){',
+    '    var d=document.createElement("div");d.className="aki";',
+    '    var q=document.createElement("div");q.className="akiq";q.textContent="C"+(i+1);',
+    '    var a=document.createElement("div");a.className="akia";a.textContent=LA[QS[i].ans];',
+    '    d.appendChild(q);d.appendChild(a);g.appendChild(d);',
+    '  }',
+    '}',
+    'window.addEventListener("DOMContentLoaded",function(){',
+    '  var n=localStorage.getItem("en_name");if(n)ge("iname").value=n;',
+    '  buildAK();',
+    '});'
+  ].join('\n');
+
+  var parts = [
+    '<!DOCTYPE html>',
+    '<html lang="vi">',
+    '<head>',
+    '<meta charset="UTF-8">',
+    '<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">',
+    '<title>' + t2 + '</title>',
+    '<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">',
+    '<style>' + css + '</style>',
+    '</head><body>',
+    '<div class="cover" id="cover">',
+    '<div class="ctitle">' + t2 + '</div>',
+    '<div class="csub">' + topic + ' - ' + level + ' - ' + valid.length + ' cau</div>',
+    '<input class="iline" id="iname" placeholder="Ten con la...">',
+    '<button class="btnstart" onclick="startTest()">Bat dau lam bai</button>',
+    '<a href="english-daily.html" class="backlink">Ve trang chinh</a>',
+    '</div>',
+    '<div id="tbody">',
+    '<div class="rbar"><div class="rscore" id="rs">-</div><div class="rprog"><div class="rfill" id="rf" style="width:0%"></div></div><div class="rsub" id="rsb">Lam bai roi nop</div><button class="rsubmit" id="rsbtn" onclick="submitQ()">Nop bai</button></div>',
+    '<div id="qa"></div>',
+    '<div class="akey"><div class="akhdr" onclick="toggleAK()"><div class="aktitle">Dap an</div></div><div class="akbody" id="akb"><div class="akgrid" id="akg"></div></div></div>',
+    '</div>',
+    '<div class="toast" id="t"></div>',
+    '<script>' + jscode + '<\/script>',
+    '</body></html>'
+  ].join('\n');
+
+  var blob = new Blob([parts],{type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  var fn = 'exam-' + t2.replace(/[^a-zA-Z0-9]/g,'-').toLowerCase() + '.html';
+  a.href=url; a.download=fn;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+  toast('Da tao file ' + fn + '! Upload len GitHub nhe.');
+}
+
+window.addEventListener('DOMContentLoaded',function(){
+  addQ(); addQ(); addQ();
+});
+</script>
+</body>
+</html>
