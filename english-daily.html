@@ -864,7 +864,7 @@ function toggleTaskOpt(id){
   if(el2){el2.classList.toggle('on',editorSelected[id]);el2.textContent=editorSelected[id]?'✓':'';}
 }
 function saveAssignment(){
-  var ids=Object.keys(editorSelected).filter(function(k){return editorSelected[k];});
+  var ids=[];for(var _k in editorSelected){if(editorSelected.hasOwnProperty(_k)&&editorSelected[_k])ids.push(_k);}
   localStorage.setItem(ASSIGN_KEY+TODAY_STR,JSON.stringify(ids));
   closeEditor();renderAssignList(ids);
   toast('✅ Đã giao bài! Con vào là thấy ngay 😊');
@@ -941,12 +941,12 @@ function buildTestFolders(){
           var isLocked=ei>0&&!localStorage.getItem('en_exam_submitted_'+EXAM_LIST[ei-1].id);
           var isNext=!isSubmitted&&!isLocked;
           var badge='';var badgeClass='';var onclick2='';
-          if(isSubmitted){badge='✅ Đã nộp';badgeClass='eib-done';onclick2='openTask("'+e.url+'","📋 '+e.name+'","'+e.id+'")';}
-          else if(isLocked){badge='🔒 Chưa mở';badgeClass='eib-lock';onclick2='void(0)';}
-          else{badge='▶ Làm ngay';badgeClass='eib-next';onclick2='openTask("'+e.url+'","📋 '+e.name+'","'+e.id+'")';}
+          if(isSubmitted){badge='✅ Đã nộp';badgeClass='eib-done';onclick2='openTaskFromData(this)';}
+          else if(isLocked){badge='🔒 Chưa mở';badgeClass='eib-lock';onclick2='';}
+          else{badge='▶ Làm ngay';badgeClass='eib-next';onclick2='openTaskFromData(this)';}
           var style=isNext?'border-left:3px solid var(--mint);':'';
           if(isLocked)style='opacity:.5;';
-          items+='<div class="exam-item" style="'+style+'" onclick="'+onclick2+'">';
+          items+='<div class="exam-item" style="'+style+'" data-url="'+e.url+'" data-name="📋 '+e.name+'" data-id="'+e.id+'" onclick="'+onclick2+'">';
           items+='<div class="ei-icon">'+(isNext?'📍':'📋')+'</div>';
           items+='<div class="ei-info"><div class="ei-name">'+e.name+(isNext?' ← Tiếp theo':'')+'</div>';
           items+='<div class="ei-meta">'+e.meta+'</div></div>';
