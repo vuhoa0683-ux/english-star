@@ -52,14 +52,56 @@ select.inp{background:var(--card)}
     </div>
   </div>
   <div class="card">
-    <div class="card-title">Dan de tu ChatGPT hoac Gemini</div>
-    <div class="hint">
-      Copy prompt nay vao ChatGPT / Gemini (co the xin 40-50 cau luon):<br>
-      <strong>"Tao 50 cau trac nghiem tieng Anh lop 3-4, chia 5 phan (Vocabulary, Grammar, Reading, Fill in blank, Error correction), moi phan 10 cau. Moi cau co 4 lua chon A B C D. Ghi ro dap an. Dinh dang: 1. Cau hoi A. ... B. ... C. ... D. ... Dap an: A"</strong><br>
-      <span style="font-size:11px;color:#7C3AED">Meo: neu AI cat ngang vi qua dai, xin tung phan 10 cau roi dan lan luot - so cau se tu cong don!</span>
+    <div class="card-title">Buoc 1: Tao de bang AI</div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px">Chon chu de roi copy prompt → dan vao ChatGPT hoac Gemini</div>
+
+    <!-- Topic selector -->
+    <div class="row2" style="margin-bottom:8px">
+      <div><lbl>Chu de</lbl>
+        <select class="inp" id="prompt-topic" onchange="updatePrompt()">
+          <option value="Animals and Nature">Animals and Nature</option>
+          <option value="Food and Drinks">Food and Drinks</option>
+          <option value="School and Daily Life">School and Daily Life</option>
+          <option value="Family and Community">Family and Community</option>
+          <option value="Hobbies and Sports">Hobbies and Sports</option>
+          <option value="Transport and Travel">Transport and Travel</option>
+          <option value="Weather and Seasons">Weather and Seasons</option>
+          <option value="Body and Health">Body and Health</option>
+          <option value="Colors and Shapes">Colors and Shapes</option>
+          <option value="Numbers and Time">Numbers and Time</option>
+        </select>
+      </div>
+      <div><lbl>So cau</lbl>
+        <select class="inp" id="prompt-count" onchange="updatePrompt()">
+          <option value="10">10 cau</option>
+          <option value="20">20 cau</option>
+          <option value="30">30 cau</option>
+          <option value="40">40 cau</option>
+          <option value="50" selected>50 cau</option>
+        </select>
+      </div>
     </div>
-    <textarea class="paste-area" id="ai-text" placeholder="Dan ket qua tu ChatGPT/Gemini vao day..."></textarea>
-    <button class="paste-btn" onclick="parseText()">Auto nhan dang cau hoi</button>
+
+    <!-- Generated prompt -->
+    <div style="background:#F8FAFF;border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 12px;margin-bottom:8px;font-size:12px;font-weight:600;line-height:1.7;color:var(--ink2)" id="prompt-preview"></div>
+
+    <!-- Copy button -->
+    <button onclick="copyPrompt()" style="width:100%;padding:11px;border:none;border-radius:var(--rs);background:linear-gradient(135deg,var(--mint),#059669);color:#fff;font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;cursor:pointer;margin-bottom:8px">
+      📋 Copy Prompt → Dan vao ChatGPT / Gemini
+    </button>
+
+    <!-- Links -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px">
+      <a href="https://chat.openai.com" target="_blank" style="display:block;padding:9px;border:1.5px solid #10A37F;border-radius:var(--rs);text-align:center;font-size:12px;font-weight:800;color:#10A37F;text-decoration:none">🟢 Mo ChatGPT</a>
+      <a href="https://gemini.google.com" target="_blank" style="display:block;padding:9px;border:1.5px solid #4285F4;border-radius:var(--rs);text-align:center;font-size:12px;font-weight:800;color:#4285F4;text-decoration:none">🔵 Mo Gemini</a>
+    </div>
+
+    <div class="card-title" style="margin-bottom:8px">Buoc 2: Dan ket qua vao day</div>
+    <div style="background:#FEF3C7;border:1.5px solid #F59E0B;border-radius:var(--rs);padding:8px 12px;font-size:11px;font-weight:700;color:#92400E;margin-bottom:8px">
+      ⚡ Copy toan bo ket qua tu ChatGPT/Gemini → dan vao o duoi → bam "Nhan dang tu dong"
+    </div>
+    <textarea class="paste-area" id="ai-text" placeholder="Dan ket qua tu ChatGPT / Gemini vao day...&#10;&#10;Vi du:&#10;1. What animal has a long neck?&#10;A. Dog  B. Cat  C. Giraffe  D. Fish&#10;Dap an: C&#10;&#10;2. ..."></textarea>
+    <button class="paste-btn" onclick="parseText()">⚡ Nhan dang tu dong</button>
   </div>
   <div class="card">
     <div class="card-title">Danh sach cau hoi <span id="qcount" style="font-size:12px;color:var(--muted);font-weight:700">(0 cau)</span></div>
@@ -82,6 +124,42 @@ var LL = ['A','B','C','D'];
 
 function ge(id){ return document.getElementById(id); }
 function toast(m){ var t=ge('toast'); t.textContent=m; t.className='toast show'; setTimeout(function(){ t.className='toast'; }, 2500); }
+
+
+var PROMPT_TEMPLATES = {
+  default: function(topic, count) {
+    return 'Tao ' + count + ' cau trac nghiem tieng Anh lop 3-4 ve chu de "' + topic + '".\n\nYeu cau:\n- Moi cau co 4 lua chon A, B, C, D\n- Ghi ro dap an sau moi cau\n- Trinh do phu hop hoc sinh 8-10 tuoi\n\nDinh dang bat buoc:\n1. [Cau hoi]\nA. [Lua chon]\nB. [Lua chon]\nC. [Lua chon]\nD. [Lua chon]\nDap an: [A/B/C/D]\n\n2. ...\n\nHay tao du ' + count + ' cau, khong them noi dung nao khac ngoai cac cau hoi.';
+  }
+};
+
+var currentPrompt = '';
+
+function updatePrompt() {
+  var topic = document.getElementById('prompt-topic').value;
+  var count = document.getElementById('prompt-count').value;
+  currentPrompt = PROMPT_TEMPLATES.default(topic, count);
+  document.getElementById('prompt-preview').textContent = currentPrompt;
+}
+
+function copyPrompt() {
+  if (!currentPrompt) updatePrompt();
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(currentPrompt).then(function() {
+      toast('Da copy! Dan vao ChatGPT hoac Gemini nhe!');
+    }).catch(function() { copyFallback(); });
+  } else { copyFallback(); }
+}
+
+function copyFallback() {
+  var ta = document.createElement('textarea');
+  ta.value = currentPrompt;
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); toast('Da copy! Dan vao ChatGPT hoac Gemini nhe!'); }
+  catch(e) { toast('Khong copy duoc! Chon va copy thu cong nhe.'); }
+  document.body.removeChild(ta);
+}
 
 function addQ(){
   QQ.push({q:'', opts:['','','',''], ans:0});
@@ -370,6 +448,7 @@ function doGenerate(){
 
 window.addEventListener('DOMContentLoaded',function(){
   addQ(); addQ(); addQ();
+  updatePrompt();
 });
 </script>
 </body>
