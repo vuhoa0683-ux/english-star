@@ -252,38 +252,66 @@ function render(){
 function parseText(){
   var raw = ge('ai-text').value.trim();
   if(!raw){ toast('Dan noi dung vao truoc!'); return; }
-  var lines = raw.split(/\r?\n/);
-  var out = []; var cur = null;
+  raw = raw.replace(/\*\*/g,'').replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+  var lines = raw.split('\n');
+  var out = [];
+  var cur = null;
+
+  function extractAns(str){
+    var m = str.match(/(?:Đáp án|Dap an|Answer|Correct)[:\s]+([A-Da-d])/i);
+    return m ? 'ABCD'.indexOf(m[1].toUpperCase()) : -1;
+  }
+
+  function parseSameLine(content){
+    var m = content.match(/^(.+?)\s+A[.)]\s*(.+?)\s+B[.)]\s*(.+?)\s+C[.)]\s*(.+?)\s+D[.)]\s*(.+)$/);
+    if(!m) return null;
+    var q = m[1].trim();
+    var opts = [m[2].trim(),m[3].trim(),m[4].trim(),m[5].trim()];
+    var ans = 0;
+    // Answer may be embedded in D option: "Lion Đáp án: C"
+    var da = opts[3].match(/^(.+?)\s+(?:Đáp án|Dap an|Answer)[:\s]+([A-Da-d])/i);
+    if(da){ opts[3]=da[1].trim(); ans='ABCD'.indexOf(da[2].toUpperCase()); }
+    // Or answer at end of line
+    var ea = content.match(/(?:Đáp án|Dap an|Answer)[:\s]+([A-Da-d])\s*$/i);
+    if(ea) ans='ABCD'.indexOf(ea[1].toUpperCase());
+    return {q:q,opts:opts,ans:ans>=0?ans:0};
+  }
+
   for(var i=0;i<lines.length;i++){
     var ln = lines[i].trim();
     if(!ln) continue;
+    // New question line
     var qm = ln.match(/^(\d+)[.):]\s*(.+)/);
-    if(qm){ if(cur&&cur.q) out.push(cur); cur={q:qm[2],opts:['','','',''],ans:0}; continue; }
+    if(qm){
+      if(cur&&cur.q&&cur.opts[0]) out.push(cur);
+      var content = qm[2].trim();
+      // Try same-line format first
+      var sl = parseSameLine(content);
+      if(sl){ out.push(sl); cur=null; }
+      else { cur={q:content,opts:['','','',''],ans:0}; }
+      continue;
+    }
     if(!cur) continue;
-    var om = ln.match(/^([A-Da-d])[.):]\s*(.+)/);
-    if(om){ var idx='ABCD'.indexOf(om[1].toUpperCase()); if(idx>=0) cur.opts[idx]=om[2].trim(); continue; }
-    var am = ln.match(/[Dd][aA][Pp]\s*[aA][Nn][:\s]+([A-Da-d])/)||ln.match(/[Aa]nswer[:\s]+([A-Da-d])/);
-    if(am&&cur){ cur.ans='ABCD'.indexOf(am[1].toUpperCase()); }
+    // Option line
+    var om = ln.match(/^([A-Da-d])[.)]\s*(.+)/);
+    if(om){ var oi='ABCD'.indexOf(om[1].toUpperCase()); if(oi>=0) cur.opts[oi]=om[2].trim(); continue; }
+    // Answer line
+    var ai = extractAns(ln);
+    if(ai>=0){ cur.ans=ai; continue; }
   }
-  if(cur&&cur.q) out.push(cur);
-  if(!out.length){ toast('Khong nhan dang duoc! Kiem tra dinh dang.'); return; }
-  // Append to existing questions instead of replacing (so anh can paste multiple batches)
-  var emptyCount = 0;
-  for(var ei=0;ei<QQ.length;ei++){ if(!QQ[ei].q.trim()) emptyCount++; }
-  if(emptyCount===QQ.length){
-    // All empty - replace
-    QQ = out;
-  } else {
-    // Has content - append
-    QQ = QQ.concat(out);
-  }
+  if(cur&&cur.q&&cur.opts[0]) out.push(cur);
+
+  if(!out.length){ toast('Khong nhan dang duoc! Thu lai.'); return; }
+  var hasContent=false;
+  for(var ei=0;ei<QQ.length;ei++){ if(QQ[ei].q.trim()){hasContent=true;break;} }
+  QQ = hasContent ? QQ.concat(out) : out;
   render();
   ge('ai-text').value='';
-  toast('Da them ' + out.length + ' cau! Tong: ' + QQ.length + ' cau');
+  toast('Nhan dang ' + out.length + ' cau! Tong: ' + QQ.length + ' cau');
   setTimeout(function(){
-    var blocks=document.querySelectorAll('.q-block');
-    if(blocks.length) blocks[blocks.length-out.length].scrollIntoView({behavior:'smooth',block:'center'});
-  },100);
+    var bl=document.querySelectorAll('.q-block');
+    if(bl.length) bl[Math.max(0,bl.length-out.length)].scrollIntoView({behavior:'smooth',block:'center'});
+  },200);
 }
 
 function doGenerate(){
