@@ -318,7 +318,10 @@ function doGenerate(){
   var title = ge('ex-title').value.trim() || 'De on tap';
   var topic = ge('ex-topic').value.trim() || 'English';
   var level = ge('ex-level').value;
-  var valid = QQ.filter(function(q){ return q.q.trim() && q.opts[0].trim(); });
+  var valid=[];
+  for(var _vi=0;_vi<QQ.length;_vi++){
+    if(QQ[_vi].q.trim()&&QQ[_vi].opts[0].trim()) valid.push(QQ[_vi]);
+  }
   if(!valid.length){ toast('Can it nhat 1 cau hoi co noi dung!'); return; }
 
   var sk = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4';
