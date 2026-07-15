@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>De Animals Lop 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Nunito,sans-serif;background:#F0F9FF;color:#0F172A}
+.cover{min-height:100vh;background:linear-gradient(160deg,#1E1B4B,#312E81,#4C1D95);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center}
+.ctitle{font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;color:#fff;margin-bottom:6px}
+.csub{font-size:13px;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:24px}
+.iline{background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,.4);color:#fff;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;padding:4px 0;width:100%;max-width:300px;margin-bottom:16px;text-align:center}
+.iline::placeholder{color:rgba(255,255,255,.4)}
+.btnstart{background:linear-gradient(135deg,#6D28D9,#4F46E5);color:#fff;border:none;border-radius:10px;padding:14px 32px;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;cursor:pointer;width:100%;max-width:300px;margin-bottom:10px}
+.backlink{color:rgba(255,255,255,.6);font-size:12px;font-weight:700;text-decoration:none}
+#tbody{display:none;max-width:640px;margin:0 auto;padding:16px 14px 80px}
+.rbar{background:#fff;border-bottom:2px solid #E2E8F0;padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.rscore{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#7C3AED;min-width:60px}
+.rprog{flex:1;height:7px;background:#E2E8F0;border-radius:4px;overflow:hidden}
+.rfill{height:100%;background:linear-gradient(90deg,#7C3AED,#0EA5E9);border-radius:4px;transition:width .4s}
+.rsub{font-size:11px;font-weight:700;color:#94A3B8}
+.rsubmit{padding:8px 16px;border-radius:10px;border:none;background:#10B981;color:#fff;font-size:13px;font-weight:800;cursor:pointer}
+.mcq{margin-bottom:14px;padding:12px;background:#fff;border-radius:10px;border:1.5px solid #E2E8F0}
+.mqq{font-size:14px;font-weight:800;margin-bottom:8px;line-height:1.6}
+.mopts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mopt{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;border:1.5px solid #E2E8F0;cursor:pointer;background:#fff}
+.mopt.sel{border-color:#7C3AED;background:#EDE9FE}
+.mopt.correct{border-color:#10B981;background:#ECFDF5}
+.mopt.wrong{border-color:#F43F5E;background:#FFF1F2}
+.mltr{width:22px;height:22px;border-radius:50%;background:#E2E8F0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#94A3B8;flex-shrink:0}
+.mopt.sel .mltr{background:#7C3AED;color:#fff}
+.akey{background:#fff;border-radius:14px;border:2px dashed #F59E0B;margin-top:16px;overflow:hidden}
+.akhdr{background:linear-gradient(135deg,#FEF3C7,#FDE68A);padding:12px 16px;cursor:pointer}
+.aktitle{font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:#92400E}
+.akbody{display:none;padding:14px 16px}
+.akbody.open{display:block}
+.akgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.aki{background:#ECFDF5;border-radius:6px;padding:6px 4px;text-align:center}
+.akiq{font-size:10px;font-weight:700;color:#94A3B8}
+.akia{font-size:13px;font-weight:800;color:#059669}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:#0F172A;color:#fff;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:700;transition:transform .25s;z-index:9999;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}</style>
+</head><body>
+<div class="cover" id="cover">
+<div class="ctitle">De Animals Lop 3</div>
+<div class="csub">Animals - Lop 3-4 - 50 cau</div>
+<input class="iline" id="iname" placeholder="Ten con la...">
+<button class="btnstart" onclick="startTest()">Bat dau lam bai</button>
+<a href="english-daily.html" class="backlink">Ve trang chinh</a>
+</div>
+<div id="tbody">
+<div class="rbar"><div class="rscore" id="rs">-</div><div class="rprog"><div class="rfill" id="rf" style="width:0%"></div></div><div class="rsub" id="rsb">Lam bai roi nop</div><button class="rsubmit" id="rsbtn" onclick="submitQ()">Nop bai</button></div>
+<div id="qa"></div>
+<div class="akey"><div class="akhdr" onclick="toggleAK()"><div class="aktitle">Dap an</div></div><div class="akbody" id="akb"><div class="akgrid" id="akg"></div></div></div>
+</div>
+<div class="toast" id="t"></div>
+<script>var QS=[{"q":"What animal is known as the King of the Jungle?","opts":["Elephant","Tiger","Lion","Monkey"],"ans":2},{"q":"Which bird can't fly but can swim very well?","opts":["Parrot","Penguin","Eagle","Sparrow"],"ans":1},{"q":"What do bees make?","opts":["Milk","Honey","Water","Juice"],"ans":1},{"q":"Which animal has a very long neck?","opts":["Zebra","Hippo","Giraffe","Horse"],"ans":2},{"q":"A frog lives in the ____.","opts":["sky","desert","pond","tree"],"ans":2},{"q":"What color is the sun?","opts":["Green","Blue","Pink","Yellow"],"ans":3},{"q":"Which animal is very slow?","opts":["Rabbit","Cheetah","Snail","Horse"],"ans":2},{"q":"Which animal lives in the ocean?","opts":["Cow","Shark","Chicken","Bear"],"ans":1},{"q":"How many legs does a spider have?","opts":["4","6","8","10"],"ans":2},{"q":"Which animal gives us milk?","opts":["Snake","Cow","Ant","Fish"],"ans":1},{"q":"A ____ has a colorful tail and likes to show it.","opts":["Pig","Peacock","Duck","Goat"],"ans":1},{"q":"Where does a bird live?","opts":["In a kennel","In a nest","In a stable","In a cave"],"ans":1},{"q":"Which animal has black and white stripes?","opts":["Leopard","Zebra","Tiger","Lion"],"ans":1},{"q":"What do you see in the sky at night?","opts":["Sun","Moon","Clouds","Rain"],"ans":1},{"q":"Which animal is small and likes to eat cheese?","opts":["Mouse","Elephant","Whale","Hippo"],"ans":0},{"q":"A butterfly starts its life as a ____.","opts":["fly","caterpillar","bee","spider"],"ans":1},{"q":"Which of these is a flower?","opts":["Apple","Rose","Carrot","Grass"],"ans":1},{"q":"What is a baby dog called?","opts":["Kitten","Cub","Puppy","Calf"],"ans":2},{"q":"Which animal can jump very high and lives in Australia?","opts":["Kangaroo","Panda","Koala","Polar Bear"],"ans":0},{"q":"What do trees need to grow?","opts":["Milk and bread","Water and sunlight","Toys and books","Soda and pizza"],"ans":1},{"q":"Which animal has a trunk?","opts":["Rhino","Elephant","Giraffe","Camel"],"ans":1},{"q":"Snakes have ____ legs.","opts":["two","four","zero","six"],"ans":2},{"q":"Which animal lives in the desert and has humps?","opts":["Horse","Camel","Cow","Sheep"],"ans":1},{"q":"What is the largest animal in the world?","opts":["Elephant","Blue Whale","Shark","Giraffe"],"ans":1},{"q":"Monkeys are good at ____ trees.","opts":["flying","swimming","climbing","driving"],"ans":2},{"q":"Which animal is famous for being very fast?","opts":["Turtle","Cheetah","Snail","Sloth"],"ans":1},{"q":"Fish breathe through their ____.","opts":["nose","lungs","gills","skin"],"ans":2},{"q":"What do we call a baby cat?","opts":["Puppy","Kitten","Chick","Piglet"],"ans":1},{"q":"Which animal has wool?","opts":["Pig","Sheep","Dog","Cat"],"ans":1},{"q":"Where do polar bears live?","opts":["In the jungle","In the desert","In the Arctic","On a farm"],"ans":2},{"q":"Which of these is a large body of salt water?","opts":["River","Lake","Ocean","Pond"],"ans":2},{"q":"What season comes after winter?","opts":["Autumn","Spring","Summer","Fall"],"ans":1},{"q":"Which animal makes a \"Meow\" sound?","opts":["Dog","Bird","Cat","Horse"],"ans":2},{"q":"A ____ is an insect with beautiful wings.","opts":["Butterfly","Bat","Bird","Plane"],"ans":0},{"q":"What fruit does a monkey usually eat?","opts":["Orange","Banana","Grape","Watermelon"],"ans":1},{"q":"Which animal has a hard shell on its back?","opts":["Rabbit","Turtle","Hamster","Mouse"],"ans":1},{"q":"Where do lions live?","opts":["In the ocean","In the savanna","In a house","In a fish tank"],"ans":1},{"q":"Clouds are in the ____.","opts":["ground","sky","basement","ocean"],"ans":1},{"q":"Which animal is pink and lives on a farm?","opts":["Horse","Pig","Sheep","Chicken"],"ans":1},{"q":"What do chickens lay?","opts":["Milk","Eggs","Wool","Honey"],"ans":1},{"q":"Which animal is tall and has a horn on its nose?","opts":["Rhino","Elephant","Hippo","Zebra"],"ans":0},{"q":"Bats usually sleep during the ____.","opts":["night","day","evening","winter"],"ans":1},{"q":"What is the color of grass?","opts":["Red","Yellow","Green","Blue"],"ans":2},{"q":"Which animal is known for its long ears?","opts":["Mouse","Rabbit","Bear","Cat"],"ans":1},{"q":"An octopus has ____ arms.","opts":["two","four","six","eight"],"ans":3},{"q":"What do you use to keep dry in the rain?","opts":["A book","An umbrella","A hat","A spoon"],"ans":1},{"q":"Which animal can mimic human speech?","opts":["Dog","Parrot","Fish","Hamster"],"ans":1},{"q":"Which animal is very big and lives in the forest?","opts":["Ant","Bear","Bee","Fly"],"ans":1},{"q":"Which animal lives in a hive?","opts":["Bird","Bee","Spider","Ant"],"ans":1},{"q":"What season is the hottest?","opts":["Spring","Winter","Summer","Autumn"],"ans":2}];
+var SL={};var done=false;var LA=["A","B","C","D"];
+function ge(id){return document.getElementById(id);}
+function cnt(o){var n=0;for(var k in o){if(o.hasOwnProperty(k))n++;}return n;}
+function toggleAK(){var b=ge("akb");if(b)b.classList.toggle("open");}
+function startTest(){
+  var n=ge("iname").value.trim();if(!n){return;}
+  localStorage.setItem("en_name",n);
+  ge("cover").style.display="none";ge("tbody").style.display="block";
+  buildQ();buildAK();window.scrollTo({top:0});
+}
+function buildQ(){
+  var c=ge("qa");c.innerHTML="";
+  for(var i=0;i<QS.length;i++){
+    var q=QS[i];
+    var d=document.createElement("div");d.className="mcq";
+    var qt=document.createElement("div");qt.className="mqq";qt.textContent=(i+1)+". "+q.q;d.appendChild(qt);
+    var mo=document.createElement("div");mo.className="mopts";
+    for(var oi=0;oi<q.opts.length;oi++){
+      if(!q.opts[oi])continue;
+      var op=document.createElement("div");op.className="mopt";op.id="o"+i+"_"+oi;
+      op.onclick=(function(a,b){return function(){sel(a,b);};})(i,oi);
+      var sp=document.createElement("span");sp.className="mltr";sp.textContent=LA[oi];
+      var st=document.createElement("span");st.textContent=q.opts[oi];
+      op.appendChild(sp);op.appendChild(st);mo.appendChild(op);
+    }
+    d.appendChild(mo);c.appendChild(d);
+  }
+}
+function sel(qi,oi){
+  if(done)return;
+  var p=SL[qi];
+  if(p!==undefined){var pe=ge("o"+qi+"_"+p);if(pe)pe.classList.remove("sel");}
+  SL[qi]=oi;
+  var ne=ge("o"+qi+"_"+oi);if(ne)ne.classList.add("sel");
+  ge("rf").style.width=Math.round(cnt(SL)/QS.length*100)+"%";
+  ge("rsb").textContent=cnt(SL)+"/"+QS.length+" cau";
+}
+function submitQ(){
+  if(done)return;done=true;
+  var sc=0;
+  for(var i=0;i<QS.length;i++){
+    var s=SL[i];
+    if(s===QS[i].ans){sc++;var c=ge("o"+i+"_"+s);if(c)c.className="mopt correct";}
+    else{if(s!==undefined){var w=ge("o"+i+"_"+s);if(w)w.className="mopt wrong";}var r=ge("o"+i+"_"+QS[i].ans);if(r)r.className="mopt correct";}
+  }
+  ge("rs").textContent=sc+"d";
+  ge("rsb").textContent=(sc>=QS.length*.8?"Xuat sac!":sc>=QS.length*.6?"Tot lam!":"Co gang!");
+  var sb=ge("rsbtn");if(sb){sb.textContent="Da nop";sb.disabled=true;sb.style.background="#94A3B8";}
+  localStorage.setItem("exam_done_custom","1");
+  var key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZGNjY3FsZGF0Z21kdGFreGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjQ3NTQsImV4cCI6MjA5MjkwMDc1NH0.qpH8kH9Zm1DXjUh-Uh-a_vbmbVpziZKkti6fU2ZZ1L4";
+  var name=localStorage.getItem("en_name")||"con";
+  fetch("https://dmdcccqldatgmdtakxcj.supabase.co/rest/v1/results",{method:"POST",headers:{apikey:key,"Authorization":"Bearer "+key,"Content-Type":"application/json","Prefer":"return=representation"},body:JSON.stringify({subject:"english",level:"Custom De Animals Lop 3",score:sc,total:QS.length,hints_used:0,student_name:name,answers:{date:new Date().toISOString().slice(0,10)}})}).then(function(){}).catch(function(){});
+  ge("akb").classList.add("open");
+  setTimeout(function(){var a=ge("akey");if(a)a.scrollIntoView({behavior:"smooth"});},600);
+}
+function buildAK(){
+  var g=ge("akg");g.innerHTML="";
+  for(var i=0;i<QS.length;i++){
+    var d=document.createElement("div");d.className="aki";
+    var q=document.createElement("div");q.className="akiq";q.textContent="C"+(i+1);
+    var a=document.createElement("div");a.className="akia";a.textContent=LA[QS[i].ans];
+    d.appendChild(q);d.appendChild(a);g.appendChild(d);
+  }
+}
+window.addEventListener("DOMContentLoaded",function(){
+  var n=localStorage.getItem("en_name");if(n)ge("iname").value=n;
+  buildAK();
+});</script>
+</body></html>
